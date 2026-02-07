@@ -3,7 +3,9 @@ project(quartz)
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_library(quartz_renderer)
+add_library(quartz_renderer
+    src/renderer/lib.cpp
+)
 
 #           DOWNLOAD ALL THE SUBMODULES
 find_package(Git QUIET)
@@ -83,5 +85,3 @@ if(UNIX)
 else()
 	message(FATAL_ERROR "No Windows build preparations. Sorry")
 endif()
-
-add_executable(quartz src/renderer/main.cpp)
