@@ -14,7 +14,30 @@ namespace quartz::renderer {
     {}
 
     void Stroke::add_point(Point point) {
-        //TODO: implement
+        if (points_.empty()) {
+            points_.emplace_back();
+        }
+
+        BezierSection& section = points_.back();
+
+        if (is_null(section.start)) {
+            section.start = point;
+            return;
+        }
+
+        if (points_.size() != 1 && is_null(section.tangent1)) {
+            section.tangent1 = point;
+            return;
+        }
+
+        if (is_null(section.tangent2)) {
+            section.tangent2 = point;
+            return;
+        }
+
+        points_.emplace_back();
+
+        points_.back().start = point;
     }
 
     void Stroke::set_color(Color color) {
