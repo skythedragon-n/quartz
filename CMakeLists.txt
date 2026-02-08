@@ -103,3 +103,10 @@ if(UNIX)
 else()
 	message(FATAL_ERROR "No Windows build preparations. Sorry")
 endif()
+
+add_executable(amethyst
+src/amethyst/main.cpp)
+target_link_libraries(quartz_renderer)
+
+add_executable(quartz_test
+src/test/main.cpp)
