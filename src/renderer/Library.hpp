@@ -19,7 +19,7 @@ namespace quartz::renderer {
     public:
         Library(::std::string group);
 
-        void add_symbol(::std::string name, ::std::string type);
+        void add_symbol(::std::string name, Symbol::Type type);
         void add_folder(::std::string name);
 
         Symbol& find_symbol(::std::string path);

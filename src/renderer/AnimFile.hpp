@@ -30,5 +30,7 @@ namespace quartz::renderer {
         void add_library(std::string group);
 
         Symbol& find_symbol(std::string path);
+        LibraryFolder& find_folder(std::string path);
+        Library& get_library(std::string group);
     };
 }

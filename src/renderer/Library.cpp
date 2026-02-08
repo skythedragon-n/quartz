@@ -15,7 +15,7 @@ namespace quartz::renderer {
         root_.add_folder(name);
     }
 
-    void Library::add_symbol(std::string name, std::string type) {
+    void Library::add_symbol(std::string name, Symbol::Type type) {
         root_.add_symbol(name, type);
     }
 

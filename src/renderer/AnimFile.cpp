@@ -33,6 +33,27 @@ namespace quartz::renderer {
     }
 
     Symbol& AnimFile::find_symbol(std::string path) {
-        //TODO: implement library
+        size_t colon = path.find_first_of(':');
+
+        //TODO: hande errors & reject invalid paths
+
+        return get_library(path.substr(0, colon)).find_symbol(path.substr(colon + 1));
+    }
+
+    LibraryFolder& AnimFile::find_folder(std::string path) {
+        size_t colon = path.find_first_of(':');
+
+        //TODO: hande errors & reject invalid paths
+
+        return get_library(path.substr(0, colon)).find_folder(path.substr(colon + 1));
+    }
+
+    Library& AnimFile::get_library(std::string group) {
+        //TODO: handle errors & reject invalid paths
+        for (Library& library : libraries_) {
+            if (library.group() == group) {
+                return library;
+            }
+        }
     }
 }

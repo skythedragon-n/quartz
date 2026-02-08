@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include <variant>
 #include <vector>
@@ -15,17 +16,18 @@
 
 namespace quartz::renderer {
     class LibraryFolder {
-        ::std::vector<::std::variant<Symbol, LibraryFolder>> items_;
+        ::std::vector<Symbol> symbols_;
+        ::std::vector<LibraryFolder> folders_;
 
         ::std::string name_;
 
     public:
 
-        LibraryFolder(::std::string name);
+        explicit LibraryFolder(::std::string name);
 
         void set_name(::std::string name);
 
-        void add_symbol(::std::string name, ::std::string type);
+        void add_symbol(::std::string name, Symbol::Type type);
         void add_folder(::std::string name);
 
         Symbol& find_symbol(std::string path);
