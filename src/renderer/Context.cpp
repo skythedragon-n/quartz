@@ -7,7 +7,5 @@
 
 #include "Context.hpp"
 
-namespace quartz {
-    namespace renderer {
-    } // renderer
-} // quartz
+namespace quartz::renderer {
+} // quartz::renderer

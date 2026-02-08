@@ -6,6 +6,16 @@ set(CMAKE_CXX_STANDARD 23)
 add_library(quartz_renderer
 src/renderer/Context.cpp
 src/renderer/Context.hpp
+src/renderer/AnimFile.cpp
+src/renderer/AnimFile.hpp
+src/renderer/Library.cpp
+src/renderer/Library.hpp
+src/renderer/LibraryFolder.cpp
+src/renderer/LibraryFolder.hpp
+src/renderer/Symbol.cpp
+src/renderer/Symbol.hpp
+src/renderer/Drawing.cpp
+src/renderer/Drawing.hpp
 )
 
 #           DOWNLOAD ALL THE SUBMODULES

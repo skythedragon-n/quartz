@@ -7,9 +7,9 @@
 
 #pragma once
 
-namespace quartz {
-    namespace renderer {
-        class Context {
-        };
-    } // renderer
-} // quartz
+namespace quartz::renderer {
+    class Context {
+    public:
+        Context();
+    };
+} // quartz::renderer
