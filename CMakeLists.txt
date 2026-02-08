@@ -41,7 +41,33 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules/pugixml/CMakeLists.txt")
     message(FATAL_ERROR "The pugixml submodule was not downloaded! Please update submodules and try again.")
 endif()
 
-# Build pugixml from submodule and link it to quartz_renderer
+add_library(vg-renderer STATIC
+    "submodules/vg-renderer/src/vg.cpp"
+    "submodules/vg-renderer/src/stroker.cpp"
+    "submodules/vg-renderer/src/path.cpp"
+    "submodules/vg-renderer/src/vg_util.cpp"
+    "submodules/vg-renderer/src/libs/fontstash.cpp"
+    "submodules/vg-renderer/src/libs/stb_truetype.cpp"
+
+    "submodules/vg-renderer/src/libtess2/bucketalloc.c"
+    "submodules/vg-renderer/src/libtess2/dict.c"
+    "submodules/vg-renderer/src/libtess2/geom.c"
+    "submodules/vg-renderer/src/libtess2/mesh.c"
+    "submodules/vg-renderer/src/libtess2/priorityq.c"
+    "submodules/vg-renderer/src/libtess2/sweep.c"
+    "submodules/vg-renderer/src/libtess2/tess.c"
+    )
+target_include_directories(vg-renderer PUBLIC "submodules/vg-renderer/include/")
+
+target_include_directories(vg-renderer PUBLIC
+    submodules/vg-renderer/src
+)
+
+target_include_directories(vg-renderer PUBLIC
+    submodules/bgfx/include
+    submodules/bx/include
+)
+
 add_subdirectory(submodules/pugixml)
 
 if(TARGET pugixml::pugixml)
@@ -106,7 +132,9 @@ endif()
 
 add_executable(amethyst
 src/amethyst/main.cpp)
-target_link_libraries(quartz_renderer)
+target_link_libraries(quartz_renderer pugixml)
+target_link_libraries(quartz_renderer vg-renderer)
+target_link_libraries(quartz_renderer simple-svg)
 
 add_executable(quartz_test
 src/test/main.cpp)

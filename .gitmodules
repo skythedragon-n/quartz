@@ -10,3 +10,6 @@
 [submodule "submodules/pugixml"]
 	path = submodules/pugixml
 	url = https://github.com/zeux/pugixml.git
+[submodule "submodules/vg-renderer"]
+	path = submodules/vg-renderer
+	url = https://github.com/jdryg/vg-renderer.git
