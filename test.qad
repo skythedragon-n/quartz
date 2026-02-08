@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<document>
+<quartz-document spec="0.1">
     <size width="1920" height="1080"/>
     <framerate fps="24"/>
     <background color="#FFFFFF"/>
@@ -20,4 +20,4 @@
             </layer>
         </symbol>
     </library>
-</document>
+</quartz-document>
