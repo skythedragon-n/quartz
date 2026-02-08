@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<document>
+    <size width="1920" height="1080"/>
+    <framerate fps="24"/>
+    <background color="#FFFFFF"/>
+    <library group="library">
+        <folder name="dummy">
+            <symbol type="drawing" name="infold">
+                <stroke points="[(200,200),(200,200),(0,0),(0,0)]" thickness="10.0" color="#000000"/>
+            </symbol>
+        </folder>
+    </library>
+    <library group="scene">
+        <symbol name="scene1" type="layered-anim">
+            <layer name="test">
+                <frame index="1">
+                    <object path="library:dummy/infold"/>
+                </frame>
+            </layer>
+        </symbol>
+    </library>
+</document>
