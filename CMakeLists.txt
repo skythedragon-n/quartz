@@ -18,6 +18,7 @@ src/renderer/Drawing.cpp
 src/renderer/Drawing.hpp
 src/renderer/Stroke.cpp
 src/renderer/Stroke.hpp
+src/renderer/utils.hpp
 )
 
 #           DOWNLOAD ALL THE SUBMODULES
@@ -145,7 +146,7 @@ endif()
 add_executable(amethyst
 src/amethyst/main.cpp)
 target_link_libraries(quartz_renderer pugixml)
-target_link_libraries(quartz_renderer vg-renderer)
+#target_link_libraries(quartz_renderer vg-renderer)
 target_link_libraries(quartz_renderer simple-svg)
 
 add_executable(quartz_test

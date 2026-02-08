@@ -9,24 +9,16 @@
 #include <cstdint>
 #include <vector>
 
+#include "Stroke.hpp"
+
 namespace quartz::renderer {
-    struct Point {
-        double x, y;
-    };
-
-    struct Color {
-        uint8_t r, g, b, a;
-    };
-
-    struct BezierSection {
-        Point start;
-        Point tangent1, tangent2;
-    };
 
     class Drawing {
         std::vector<Stroke> strokes_;
 
     public:
-        Drawing();
+        void add_stroke(Color color, double thickness, std::vector<Point> points);
+        Stroke& get_stroke(size_t index);
+        ::std::vector<Stroke>& strokes() { return strokes_; }
     };
 }

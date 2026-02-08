@@ -8,7 +8,7 @@
 #pragma once
 #include <vector>
 
-#include "Drawing.hpp"
+#include "utils.hpp"
 
 namespace quartz::renderer {
     class Stroke {
