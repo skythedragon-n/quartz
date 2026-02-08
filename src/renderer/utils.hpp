@@ -8,6 +8,8 @@
 #pragma once
 
 #include <cstdint>
+#include <cmath>
+#include <limits>
 
 namespace quartz::renderer {
     struct Point {
@@ -18,8 +20,26 @@ namespace quartz::renderer {
         uint8_t r, g, b, a;
     };
 
+    constexpr double NaN = ::std::numeric_limits<double>::quiet_NaN();
+    constexpr Point null_point = {NaN, NaN};
+
+    constexpr bool is_null(Point& p) {
+        return ::std::isnan(p.x) || ::std::isnan(p.y);
+    }
+
+    constexpr bool is_nonnull(Point& p) {
+        return ::std::isnan(p.x) || ::std::isnan(p.y);
+    }
+
     struct BezierSection {
-        Point start;
-        Point tangent1, tangent2;
+        enum class Lock {
+            None,
+            Radial,
+            Complete
+        };
+
+        Point start = null_point;
+        Point tangent1 = null_point, tangent2 = null_point;
+        Lock lock = Lock::None;
     };
 }
