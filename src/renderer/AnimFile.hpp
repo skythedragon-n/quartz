@@ -28,5 +28,7 @@ namespace quartz::renderer {
         void set_fps(uint64_t fps);
 
         void add_library(std::string group);
+
+        Symbol& find_symbol(std::string path);
     };
 }

@@ -1,0 +1,36 @@
+//
+// copyleft 🄯 2026 by SkyTheDragon
+// licenced under the GPLv3-or-later, details located in LICENCE
+//
+// Created by skythedragon on 2/7/26.
+//
+
+#pragma once
+
+#include <string>
+#include <variant>
+#include <vector>
+
+#include "Symbol.hpp"
+
+namespace quartz::renderer {
+    class LibraryFolder {
+        ::std::vector<::std::variant<Symbol, LibraryFolder>> items_;
+
+        ::std::string name_;
+
+    public:
+
+        LibraryFolder(::std::string name);
+
+        void set_name(::std::string name);
+
+        void add_symbol(::std::string name, ::std::string type);
+        void add_folder(::std::string name);
+
+        Symbol& find_symbol(std::string path);
+        LibraryFolder& find_folder(std::string path);
+
+        [[nodiscard]] ::std::string name() const { return name_; }
+    };
+}

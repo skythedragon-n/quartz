@@ -29,6 +29,10 @@ namespace quartz::renderer {
     }
 
     void AnimFile::add_library(std::string group) {
+        libraries_.emplace_back(group);
+    }
+
+    Symbol& AnimFile::find_symbol(std::string path) {
         //TODO: implement library
     }
 }

@@ -16,6 +16,8 @@ src/renderer/Symbol.cpp
 src/renderer/Symbol.hpp
 src/renderer/Drawing.cpp
 src/renderer/Drawing.hpp
+src/renderer/Stroke.cpp
+src/renderer/Stroke.hpp
 )
 
 #           DOWNLOAD ALL THE SUBMODULES
