@@ -7,3 +7,6 @@
 [submodule "submodules/bimg"]
 	path = submodules/bimg
 	url = https://github.com/bkaradzic/bimg.git
+[submodule "submodules/pugixml"]
+	path = submodules/pugixml
+	url = https://github.com/zeux/pugixml.git

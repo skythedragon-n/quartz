@@ -4,7 +4,8 @@ project(quartz)
 set(CMAKE_CXX_STANDARD 23)
 
 add_library(quartz_renderer
-    src/renderer/lib.cpp
+src/renderer/Context.cpp
+src/renderer/Context.hpp
 )
 
 #           DOWNLOAD ALL THE SUBMODULES
@@ -34,6 +35,23 @@ endif()
 
 if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules/bgfx/makefile")
 	message(FATAL_ERROR "The bgfx submodules was not downloaded! GIT_SUBMODULE was turned off or failed. Please update submodules and try again.")
+endif()
+
+if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules/pugixml/CMakeLists.txt")
+    message(FATAL_ERROR "The pugixml submodule was not downloaded! Please update submodules and try again.")
+endif()
+
+# Build pugixml from submodule and link it to quartz_renderer
+add_subdirectory(submodules/pugixml)
+
+if(TARGET pugixml::pugixml)
+    target_link_libraries(quartz_renderer pugixml::pugixml)
+elseif(TARGET pugixml)
+    target_link_libraries(quartz_renderer pugixml)
+elseif(TARGET pugixml-static)
+    target_link_libraries(quartz_renderer pugixml-static)
+else()
+    message(FATAL_ERROR "pugixml CMake target not found after add_subdirectory(submodules/pugixml).")
 endif()
 
 if(UNIX)
