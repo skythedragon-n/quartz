@@ -9,7 +9,7 @@
 <p>
 <img src="https://img.shields.io/badge/C%2B%2B-26-blue" alt="CPP">
 <img src="https://img.shields.io/badge/Arch-x86__64%2C%20ARM64%2C%20RISC--V-blue" alt="Hardware">
-<img src="https://img.shields.io/badge/license-MIT-green" alt="License">
+<img src="https://img.shields.io/badge/license-GPL_3.0-green" alt="License">
 </p>
 
 </div>
