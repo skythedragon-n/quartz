@@ -7,7 +7,7 @@
 <h3></h3>
 
 <p>
-<img src="https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go&logoColor=white" alt="Go">
+<img src="(https://img.shields.io/badge/C%2B%2B-26-blue)">
 <img src="https://img.shields.io/badge/Arch-x86__64%2C%20ARM64%2C%20RISC--V-blue" alt="Hardware">
 <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
