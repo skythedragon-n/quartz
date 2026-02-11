@@ -1,5 +1,5 @@
 <div align="center">
-<img src="[assets/logo.jpg](https://upload.wikimedia.org/wikipedia/commons/c/ce/Quartz_Br%C3%A9sil.jpg)" alt="quartz" width="512">
+<img src="[assets/logo.jpg]" alt="image go here" width="512">
 
 <h1>Quartz</h1>
 
