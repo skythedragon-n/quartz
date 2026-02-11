@@ -8,8 +8,11 @@
 #include "Library.hpp"
 
 namespace quartz::renderer {
-    Library::Library(std::string group) : group_(group), root_("root") {
-    }
+    Library::Library(CtorKey, std::string group, AnimFile* file) :
+    group_(group),
+    root_(this),
+    file_(file)
+    {}
 
     void Library::add_folder(std::string name) {
         root_.add_folder(name);
@@ -19,11 +22,11 @@ namespace quartz::renderer {
         root_.add_symbol(name, type);
     }
 
-    Symbol& Library::find_symbol(std::string path) {
+    FindResult<SymbolId> Library::find_symbol(std::string path) {
         return root_.find_symbol(path);
     }
 
-    LibraryFolder& Library::find_folder(std::string path) {
+    FindResult<FolderId> Library::find_folder(std::string path) {
         return root_.find_folder(path);
     }
 }

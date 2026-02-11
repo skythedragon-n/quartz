@@ -28,32 +28,58 @@ namespace quartz::renderer {
         fps_ = fps;
     }
 
-    void AnimFile::add_library(std::string group) {
-        libraries_.emplace_back(group);
+    void AnimFile::add_library(::std::string group) {
+        libraries_.emplace_back(Library::CtorKey(), group, this);
+        libraries_by_group_[group] = libraries_.size() - 1;
     }
 
-    Symbol& AnimFile::find_symbol(std::string path) {
+    SymbolId AnimFile::add_symbol(::std::string name, Symbol::Type type, LibraryFolder* parent) {
+        symbols_.emplace_back(Symbol::CtorKey(), name, type, parent);
+        return symbols_.size() - 1;
+    }
+
+    FolderId AnimFile::add_folder(::std::string name, LibraryFolder* parent) {
+        folders_.emplace_back(LibraryFolder::CtorKey(), name, parent, this);
+        return folders_.size() - 1;
+    }
+
+    FindResult<SymbolId> AnimFile::find_symbol(std::string path) {
         size_t colon = path.find_first_of(':');
 
-        //TODO: hande errors & reject invalid paths
-
-        return get_library(path.substr(0, colon)).find_symbol(path.substr(colon + 1));
-    }
-
-    LibraryFolder& AnimFile::find_folder(std::string path) {
-        size_t colon = path.find_first_of(':');
-
-        //TODO: hande errors & reject invalid paths
-
-        return get_library(path.substr(0, colon)).find_folder(path.substr(colon + 1));
-    }
-
-    Library& AnimFile::get_library(std::string group) {
-        //TODO: handle errors & reject invalid paths
-        for (Library& library : libraries_) {
-            if (library.group() == group) {
-                return library;
-            }
+        if (colon == ::std::string::npos) {
+            return ::std::nullopt;
         }
+
+        auto library_iter = libraries_by_group_.find(path.substr(0, colon));
+
+        if (library_iter == libraries_by_group_.end()) {
+            return ::std::nullopt;
+        }
+
+        return libraries_[library_iter->second].find_symbol(path.substr(colon + 1));
+    }
+
+    FindResult<FolderId> AnimFile::find_folder(std::string path) {
+        size_t colon = path.find_first_of(':');
+
+        if (colon == ::std::string::npos) {
+            return ::std::nullopt;
+        }
+
+        auto library_iter = libraries_by_group_.find(path.substr(0, colon));
+
+        if (library_iter == libraries_by_group_.end()) {
+            return ::std::nullopt;
+        }
+
+        return libraries_[library_iter->second].find_folder(path.substr(colon + 1));
+    }
+
+    FindResult<LibraryId> AnimFile::get_library(std::string group) {
+        if (libraries_by_group_.find(group) == libraries_by_group_.end()) {
+            return LIBRARY_ID_INVALID;
+        }
+
+        return libraries_by_group_.at(group);
     }
 }

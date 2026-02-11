@@ -8,11 +8,16 @@
 #include "Symbol.hpp"
 
 namespace quartz::renderer {
-    Symbol::Symbol(std::string name, Type type) :
+    Symbol::Symbol(CtorKey, std::string name, Type type, LibraryFolder* parent) :
     name_(name),
-    type_(type) {}
+    type_(type),
+    parent_(parent){}
 
     void Symbol::set_name(std::string name) {
         name_ = name;
+    }
+
+    void Symbol::set_parent(LibraryFolder* parent) {
+        parent_ = parent;
     }
 }

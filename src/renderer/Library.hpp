@@ -16,14 +16,27 @@ namespace quartz::renderer {
         LibraryFolder root_;
 
         ::std::string group_;
+
+        AnimFile* file_;
+
+        struct CtorKey {
+        private:
+            CtorKey() = default;
+            friend class AnimFile;
+        };
+
+        friend class AnimFile;
+        friend class LibraryFolder;
+
     public:
-        Library(::std::string group);
+
+        Library(CtorKey, ::std::string group, AnimFile* file);
 
         void add_symbol(::std::string name, Symbol::Type type);
         void add_folder(::std::string name);
 
-        Symbol& find_symbol(::std::string path);
-        LibraryFolder& find_folder(::std::string path);
+        FindResult<SymbolId> find_symbol(::std::string path);
+        FindResult<FolderId> find_folder(::std::string path);
 
         [[nodiscard]] ::std::string group() const { return group_; }
     };

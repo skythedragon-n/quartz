@@ -7,9 +7,23 @@
 
 #include "LibraryFolder.hpp"
 
+#include "AnimFile.hpp"
+#include "Library.hpp"
+
 namespace quartz::renderer {
-    LibraryFolder::LibraryFolder(::std::string name) :
-    name_(name)
+    void LibraryFolder::set_parent(LibraryFolder* parent) {
+        parent_ = parent;
+    }
+
+    LibraryFolder::LibraryFolder(CtorKey, ::std::string name, LibraryFolder* parent, AnimFile* file) :
+    name_(name),
+    parent_(parent)
+    {}
+
+    LibraryFolder::LibraryFolder(Library* parent) :
+    name_("root"),
+    parent_(parent),
+    file_(parent->file_)
     {}
 
     void LibraryFolder::set_name(::std::string name) {
@@ -17,41 +31,56 @@ namespace quartz::renderer {
     }
 
     void LibraryFolder::add_symbol(::std::string name, Symbol::Type type) {
-        symbols_.emplace_back(name, type);
+        SymbolId symbol = file_->add_symbol(name, type, this);
+        symbols_.emplace(name, symbol);
     }
+
     void LibraryFolder::add_folder(::std::string name) {
-        folders_.emplace_back(name);
+        FolderId folder = file_->add_folder(name, this);
+        folders_.emplace(name, folder);
     }
 
-    Symbol& LibraryFolder::find_symbol(std::string path) {
+    FindResult<SymbolId> LibraryFolder::find_symbol(std::string path) {
+        ::std::size_t first_sep = path.find_first_of('/');
 
-        size_t slash = path.find_first_of('/');
+        if (first_sep == ::std::string::npos) {
+            auto iter = symbols_.find(path);
 
-        if (slash != std::string::npos) {
-            return find_folder(path.substr(0, slash)).find_symbol(path.substr(slash + 1));
-        }
-
-        for (Symbol& symbol : symbols_) {
-            if (symbol.name() == path) {
-                return symbol;
+            if (iter == symbols_.end()) {
+                return std::nullopt;
             }
+
+            return iter->second;
         }
+
+        auto iter = folders_.find(path.substr(0, first_sep));
+
+        if (iter == folders_.end()) {
+            return ::std::nullopt;
+        }
+
+        return file_->resolve_folder(iter->second).find_symbol(path.substr(first_sep + 1));
     }
 
-    LibraryFolder& LibraryFolder::find_folder(std::string path) {
+    FindResult<FolderId> LibraryFolder::find_folder(std::string path) {
+        ::std::size_t first_sep = path.find_first_of('/');
 
-        size_t slash = path.find_first_of('/');
+        if (first_sep == ::std::string::npos) {
+            auto iter = folders_.find(path);
 
-        ::std::string folder_name = path.substr(0, slash);
-
-        if (folder_name.find_first_of('/') != std::string::npos) {
-            return find_folder(folder_name).find_folder(path.substr(slash + 1));
-        }
-
-        for (LibraryFolder& folder : folders_) {
-            if (folder.name() == path) {
-                return folder;
+            if (iter == folders_.end()) {
+                return std::nullopt;
             }
+
+            return iter->second;
         }
+
+        auto iter = folders_.find(path.substr(0, first_sep));
+
+        if (iter == folders_.end()) {
+            return ::std::nullopt;
+        }
+
+        return file_->resolve_folder(iter->second).find_folder(path.substr(first_sep + 1));
     }
 }

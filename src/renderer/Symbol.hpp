@@ -13,6 +13,9 @@
 
 
 namespace quartz::renderer {
+    class LibraryFolder;
+    class Library;
+
     class Symbol {
     public:
         enum class Type {
@@ -21,10 +24,23 @@ namespace quartz::renderer {
     private:
         ::std::string name_;
         Type type_;
-        ::std::variant<Drawing> data_;
+        ::std::variant<Drawing/**, std::vector<AnimatedLayer>**/> data_;
+
+        LibraryFolder* parent_;
+        void set_parent(LibraryFolder* parent);
+
+        struct CtorKey {
+        private:
+            CtorKey() = default;
+            friend class AnimFile;
+        };
+
+        friend class Library;
+        friend class AnimFile;
 
     public:
-        Symbol(::std::string name, Type type);
+
+        Symbol(CtorKey, ::std::string name, Type type, LibraryFolder* parent);
 
         void set_name(::std::string name);
 
