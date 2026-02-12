@@ -15,3 +15,22 @@
 
 
 ---
+
+Quartz animation will have all the great features from Adobe Animate, ToonBoom, Tahoma2D, Moho, etc.
+
+And it will be open source, so you can make edits and view the code.
+
+<table align="center">
+  <tr align="center">
+    <td align="center" valign="top">
+      <p align="center">
+        <img src="https://github.com/skythedragon-n/quartz/blob/main/Quartz%20Intro.gif?raw=true" width="360" height="240">
+      </p>
+    </td>
+    <td align="center" valign="top">
+      <p align="center">
+        <img src="https://github.com/skythedragon-n/quartz/blob/main/Artist%20Block.png?raw=true" width="400" height="240">
+      </p>
+    </td>
+  </tr>
+</table>
