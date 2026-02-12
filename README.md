@@ -13,7 +13,7 @@
 
 <p>
 <a href="https://discord.gg/qHdVzrqmSJ"><img src="https://img.shields.io/badge/Discord-Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
-<a>  |||  </a>
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://img.shields.io/badge/_%7C%7C%7C_-black?style=for-the-badge" alt="Block"></a>
 <a href="https://www.youtube.com/@officialquartzteam"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
 </p>
 </div>
