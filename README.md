@@ -25,7 +25,8 @@ And it will be open source, so you can make edits and view the code.
     <td align="center" valign="top">
       <p align="center">
         <img src="https://github.com/skythedragon-n/quartz/blob/main/Quartz%20Intro.gif?raw=true" width="360" height="240">
-      quartz intro</p>
+      </p>
+      <p>Quartz intro</p>
     </td>
     <td align="center" valign="top">
       <p align="center">
