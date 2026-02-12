@@ -36,3 +36,9 @@ And it will be open source, so you can make edits and view the code.
     </td>
   </tr>
 </table>
+
+<p>
+<img src="https://img.shields.io/badge/C%2B%2B-23-blue" alt="CPP">
+<img src="https://img.shields.io/badge/Platforms-Windows%2C_Linux-orange" alt="Hardware">
+<a href="https://discord.gg/qHdVzrqmSJ"><img src="https://img.shields.io/badge/Discord-Community-5865F2?style=flat&logo=discord&logoColor=white" alt="Discord"></a>
+</p>
