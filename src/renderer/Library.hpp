@@ -17,7 +17,7 @@ namespace quartz::renderer {
 
         ::std::string group_;
 
-        AnimFile* file_;
+        AnimFile* file_ = nullptr;
 
         struct CtorKey {
         private:
@@ -30,7 +30,9 @@ namespace quartz::renderer {
 
     public:
 
-        Library(CtorKey, ::std::string group, AnimFile* file);
+        Library(CtorKey, ::std::string group, LibraryId id, AnimFile* file);
+
+        Library() = delete;
 
         void add_symbol(::std::string name, Symbol::Type type);
         void add_folder(::std::string name);

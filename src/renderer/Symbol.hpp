@@ -26,8 +26,12 @@ namespace quartz::renderer {
         Type type_;
         ::std::variant<Drawing/**, std::vector<AnimatedLayer>**/> data_;
 
-        LibraryFolder* parent_;
-        void set_parent(LibraryFolder* parent);
+        AnimFile* file_ = nullptr;
+
+        const SymbolId id_;
+
+        FolderId parent_;
+        void set_parent(FolderId parent);
 
         struct CtorKey {
         private:
@@ -40,7 +44,7 @@ namespace quartz::renderer {
 
     public:
 
-        Symbol(CtorKey, ::std::string name, Type type, LibraryFolder* parent);
+        Symbol(CtorKey, ::std::string name, Type type, FolderId parent, SymbolId id, AnimFile* file);
 
         void set_name(::std::string name);
 

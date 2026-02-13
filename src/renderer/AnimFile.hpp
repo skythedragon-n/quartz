@@ -28,13 +28,13 @@ namespace quartz::renderer {
         ::std::vector<Symbol> symbols_;
         ::std::vector<LibraryFolder> folders_;
 
-        ::std::unordered_map<std::string, LibraryId> libraries_by_group_;
+        ::std::unordered_map<::std::string, LibraryId> libraries_by_group_;
 
         uint64_t width_ = 0, height_ = 0;
         uint64_t fps_ = 0;
 
-        SymbolId add_symbol(std::string name, Symbol::Type type, LibraryFolder* parent);
-        FolderId add_folder(std::string name, LibraryFolder* parent);
+        SymbolId add_symbol(::std::string name, Symbol::Type type, FolderId parent);
+        FolderId add_folder(::std::string name, FolderId parent);
 
         friend class Library;
         friend class LibraryFolder;
@@ -48,14 +48,14 @@ namespace quartz::renderer {
         void set_size(uint64_t width, uint64_t height);
         void set_fps(uint64_t fps);
 
-        void add_library(std::string group);
+        void add_library(::std::string group);
 
-        FindResult<SymbolId> find_symbol(std::string path);
-        FindResult<FolderId> find_folder(std::string path);
-        FindResult<LibraryId> get_library(std::string group);
+        FindResult<SymbolId> find_symbol(::std::string path);
+        FindResult<FolderId> find_folder(::std::string path);
+        FindResult<LibraryId> get_library(::std::string group);
 
-        Symbol&        resolve_symbol (size_t id) { return symbols_  [id]; }
-        LibraryFolder& resolve_folder (size_t id) { return folders_  [id]; }
-        Library&       resolve_library(size_t id) { return libraries_[id]; }
+        Symbol&        resolve_symbol (SymbolId  id) { return symbols_  [id.id]; }
+        LibraryFolder& resolve_folder (FolderId  id) { return folders_  [id.id]; }
+        Library&       resolve_library(LibraryId id) { return libraries_[id.id]; }
     };
 }

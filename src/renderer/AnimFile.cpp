@@ -29,21 +29,39 @@ namespace quartz::renderer {
     }
 
     void AnimFile::add_library(::std::string group) {
-        libraries_.emplace_back(Library::CtorKey(), group, this);
-        libraries_by_group_[group] = libraries_.size() - 1;
+        libraries_.emplace_back(
+            Library::CtorKey(),
+            group,
+            LibraryId {libraries_.size()},
+            this
+        );
+        libraries_by_group_[group] = {libraries_.size() - 1};
     }
 
-    SymbolId AnimFile::add_symbol(::std::string name, Symbol::Type type, LibraryFolder* parent) {
-        symbols_.emplace_back(Symbol::CtorKey(), name, type, parent);
-        return symbols_.size() - 1;
+    SymbolId AnimFile::add_symbol(::std::string name, Symbol::Type type, FolderId parent) {
+        symbols_.emplace_back(
+            Symbol::CtorKey(),
+            name,
+            type,
+            parent,
+            SymbolId {symbols_.size()},
+            this
+        );
+        return {symbols_.size() - 1};
     }
 
-    FolderId AnimFile::add_folder(::std::string name, LibraryFolder* parent) {
-        folders_.emplace_back(LibraryFolder::CtorKey(), name, parent, this);
-        return folders_.size() - 1;
+    FolderId AnimFile::add_folder(::std::string name, FolderId parent) {
+        folders_.emplace_back(
+            LibraryFolder::CtorKey(),
+            name,
+            parent,
+            FolderId {folders_.size()},
+            this
+        );
+        return {folders_.size() - 1};
     }
 
-    FindResult<SymbolId> AnimFile::find_symbol(std::string path) {
+    FindResult<SymbolId> AnimFile::find_symbol(::std::string path) {
         size_t colon = path.find_first_of(':');
 
         if (colon == ::std::string::npos) {
@@ -56,10 +74,10 @@ namespace quartz::renderer {
             return ::std::nullopt;
         }
 
-        return libraries_[library_iter->second].find_symbol(path.substr(colon + 1));
+        return libraries_[library_iter->second.id].find_symbol(path.substr(colon + 1));
     }
 
-    FindResult<FolderId> AnimFile::find_folder(std::string path) {
+    FindResult<FolderId> AnimFile::find_folder(::std::string path) {
         size_t colon = path.find_first_of(':');
 
         if (colon == ::std::string::npos) {
@@ -72,10 +90,10 @@ namespace quartz::renderer {
             return ::std::nullopt;
         }
 
-        return libraries_[library_iter->second].find_folder(path.substr(colon + 1));
+        return libraries_[library_iter->second.id].find_folder(path.substr(colon + 1));
     }
 
-    FindResult<LibraryId> AnimFile::get_library(std::string group) {
+    FindResult<LibraryId> AnimFile::get_library(::std::string group) {
         if (libraries_by_group_.find(group) == libraries_by_group_.end()) {
             return LIBRARY_ID_INVALID;
         }

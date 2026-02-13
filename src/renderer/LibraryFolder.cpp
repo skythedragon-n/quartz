@@ -11,19 +11,22 @@
 #include "Library.hpp"
 
 namespace quartz::renderer {
-    void LibraryFolder::set_parent(LibraryFolder* parent) {
+    void LibraryFolder::set_parent(LibraryId parent) {
         parent_ = parent;
     }
 
-    LibraryFolder::LibraryFolder(CtorKey, ::std::string name, LibraryFolder* parent, AnimFile* file) :
+    LibraryFolder::LibraryFolder(CtorKey, ::std::string name, FolderId parent, FolderId id, AnimFile* file) :
     name_(name),
-    parent_(parent)
+    parent_(parent),
+    id_(id),
+    file_(file)
     {}
 
-    LibraryFolder::LibraryFolder(Library* parent) :
+    LibraryFolder::LibraryFolder(LibraryId parent, AnimFile* file) :
     name_("root"),
     parent_(parent),
-    file_(parent->file_)
+    id_(FOLDER_ID_INVALID),
+    file_(file)
     {}
 
     void LibraryFolder::set_name(::std::string name) {
@@ -31,16 +34,16 @@ namespace quartz::renderer {
     }
 
     void LibraryFolder::add_symbol(::std::string name, Symbol::Type type) {
-        SymbolId symbol = file_->add_symbol(name, type, this);
+        SymbolId symbol = file_->add_symbol(name, type, id_);
         symbols_.emplace(name, symbol);
     }
 
     void LibraryFolder::add_folder(::std::string name) {
-        FolderId folder = file_->add_folder(name, this);
+        FolderId folder = file_->add_folder(name, id_);
         folders_.emplace(name, folder);
     }
 
-    FindResult<SymbolId> LibraryFolder::find_symbol(std::string path) {
+    FindResult<SymbolId> LibraryFolder::find_symbol(::std::string path) {
         ::std::size_t first_sep = path.find_first_of('/');
 
         if (first_sep == ::std::string::npos) {
@@ -62,7 +65,7 @@ namespace quartz::renderer {
         return file_->resolve_folder(iter->second).find_symbol(path.substr(first_sep + 1));
     }
 
-    FindResult<FolderId> LibraryFolder::find_folder(std::string path) {
+    FindResult<FolderId> LibraryFolder::find_folder(::std::string path) {
         ::std::size_t first_sep = path.find_first_of('/');
 
         if (first_sep == ::std::string::npos) {

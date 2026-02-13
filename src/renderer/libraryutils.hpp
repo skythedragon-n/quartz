@@ -10,13 +10,13 @@
 #include <optional>
 
 namespace quartz::renderer {
-    using SymbolId = size_t;
-    using FolderId = size_t;
-    using LibraryId = size_t;
+    struct SymbolId { size_t id;};
+    struct FolderId { size_t id; };
+    struct LibraryId { size_t id; };
 
-    constexpr SymbolId SYMBOL_ID_INVALID = size_t(-1);
-    constexpr FolderId FOLDER_ID_INVALID = size_t(-1);
-    constexpr LibraryId LIBRARY_ID_INVALID = size_t(-1);
+    constexpr SymbolId SYMBOL_ID_INVALID = {size_t(-1)};
+    constexpr FolderId FOLDER_ID_INVALID = {size_t(-1)};
+    constexpr LibraryId LIBRARY_ID_INVALID = {size_t(-1)};
 
     using success_t = std::monostate;
 

@@ -23,11 +23,13 @@ namespace quartz::renderer {
 
         ::std::string name_;
 
-        std::variant<LibraryFolder*, Library*> parent_;
+        std::variant<LibraryId, FolderId> parent_;
 
         AnimFile* file_ = nullptr;
 
-        void set_parent(LibraryFolder* parent);
+        const FolderId id_;
+
+        void set_parent(LibraryId parent);
 
         struct CtorKey {
         private:
@@ -35,14 +37,14 @@ namespace quartz::renderer {
             friend class AnimFile;
         };
 
-        explicit LibraryFolder(Library* parent);
+        explicit LibraryFolder(LibraryId parent, AnimFile* file);
 
         friend class Library;
         friend class AnimFile;
 
     public:
 
-        LibraryFolder(CtorKey, ::std::string name, LibraryFolder* parent, AnimFile* file);
+        LibraryFolder(CtorKey, ::std::string name, FolderId parent, FolderId id, AnimFile* file);
 
         void set_name(::std::string name);
 
