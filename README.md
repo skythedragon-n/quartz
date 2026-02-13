@@ -1,8 +1,8 @@
 <div align="center">
-<img src="https://github.com/skythedragon-n/quartz/blob/main/Main%20Logo.png?raw=true" alt="image go here" width="512">
+<img src="https://github.com/skythedragon-n/quartz/blob/main/assets/Main%20Logo.png?raw=true" alt="image go here" width="512">
 
 
-<h3>--------------------------------------------------------------------------------------</h3>
+---
 
 <p>
 <img src="https://img.shields.io/badge/C%2B%2B-23-blue" alt="CPP">
@@ -27,14 +27,14 @@ We eventually aim to support the importing of .fla's to facilitate a smooth as p
   <tr align="center">
     <td align="center" valign="top">
       <p align="center">
-        <img src="https://github.com/skythedragon-n/quartz/blob/main/Quartz%20Intro.gif?raw=true" width="360" height="240">
+        <img src="https://github.com/skythedragon-n/quartz/blob/main/assets/Quartz%20Intro.gif?raw=true" width="360" height="240">
       </p>
       <p><strong>Quartz Intro!! Wow!</strong></p>
       <p>and out mascot, Artist Block!!! --------></p>
     </td>
     <td align="center" valign="top">
       <p align="center">
-        <img src="https://github.com/skythedragon-n/quartz/blob/main/Artist%20Block%20wave.png?raw=true" width="300" height="300">
+        <img src="https://github.com/skythedragon-n/quartz/blob/main/assets/Artist%20Block%20wave.png?raw=true" width="300" height="300">
       </p>
     </td>
   </tr>
