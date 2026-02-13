@@ -7,6 +7,7 @@
 
 #pragma once
 #include <cstdint>
+#include <expected>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -54,8 +55,8 @@ namespace quartz::renderer {
         FindResult<FolderId> find_folder(::std::string path);
         FindResult<LibraryId> get_library(::std::string group);
 
-        Symbol&        resolve_symbol (SymbolId  id) { return symbols_  [id.id]; }
-        LibraryFolder& resolve_folder (FolderId  id) { return folders_  [id.id]; }
-        Library&       resolve_library(LibraryId id) { return libraries_[id.id]; }
+        ::std::expected<Symbol*,        ResolveFailure> resolve_symbol  (SymbolId  id);
+        ::std::expected<LibraryFolder*, ResolveFailure> resolve_folder  (FolderId  id);
+        ::std::expected<Library*,       ResolveFailure> resolve_library (LibraryId id);
     };
 }

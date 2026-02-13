@@ -62,7 +62,7 @@ namespace quartz::renderer {
             return ::std::nullopt;
         }
 
-        return file_->resolve_folder(iter->second).find_symbol(path.substr(first_sep + 1));
+        return resolve(iter->second).value()->find_symbol(path.substr(first_sep + 1));
     }
 
     FindResult<FolderId> LibraryFolder::find_folder(::std::string path) {
@@ -84,6 +84,6 @@ namespace quartz::renderer {
             return ::std::nullopt;
         }
 
-        return file_->resolve_folder(iter->second).find_folder(path.substr(first_sep + 1));
+        return resolve(iter->second).value()->find_folder(path.substr(first_sep + 1));
     }
 }
