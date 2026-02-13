@@ -20,9 +20,8 @@
 
 ---
 
-Quartz animation will have all the great features from Adobe Animate, ToonBoom, Tahoma2D, Moho, etc.
-
-And it will be open source, so you can make edits and view the code.
+Quartz is a project that aims to create a piece of free-and-open-source animation software particularly suited towards the OSC.
+We eventually aim to support the importing of .fla's to facilitate a smooth as possible transition to Quartz.
 
 <table align="center">
   <tr align="center">
@@ -40,3 +39,19 @@ And it will be open source, so you can make edits and view the code.
     </td>
   </tr>
 </table>
+
+Quartz
+    Copyright (C) 2026 SkyTheDragon
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
