@@ -10,7 +10,11 @@
 #include <optional>
 
 namespace quartz::renderer {
-    struct SymbolId { size_t id;};
+    class AnimFile;
+    class LibraryFolder;
+    class Library;
+
+    struct SymbolId { size_t id; };
     struct FolderId { size_t id; };
     struct LibraryId { size_t id; };
 
