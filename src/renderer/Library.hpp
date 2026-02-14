@@ -37,8 +37,8 @@ namespace quartz::renderer {
         void add_symbol(::std::string name, Symbol::Type type);
         void add_folder(::std::string name);
 
-        FindResult<SymbolId> find_symbol(::std::string path);
-        FindResult<FolderId> find_folder(::std::string path);
+        ::std::expected<SymbolId, FindFailure> find_symbol(::std::string path);
+        ::std::expected<FolderId, FindFailure> find_folder(::std::string path);
 
         [[nodiscard]] ::std::string group() const { return group_; }
     };

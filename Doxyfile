@@ -48,7 +48,7 @@ PROJECT_NAME           = Quartz
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 0.0.0
+PROJECT_NUMBER         = 0.0.0pre-α
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewers a
@@ -61,7 +61,7 @@ PROJECT_BRIEF          = "A piece of free and open source animation software tha
 # pixels and the maximum width should not exceed 200 pixels. Doxygen will copy
 # the logo to the output directory.
 
-PROJECT_LOGO           = "/home/skythedragon/code/quartzrenderer/assets/Main Logo.png"
+PROJECT_LOGO           = "/home/skythedragon/code/quartzrenderer/assets/App Icon Small.png"
 
 # With the PROJECT_ICON tag one can specify an icon that is included in the tabs
 # when the HTML document is shown. Doxygen will copy the logo to the output

@@ -61,39 +61,39 @@ namespace quartz::renderer {
         return {folders_.size() - 1, this};
     }
 
-    FindResult<SymbolId> AnimFile::find_symbol(::std::string path) {
+    ::std::expected<SymbolId, FindFailure> AnimFile::find_symbol(::std::string path) {
         size_t colon = path.find_first_of(':');
 
         if (colon == ::std::string::npos) {
-            return ::std::nullopt;
+            return ::std::unexpected(FindFailure::InvalidPath);
         }
 
         auto library_iter = libraries_by_group_.find(path.substr(0, colon));
 
         if (library_iter == libraries_by_group_.end()) {
-            return ::std::nullopt;
+            return ::std::unexpected(FindFailure::NoSuchPath);
         }
 
         return libraries_[library_iter->second.id].find_symbol(path.substr(colon + 1));
     }
 
-    FindResult<FolderId> AnimFile::find_folder(::std::string path) {
+    ::std::expected<FolderId, FindFailure> AnimFile::find_folder(::std::string path) {
         size_t colon = path.find_first_of(':');
 
         if (colon == ::std::string::npos) {
-            return ::std::nullopt;
+            return ::std::unexpected(FindFailure::InvalidPath);
         }
 
         auto library_iter = libraries_by_group_.find(path.substr(0, colon));
 
         if (library_iter == libraries_by_group_.end()) {
-            return ::std::nullopt;
+            return ::std::unexpected(FindFailure::NoSuchPath);
         }
 
         return resolve(library_iter->second).value()->find_folder(path.substr(colon + 1));
     }
 
-    FindResult<LibraryId> AnimFile::get_library(::std::string group) {
+    ::std::expected<LibraryId, FindFailure> AnimFile::get_library(::std::string group) {
         if (libraries_by_group_.find(group) == libraries_by_group_.end()) {
             return LIBRARY_ID_INVALID;
         }
@@ -110,6 +110,10 @@ namespace quartz::renderer {
             return ::std::unexpected(ResolveFailure::WrongFile);
         }
 
+        if (id.id >= symbols_.size()) {
+            return ::std::unexpected(ResolveFailure::NoSuchObject);
+        }
+
         return &symbols_[id.id];
     }
 
@@ -122,6 +126,10 @@ namespace quartz::renderer {
             return ::std::unexpected(ResolveFailure::WrongFile);
         }
 
+        if (id.id >= folders_.size()) {
+            return ::std::unexpected(ResolveFailure::NoSuchObject);
+        }
+
         return &folders_[id.id];
     }
 
@@ -132,6 +140,10 @@ namespace quartz::renderer {
 
         if (id.file != this) {
             return ::std::unexpected(ResolveFailure::WrongFile);
+        }
+
+        if (id.id >= libraries_.size()) {
+            return ::std::unexpected(ResolveFailure::NoSuchObject);
         }
 
         return &libraries_[id.id];

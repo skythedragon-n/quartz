@@ -22,11 +22,11 @@ namespace quartz::renderer {
         root_.add_symbol(name, type);
     }
 
-    FindResult<SymbolId> Library::find_symbol(::std::string path) {
+    ::std::expected<SymbolId, FindFailure> Library::find_symbol(::std::string path) {
         return root_.find_symbol(path);
     }
 
-    FindResult<FolderId> Library::find_folder(::std::string path) {
+    ::std::expected<FolderId, FindFailure> Library::find_folder(::std::string path) {
         return root_.find_folder(path);
     }
 }
