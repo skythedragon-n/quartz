@@ -19,27 +19,31 @@ namespace quartz::renderer {
     class Symbol;
 
     /**
-     * @brief An id for a @link Symbol @endlink, containing the Id index, and the symbol's host file
-     * The @code id @endcode parameter is an index into the id's file's symbol index,
-     * while the @code file @endcode parameter is a pointer to the Id's file
+     * @brief An id for a @link Symbol @endlink
+     *
+     * The `id` parameter is an index into the id's file's symbol index,
+     * while the `file` parameter is a pointer to the Id's file
      */
     struct SymbolId { size_t id; AnimFile* file = nullptr; };
     /**
-     * @brief An id for a @link Instance @endlink, containing the Id index, and the symbol's host file
-     * The @code id @endcode parameter is an index into the id's file's instance index,
-     * while the @code file @endcode parameter is a pointer to the Id's file
+     * @brief An id for a @link Instance @endlink
+     *
+     * The `id` parameter is an index into the id's file's instance index,
+     * while the `file` parameter is a pointer to the Id's file
      */
     struct InstanceId { size_t id; AnimFile* file = nullptr; };
     /**
-     * @brief An id for a @link LibraryFolder @endlink, containing the Id index, and the symbol's host file
-     * The @code id @endcode parameter is an index into the id's file's folder index,
-     * while the @code file @endcode parameter is a pointer to the Id's file
+     * @brief An id for a @link LibraryFolder @endlink
+     *
+     * The `id` parameter is an index into the id's file's folder index,
+     * while the `file` parameter is a pointer to the Id's file
      */
     struct FolderId { size_t id; AnimFile* file = nullptr; };
     /**
-     * @brief An id for a @link Library @endlink, containing the Id index, and the symbol's host file
-     * The @code id @endcode parameter is an index into the id's file's instance index,
-     * while the @code file @endcode parameter is a pointer to the Id's file
+     * @brief An id for a @link Library @endlink
+     *
+     * The `id` parameter is an index into the id's file's instance index,
+     * while the `file` parameter is a pointer to the Id's file
      */
     struct LibraryId { size_t id; AnimFile* file = nullptr; };
     //struct FrameId { size_t id; AnimFile* file = nullptr; };
@@ -70,13 +74,19 @@ namespace quartz::renderer {
     };
 
     /**
-    * @deprecated Gonna be replaced with @code ::std::expected @endcode soon
+    * @deprecated Gonna be replaced with `::std::expected` soon
     */
     template<typename T>
     using ActionResult = ::std::variant<success_t, T>;
 
     /**
      * @brief Represents a failure to move a symbol or folder
+     *
+     * An enum with variants for each way a symbol can fail to be moved.
+     *
+     * Variants:
+     *      - NoSuchSource means the thing to be moved is non-existent
+     *      - NoSuchDestination meaning the destination folder is non-existent
      */
     enum class MoveFailure {
         NoSuchSource,
@@ -85,6 +95,13 @@ namespace quartz::renderer {
 
     /**
      * @brief Represents a failure to resolve a symbol
+     *
+     * An enum with variants for each way an object resolution can fail
+     *
+     * Variants:
+     *      - InvalidId means the Id's file is `nullptr`
+     *      - WrongFile means the Id is being resolved with the wrong file
+     *      - NoSuchObject means that there isn't an item in the file index for that object.
      */
     enum class ResolveFailure {
         InvalidId,
