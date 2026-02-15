@@ -93,4 +93,6 @@ CMakeUserPresets.json
 
 html
 latex
-
+docs.sh
+sftpbatch
+remote.sh
