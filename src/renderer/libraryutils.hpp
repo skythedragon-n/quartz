@@ -12,6 +12,11 @@
 
 #include "AnimFile.hpp"
 
+/**
+ * @file libraryutils.hpp
+ *
+ * Contains various utilities for the library system, along with all Id types.
+ */
 namespace quartz::renderer {
     class AnimFile;
     class LibraryFolder;
@@ -24,7 +29,7 @@ namespace quartz::renderer {
      * The `id` parameter is an index into the id's file's symbol index,
      * while the `file` parameter is a pointer to the Id's file
      */
-    struct SymbolId { size_t id; AnimFile* file = nullptr; };
+    struct SymbolId {size_t id; AnimFile* file = nullptr; };
     /**
      * @brief An id for a @link Instance @endlink
      *
@@ -114,6 +119,8 @@ namespace quartz::renderer {
      *
      * @param id the Id to be resolved
      * @return A pointer to the Symbol on success, and an error type on failure
+     *
+     * See @link AnimFile @endlink for more details
      */
     ::std::expected<Symbol*, ResolveFailure> resolve(SymbolId id);
 
@@ -122,6 +129,8 @@ namespace quartz::renderer {
      *
      * @param id the Id to be resolved
      * @return A pointer to the LibraryFolder on success, and an error type on failure
+     *
+     * See @link AnimFile @endlink for more details
      */
     ::std::expected<LibraryFolder*, ResolveFailure> resolve(FolderId id);
 
@@ -130,6 +139,8 @@ namespace quartz::renderer {
      *
      * @param id the Id to be resolved
      * @return A pointer to the Library on success, and an error type on failure
+     *
+     * See @link AnimFile @endlink for more details
      */
     ::std::expected<Library*, ResolveFailure> resolve(LibraryId id);
 }

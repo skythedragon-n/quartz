@@ -95,7 +95,7 @@ namespace quartz::renderer {
 
     ::std::expected<LibraryId, FindFailure> AnimFile::get_library(::std::string group) {
         if (libraries_by_group_.find(group) == libraries_by_group_.end()) {
-            return LIBRARY_ID_INVALID;
+            return ::std::unexpected(FindFailure::NoSuchPath);
         }
 
         return libraries_by_group_.at(group);
