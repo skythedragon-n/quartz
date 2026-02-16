@@ -11,7 +11,7 @@
 #include <cmath>
 #include <limits>
 
-namespace quartz::renderer {
+namespace quartz::core {
     struct Point {
         double x, y;
     };

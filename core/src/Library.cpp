@@ -7,7 +7,7 @@
 
 #include "Library.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     Library::Library(CtorKey, ::std::string group, LibraryId id, AnimFile* file) :
     group_(group),
     root_(id, file),

@@ -7,7 +7,7 @@
 
 #pragma once
 
-namespace quartz::renderer {
+namespace quartz::core {
     class Context {
     public:
         Context();

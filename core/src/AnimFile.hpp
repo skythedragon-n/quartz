@@ -16,7 +16,7 @@
 #include "libraryutils.hpp"
 
 
-namespace quartz::renderer {
+namespace quartz::core {
     /**
      * @brief Root of internal representation of animations
      *

@@ -11,7 +11,7 @@
 
 #include "Stroke.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
 
     class Drawing {
         std::vector<Stroke> strokes_;

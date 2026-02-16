@@ -10,8 +10,12 @@
 #include "AnimFile.hpp"
 #include "Library.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     void LibraryFolder::set_parent(LibraryId parent) {
+        parent_ = parent;
+    }
+
+    void LibraryFolder::set_parent(FolderId parent) {
         parent_ = parent;
     }
 

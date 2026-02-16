@@ -7,7 +7,7 @@
 
 #include "libraryutils.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     bool operator==(const SymbolId& lhs, const SymbolId& rhs) {
         return lhs.id == rhs.id && lhs.file == rhs.file;
     }

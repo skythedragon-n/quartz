@@ -7,7 +7,7 @@
 
 #include "AnimFile.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     AnimFile::AnimFile() {
     }
 

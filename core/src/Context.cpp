@@ -5,8 +5,7 @@
 // Created by skythedragon on 2/7/26.
 //
 
-#include <iostream>
+#include "Context.hpp"
 
-int main() {
-    std::cout << "Amethyst doesn't exist yet. Sorry.";
-}
+namespace quartz::core {
+} // quartz::renderer

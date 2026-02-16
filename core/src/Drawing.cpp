@@ -7,7 +7,7 @@
 
 #include "Drawing.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     void Drawing::add_stroke(Color color, double thickness, std::vector<Point> points) {
         strokes_.emplace_back(thickness, color);
 

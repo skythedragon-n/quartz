@@ -11,7 +11,7 @@
 #include "LibraryFolder.hpp"
 
 
-namespace quartz::renderer {
+namespace quartz::core {
     class Library {
         LibraryFolder root_;
 

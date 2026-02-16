@@ -15,9 +15,11 @@
 /**
  * @file libraryutils.hpp
  *
+ * @authors SkyTheDragon
+ *
  * Contains various utilities for the library system, along with all Id types.
  */
-namespace quartz::renderer {
+namespace quartz::core {
     class AnimFile;
     class LibraryFolder;
     class Library;

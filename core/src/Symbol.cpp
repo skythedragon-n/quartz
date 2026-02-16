@@ -7,7 +7,7 @@
 
 #include "Symbol.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     Symbol::Symbol(CtorKey, ::std::string name, Type type, FolderId parent, SymbolId id, AnimFile* file) :
     name_(name),
     type_(type),

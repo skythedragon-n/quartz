@@ -20,6 +20,8 @@ project(quartz)
 
 set(CMAKE_CXX_STANDARD 23)
 
+add_subdirectory(core)
+
 add_library(quartz_renderer
 src/renderer/Context.cpp
 src/renderer/Context.hpp
@@ -100,42 +102,48 @@ target_include_directories(vg-renderer PUBLIC
 
 add_subdirectory(submodules/pugixml)
 
+#TODO figure out a better way to not have to do all of that crap to link pugixml for every target
+add_library(xml core/src/drawingutils.hpp)
+
 if(TARGET pugixml::pugixml)
-    target_link_libraries(quartz_renderer pugixml::pugixml)
+    target_link_libraries(xml pugixml::pugixml)
 elseif(TARGET pugixml)
-    target_link_libraries(quartz_renderer pugixml)
+    target_link_libraries(xml pugixml)
 elseif(TARGET pugixml-static)
-    target_link_libraries(quartz_renderer pugixml-static)
+    target_link_libraries(xml pugixml-static)
 else()
     message(FATAL_ERROR "pugixml CMake target not found after add_subdirectory(submodules/pugixml).")
 endif()
 
+#TODO figure out a better way to not have to do all of that crap to link bgfx for every target
+add_library(bgfx "Cmake dummy.cpp")
+
 if(UNIX)
     #include dirs
-    target_include_directories(quartz_renderer
-	    PRIVATE
+    target_include_directories(bgfx
+	    PUBLIC
 		submodules/bgfx/include
 		submodules/bx/include
 		submodules/bimg/include
     )
 
-    target_include_directories(quartz_renderer
-	    PRIVATE
+    target_include_directories(bgfx
+	    PUBLIC
 		submodules/bgfx/3rdparty/
 		submodules/bgfx/examples/common
 	)
 
     #LINK LIBS
-    target_link_libraries(quartz_renderer GL X11 ${CMAKE_DL_LIBS} pthread)
+    target_link_libraries(bgfx GL X11 ${CMAKE_DL_LIBS} pthread)
 
     #BGFX LINKS LOGIC
-    target_link_directories(quartz_renderer PRIVATE ./submodules/bgfx/.build/linux64_gcc/bin/)
+    target_link_directories(bgfx PRIVATE ./submodules/bgfx/.build/linux64_gcc/bin/)
 
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules/bgfx/.build/linux64_gcc/bin/libbgfxDebug.a")
         message(FATAL_ERROR "The bgfx submodule was not built as debug! Go to bgfx folder and run: make linux-debug64")
         endif()
-	    target_link_libraries(quartz_renderer
+	    target_link_libraries(bgfx
 		    bgfxDebug
 		    bimgDebug
 		    bxDebug
@@ -147,7 +155,7 @@ if(UNIX)
     if(NOT EXISTS "${PROJECT_SOURCE_DIR}/submodules/bgfx/.build/linux64_gcc/bin/libbgfxRelease.a")
         message(FATAL_ERROR "The bgfx submodule was not built as release! Go to bgfx folder and run: make linux-release64")
     endif()
-	target_link_libraries(quartz_renderer
+	target_link_libraries(bgfx
 		example-glueRelease
 		example-commonRelease
 		bimg_decodeRelease
@@ -160,11 +168,5 @@ else()
 	message(FATAL_ERROR "No Windows build preparations. Sorry")
 endif()
 
-add_executable(amethyst
-src/amethyst/main.cpp)
-target_link_libraries(quartz_renderer pugixml)
-#target_link_libraries(quartz_renderer vg-renderer)
-target_link_libraries(quartz_renderer simple-svg)
-
-add_executable(quartz_test
-src/test/main.cpp)
+add_executable(quartz_tester test/main.cpp)
+target_link_libraries(quartz_tester quartz_core)
