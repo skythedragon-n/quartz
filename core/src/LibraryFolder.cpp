@@ -8,7 +8,6 @@
 #include "LibraryFolder.hpp"
 
 #include "AnimFile.hpp"
-#include "Library.hpp"
 
 namespace quartz::core {
     void LibraryFolder::set_parent(LibraryId parent) {

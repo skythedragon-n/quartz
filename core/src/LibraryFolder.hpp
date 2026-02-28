@@ -74,8 +74,11 @@ namespace quartz::core {
          * @param name Name of symbol to be added
          * @param type Type of symbol
          */
-        [[nodiscard]] ::std::expected<void, > add_symbol(::std::string name, Symbol::Type type);
-        void add_folder(::std::string name);
+        [[nodiscard]] ::std::expected<void, AddFailure> add_symbol(::std::string name, Symbol::Type type);
+        /**
+         * @brief Adds a subfolder to the folder
+         */
+        [[nodiscard]] ::std::expected<void, AddFailure> add_folder(::std::string name);
 
         ::std::expected<SymbolId, FindFailure> find_symbol(std::string path);
         ::std::expected<FolderId, FindFailure> find_folder(std::string path);
