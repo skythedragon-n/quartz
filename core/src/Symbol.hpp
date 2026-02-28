@@ -10,11 +10,9 @@
 #include <variant>
 
 #include "Drawing.hpp"
+#include "id_sys.hpp"
 
-
-namespace quartz::renderer {
-    class LibraryFolder;
-    class Library;
+namespace quartz::core {
 
     class Symbol {
     public:
@@ -33,23 +31,18 @@ namespace quartz::renderer {
         FolderId parent_;
         void set_parent(FolderId parent);
 
-        struct CtorKey {
-        private:
-            CtorKey() = default;
-            friend class AnimFile;
-        };
-
         friend class Library;
         friend class AnimFile;
 
     public:
 
-        Symbol(CtorKey, ::std::string name, Type type, FolderId parent, SymbolId id, AnimFile* file);
+        Symbol(AnimKey, ::std::string name, Type type, FolderId parent, SymbolId id, AnimFile* file);
 
         void set_name(::std::string name);
 
         [[nodiscard]] ::std::string name() const { return name_; }
 
         Drawing& drawing() { return ::std::get<Drawing>(data_); }
+        //::std::vector<AnimatedLayer>& anim_layers() { return ::std::get<std::vector<AnimatedLayer>>(data_); }
     };
 }

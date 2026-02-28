@@ -8,9 +8,9 @@
 #pragma once
 #include <vector>
 
-#include "utils.hpp"
+#include "drawing_utils.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     class Stroke {
         ::std::vector<BezierSection> points_;
         double thickness_;

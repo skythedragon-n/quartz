@@ -17,7 +17,7 @@ namespace quartz::core {
     };
 
     struct Color {
-        uint8_t r, g, b, a;
+        uint8_t r = 0, g = 0, b = 0, a = 255;
     };
 
     constexpr double NaN = ::std::numeric_limits<double>::quiet_NaN();
@@ -41,5 +41,12 @@ namespace quartz::core {
         Point start = null_point;
         Point tangent1 = null_point, tangent2 = null_point;
         Lock lock = Lock::None;
+    };
+
+    struct Transform {
+        double xScale = 1.0, yScale = 1.0;
+        double rotation = 0.0;
+        double xOffset = 0.0, yOffset = 0.0;
+        double skewX = 0.0, skewY = 0.0;
     };
 }
