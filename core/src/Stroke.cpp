@@ -7,7 +7,7 @@
 
 #include "Stroke.hpp"
 
-namespace quartz::renderer {
+namespace quartz::core {
     Stroke::Stroke(double thickness, Color color) :
     thickness_(thickness),
     color_(color)
