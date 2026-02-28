@@ -16,10 +16,27 @@
 
 
 cmake_minimum_required(VERSION 4.0)
+project(quartz VERSION "0.0.0")
+
+set(${CMAKE_PROJECT_VERSION} "0.0.0pre-alpha")
 
 set(CMAKE_CXX_STANDARD 23)
 
 add_subdirectory(core)
+add_subdirectory(lib)
+
+target_link_libraries(quartz_lib quartz_core)
+add_dependencies(quartz_lib quartz_core_headers)
+
+Include(FetchContent)
+
+FetchContent_Declare(
+  Catch2
+  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+  GIT_TAG        v3.8.1 # or a later release
+)
+
+FetchContent_MakeAvailable(Catch2)
 
 #           DOWNLOAD ALL THE SUBMODULES
 find_package(Git QUIET)
