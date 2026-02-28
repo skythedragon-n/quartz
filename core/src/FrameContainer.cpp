@@ -1,0 +1,249 @@
+//
+// copyleft 🄯 2026 by SkyTheDragon
+// licenced under the GPLv3-or-later, details located in LICENSE
+//
+// Created by skythedragon on 19 Feb 2026.
+//
+
+#include "FrameContainer.hpp"
+
+#include "id_sys.hpp"
+
+namespace quartz::core {
+    template <typename ItemT>
+    ::std::expected<typename FrameContainer<ItemT>::InsertSuccess, typename FrameContainer<ItemT>::InsertFailure>
+    FrameContainer<ItemT>::insert_frame(size_t index, ItemT item) {
+        if (items_.size() >= index) {
+            if (items_.empty()) {
+                //You can't fill the list with the last frame in it up to 'index' if there is no last frame
+                if (index != 1) {
+                    return ::std::unexpected(NoFrames{});
+                }
+
+                //This is fine. No fill required. Just append 'item'
+                items_.emplace_back(Item{item, 0, 1});
+                return AddedToEnd{1};
+            }
+
+            Item last_item = items_.back();
+
+            if (last_item.content == item) {
+                size_t last_dist = last_item.from_first;
+
+                size_t items_size = items_.size();
+
+                for (size_t i = 1; i <= index - items_size + 1; i++) {
+                    items_.emplace_back(Item{item, last_dist + i, Item::INVALID_INDEX});
+                }
+
+                size_t first_frame = items_.size() - last_dist - 1;
+
+                for (size_t i = items_.size() - 1; i >= first_frame; --i) {
+                    items_[i].to_next = items_.size() - i;
+                }
+
+                return AddedToEnd{index - items_size + 1};
+            }
+
+            if (index == items_.size()) {
+                items_.emplace_back(Item{item, 0, 1});
+                return AddedToEnd{1};
+            }
+
+            size_t for_len = index - items_.size() + 1;
+
+            for (size_t i = 1; i <= for_len; ++i) {
+                items_.emplace_back(Item{last_item.content, last_item.from_first + i, Item::INVALID_INDEX});
+            }
+
+            size_t first_frame = items_.size() - last_item.from_first - 1;
+
+            for (size_t i = items_.size() - 1; i >= first_frame; --i) {
+                items_[i].to_next = items_.size() - i;
+            }
+
+            return AddedToEnd{for_len};
+        }
+
+        if (items_[index].content == item) {
+            return std::unexpected(SameFrames{});
+        }
+
+        if (items_[index].from_first == 0) {
+            Item replace_target = items_[index];
+
+            for (size_t i = index; i < items_.size() && items_[i].content == replace_target.content; i++) {
+                items_[i].content = item;
+            }
+
+            return Normal{};
+        }
+
+        Item replace_target = items_[index];
+
+        for (size_t i = 0; i + index < items_.size() && items_[i + index].content == replace_target.content; i++) {
+            items_[i + index].content = item;
+            items_[i + index].from_first = i;
+        }
+
+        size_t first_replace = index - replace_target.from_first;
+
+        size_t new_last = index + replace_target.to_next;
+
+        for (size_t i = index - 1; i >= first_replace; i--) {
+            items_[i].to_next = index - i;
+        }
+
+        for (size_t i = new_last - 1; i >= index; i--) {
+            items_[i].to_next = new_last - i;
+        }
+
+        for (size_t i = index - 1; i >= first_replace; i--) {
+            items_[i].from_first = index - i;
+        }
+
+        return Normal{};
+    }
+
+    template <typename ItemT>
+    void FrameContainer<ItemT>::append_frame(ItemT item, size_t count) {
+        if (!items_.empty()) {
+            if (items_.back().content == item) {
+                size_t last_dist = items_.back().from_first;
+
+                for (size_t i = 1; i <= count; i++) {
+                    items_.emplace_back(Item{item, last_dist + i, Item::INVALID_INDEX});
+                }
+
+                size_t first_frame = items_.size() - last_dist - 1;
+
+                for (size_t i = items_.size() - 1; i >= first_frame; --i) {
+                    items_[i].to_next = items_.size() - i;
+                }
+
+                return;
+            }
+        }
+
+        for (size_t i = 0; i < count; ++i) {
+            items_.emplace_back(Item{item, i, count - i});
+        }
+    }
+
+    template <typename ItemT>
+    void FrameContainer<ItemT>::replace_frame(size_t index, ItemT replace) {
+        if (index >= items_.size()) {
+            return;
+        }
+
+        size_t start = index - items_[index].from_first;
+        size_t end = index + items_[index].to_next;
+
+        for (size_t i = start; i < end; i++) {
+            items_[i].content = replace;
+        }
+    }
+
+    template <typename ItemT>
+    void FrameContainer<ItemT>::remove_frame(size_t index) {
+        if (index >= items_.size()) {
+            return;
+        }
+
+        size_t target_start = index - items_[index].from_first;
+
+        if (target_start == 0) {
+            return;
+        }
+
+        ItemT replace = items_[target_start - 1].content;
+
+        size_t end_run = target_start;
+
+        for (size_t i = target_start; i < items_.size(); ++i) {
+            if (items_[i].content != items_[index].content) {
+                break;
+            }
+            items_[i].content = replace;
+            items_[i].from_first = target_start - i;
+
+            end_run = i;
+        }
+
+        for (size_t i = end_run; i >= target_start; --i) {
+            items_[i].to_next = end_run - i + 1;
+        }
+    }
+
+    template <typename ItemT>
+    void FrameContainer<ItemT>::move_frame(size_t from, size_t to) {
+        if (from >= items_.size() || to >= items_.size()) {
+            return;
+        }
+
+        Item& item = items_[from];
+
+        remove_frame(from);
+
+        insert_frame(to, item.content);
+    }
+
+    template <typename ItemT>
+    void FrameContainer<ItemT>::trim_to_size(size_t size) {
+        if (size >= items_.size()) {
+            return;
+        }
+
+        items_.resize(size);
+
+        if (items_.empty()) {
+            return;
+        }
+
+        if (items_.back().to_next != 1) {
+            ItemT& last = items_.back().content;
+
+            for (size_t i = items_.size() - 1; items_[i].content == last; i--) {
+                if (i == 0) {
+                    break;
+                }
+
+                items_[i].to_next = items_.size() - i;
+            }
+        }
+    }
+
+    template <typename ItemT>
+    FrameContainer<ItemT>::Iterator FrameContainer<ItemT>::at(size_t index) {
+        return Iterator{this, index};
+    }
+
+    template <typename ItemT>
+    std::tuple<ItemT, size_t, size_t> FrameContainer<ItemT>::operator[](size_t index) {
+        Item& item = items_[index];
+        return std::make_tuple(item.content, item.from_first, item.to_next);
+    }
+
+    template <typename ItemT>
+    FrameContainer<ItemT>::Iterator FrameContainer<ItemT>::begin() {
+        return Iterator{this, 0};
+    }
+
+    template <typename ItemT>
+    FrameContainer<ItemT>::Iterator FrameContainer<ItemT>::end() {
+        return Iterator{this, items_.size()};
+    }
+
+    template <typename ItemT>
+    size_t FrameContainer<ItemT>::size() const {
+        return items_.size();
+    }
+
+    template <typename ItemT>
+    void FrameContainer<ItemT>::clear() {
+        items_.clear();
+    }
+
+    template class FrameContainer<int>;
+    template class FrameContainer<FrameId>;
+}

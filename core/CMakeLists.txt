@@ -18,6 +18,8 @@ src/drawing_utils.hpp
 src/id_sys.cpp
 src/id_sys.hpp
 src/core_errors.hpp
+src/FrameContainer.cpp
+src/FrameContainer.hpp
 )
 
 set(CORE_HEADER_STAMP "${CMAKE_CURRENT_SOURCE_DIR}/header.stamp")
@@ -32,6 +34,7 @@ set(QUARTZ_CORE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core_errors.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Drawing.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/drawing_utils.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/FrameContainer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/id_sys.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Instance.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Library.hpp"
