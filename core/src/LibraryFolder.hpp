@@ -10,8 +10,11 @@
 #include <string>
 #include <unordered_map>
 #include <variant>
+#include <expected>
 
-#include "libraryutils.hpp"
+#include "id_sys.hpp"
+#include "core_errors.hpp"
+#include "Symbol.hpp"
 
 namespace quartz::core {
     /**

@@ -8,8 +8,7 @@
 #include "AnimFile.hpp"
 
 namespace quartz::core {
-    AnimFile::AnimFile() {
-    }
+    AnimFile::AnimFile() = default;
 
     void AnimFile::set_width(uint64_t width) {
         width_ = width;
@@ -40,7 +39,7 @@ namespace quartz::core {
 
     SymbolId AnimFile::add_symbol(::std::string name, Symbol::Type type, FolderId parent) {
         symbols_.emplace_back(
-            Symbol::CtorKey(),
+            AnimKey(),
             name,
             type,
             parent,
@@ -90,7 +89,7 @@ namespace quartz::core {
             return ::std::unexpected(FindFailure::NoSuchPath);
         }
 
-        return resolve(library_iter->second).value()->find_folder(path.substr(colon + 1));
+        return resolve_library(library_iter->second).value()->find_folder(path.substr(colon + 1));
     }
 
     ::std::expected<LibraryId, FindFailure> AnimFile::get_library(::std::string group) {

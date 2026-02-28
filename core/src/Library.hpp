@@ -9,6 +9,8 @@
 #include <string>
 
 #include "LibraryFolder.hpp"
+#include "Symbol.hpp"
+#include "core_errors.hpp"
 
 
 namespace quartz::core {
@@ -34,7 +36,7 @@ namespace quartz::core {
 
         Library() = delete;
 
-        void add_symbol(::std::string name, Symbol::Type type);
+        [[nodiscard]] ::std::expected<void, AddFailure> add_symbol(::std::string name, Symbol::Type type);
         void add_folder(::std::string name);
 
         ::std::expected<SymbolId, FindFailure> find_symbol(::std::string path);

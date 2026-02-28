@@ -37,14 +37,18 @@ namespace quartz::core {
         name_ = name;
     }
 
-    void LibraryFolder::add_symbol(::std::string name, Symbol::Type type) {
+    ::std::expected<void, AddFailure> LibraryFolder::add_symbol(::std::string name, Symbol::Type type) {
+        //TODO: check for name collisions
         SymbolId symbol = file_->add_symbol(name, type, id_);
         symbols_.emplace(name, symbol);
+        return {};
     }
 
-    void LibraryFolder::add_folder(::std::string name) {
+    ::std::expected<void, AddFailure> LibraryFolder::add_folder(::std::string name) {
+        //TODO: check for name collisions
         FolderId folder = file_->add_folder(name, id_);
         folders_.emplace(name, folder);
+        return {};
     }
 
     ::std::expected<SymbolId, FindFailure> LibraryFolder::find_symbol(::std::string path) {
@@ -66,7 +70,9 @@ namespace quartz::core {
             return ::std::unexpected(FindFailure::NoSuchPath);
         }
 
-        return resolve(iter->second).value()->find_symbol(path.substr(first_sep + 1));
+        FolderId folder = iter->second;
+
+        return folder.file->resolve_folder(folder).value()->find_symbol(path.substr(first_sep + 1));
     }
 
     ::std::expected<FolderId, FindFailure> LibraryFolder::find_folder(::std::string path) {
@@ -88,6 +94,8 @@ namespace quartz::core {
             return ::std::unexpected(FindFailure::NoSuchPath);
         }
 
-        return resolve(iter->second).value()->find_folder(path.substr(first_sep + 1));
+        FolderId folder = iter->second;
+
+        return folder.file->resolve_folder(folder).value()->find_folder(path.substr(first_sep + 1));
     }
 }

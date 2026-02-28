@@ -7,6 +7,8 @@
 
 #include "Library.hpp"
 
+#include "LibraryFolder.hpp"
+
 namespace quartz::core {
     Library::Library(CtorKey, ::std::string group, LibraryId id, AnimFile* file) :
     group_(group),
@@ -18,8 +20,8 @@ namespace quartz::core {
         root_.add_folder(name);
     }
 
-    void Library::add_symbol(::std::string name, Symbol::Type type) {
-        root_.add_symbol(name, type);
+    ::std::expected<void, AddFailure> Library::add_symbol(::std::string name, Symbol::Type type) {
+        return root_.add_symbol(name, type);
     }
 
     ::std::expected<SymbolId, FindFailure> Library::find_symbol(::std::string path) {

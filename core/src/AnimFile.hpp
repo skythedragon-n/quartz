@@ -13,7 +13,9 @@
 #include <vector>
 
 #include "Library.hpp"
-#include "libraryutils.hpp"
+#include "id_sys.hpp"
+#include "core_errors.hpp"
+#include "Symbol.hpp"
 
 
 namespace quartz::core {
