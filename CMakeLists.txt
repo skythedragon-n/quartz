@@ -16,29 +16,10 @@
 
 
 cmake_minimum_required(VERSION 4.0)
-project(quartz)
 
 set(CMAKE_CXX_STANDARD 23)
 
 add_subdirectory(core)
-
-add_library(quartz_renderer
-src/renderer/Context.cpp
-src/renderer/Context.hpp
-src/renderer/AnimFile.cpp
-src/renderer/AnimFile.hpp
-src/renderer/Library.cpp
-src/renderer/Library.hpp
-src/renderer/LibraryFolder.cpp
-src/renderer/LibraryFolder.hpp
-src/renderer/Symbol.cpp
-src/renderer/Symbol.hpp
-src/renderer/Drawing.cpp
-src/renderer/Drawing.hpp
-src/renderer/Stroke.cpp
-src/renderer/Stroke.hpp
-src/renderer/utils.hpp
-)
 
 #           DOWNLOAD ALL THE SUBMODULES
 find_package(Git QUIET)
@@ -103,7 +84,7 @@ target_include_directories(vg-renderer PUBLIC
 add_subdirectory(submodules/pugixml)
 
 #TODO figure out a better way to not have to do all of that crap to link pugixml for every target
-add_library(xml core/src/drawingutils.hpp)
+add_library(xml "cmake_helpers/empty.cpp")
 
 if(TARGET pugixml::pugixml)
     target_link_libraries(xml pugixml::pugixml)
@@ -116,7 +97,7 @@ else()
 endif()
 
 #TODO figure out a better way to not have to do all of that crap to link bgfx for every target
-add_library(bgfx "Cmake dummy.cpp")
+add_library(bgfx "cmake_helpers/empty.cpp")
 
 if(UNIX)
     #include dirs
@@ -168,5 +149,5 @@ else()
 	message(FATAL_ERROR "No Windows build preparations. Sorry")
 endif()
 
-add_executable(quartz_tester test/main.cpp)
-target_link_libraries(quartz_tester quartz_core)
+add_custom_target(quartz_headers)
+add_dependencies(quartz_headers quartz_core_headers)

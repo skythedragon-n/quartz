@@ -96,3 +96,5 @@ latex
 docs.sh
 sftpbatch
 remote.sh
+
+*.stamp
