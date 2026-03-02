@@ -33,16 +33,11 @@ namespace quartz::core {
 
         struct Normal {};
 
-        struct DeleteFirst {
-            ItemT item;
-            size_t index;
-        };
-
         struct AddedToEnd {
             size_t count;
         };
 
-        using InsertFailure = ::std::variant<DeleteFirst, NoFrames, SameFrames>;
+        using InsertFailure = ::std::variant<NoFrames, SameFrames>;
         using InsertSuccess = ::std::variant<AddedToEnd, Normal>;
 
         using InsertResult = ::std::expected<InsertSuccess, InsertFailure>;
