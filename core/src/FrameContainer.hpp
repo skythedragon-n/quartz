@@ -35,6 +35,7 @@ namespace quartz::core {
 
         struct DeleteFirst {
             ItemT item;
+            size_t index;
         };
 
         struct AddedToEnd {
@@ -43,6 +44,8 @@ namespace quartz::core {
 
         using InsertFailure = ::std::variant<DeleteFirst, NoFrames, SameFrames>;
         using InsertSuccess = ::std::variant<AddedToEnd, Normal>;
+
+        using InsertResult = ::std::expected<InsertSuccess, InsertFailure>;
 
         class Iterator {
             size_t index_ = 0;
@@ -67,9 +70,10 @@ namespace quartz::core {
 
         FrameContainer() = default;
 
-        ::std::expected<InsertSuccess, InsertFailure> insert_frame(size_t index, ItemT item);
+        InsertResult insert_frame(size_t index, ItemT item);
         void append_frame(ItemT item, size_t count = 1);
 
+        //TODO: better error handling
         void replace_frame(size_t index, ItemT replace);
         void remove_frame(size_t index);
         void move_frame(size_t from, size_t to);
@@ -78,7 +82,7 @@ namespace quartz::core {
 
         Iterator at(size_t index);
 
-        ::std::tuple<ItemT, size_t, size_t> operator[](size_t index);
+        const ::std::tuple<ItemT, size_t, size_t> operator[](size_t index);
 
         Iterator begin();
         Iterator end();

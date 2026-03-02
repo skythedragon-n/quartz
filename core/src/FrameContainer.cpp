@@ -7,16 +7,19 @@
 
 #include "FrameContainer.hpp"
 
+#include <numeric>
+#include <ranges>
+
 #include "id_sys.hpp"
 
 namespace quartz::core {
     template <typename ItemT>
     ::std::expected<typename FrameContainer<ItemT>::InsertSuccess, typename FrameContainer<ItemT>::InsertFailure>
     FrameContainer<ItemT>::insert_frame(size_t index, ItemT item) {
-        if (items_.size() >= index) {
+        if (items_.size() <= index) {
             if (items_.empty()) {
                 //You can't fill the list with the last frame in it up to 'index' if there is no last frame
-                if (index != 1) {
+                if (index != 0) {
                     return ::std::unexpected(NoFrames{});
                 }
 
@@ -32,13 +35,13 @@ namespace quartz::core {
 
                 size_t items_size = items_.size();
 
-                for (size_t i = 1; i <= index - items_size + 1; i++) {
+                for (size_t i : ::std::views::iota(static_cast<size_t>(1), index - items_.size() + 2)) {
                     items_.emplace_back(Item{item, last_dist + i, Item::INVALID_INDEX});
                 }
 
                 size_t first_frame = items_.size() - last_dist - 1;
 
-                for (size_t i = items_.size() - 1; i >= first_frame; --i) {
+                for (size_t i : ::std::views::iota(first_frame, items_.size())) {
                     items_[i].to_next = items_.size() - i;
                 }
 
@@ -50,19 +53,20 @@ namespace quartz::core {
                 return AddedToEnd{1};
             }
 
-            size_t for_len = index - items_.size() + 1;
+            size_t for_len = index - items_.size();
+            size_t first_frame = items_.size() - last_item.from_first - 1;
 
-            for (size_t i = 1; i <= for_len; ++i) {
+            for (size_t i : ::std::views::iota(static_cast<size_t>(1), for_len + 1)) {
                 items_.emplace_back(Item{last_item.content, last_item.from_first + i, Item::INVALID_INDEX});
             }
 
-            size_t first_frame = items_.size() - last_item.from_first - 1;
-
-            for (size_t i = items_.size() - 1; i >= first_frame; --i) {
+            for (size_t i : ::std::views::iota(first_frame, items_.size())) {
                 items_[i].to_next = items_.size() - i;
             }
 
-            return AddedToEnd{for_len};
+            items_.emplace_back(Item{item, 0, 1});
+
+            return AddedToEnd{for_len + 1};
         }
 
         if (items_[index].content == item) {
@@ -72,7 +76,10 @@ namespace quartz::core {
         if (items_[index].from_first == 0) {
             Item replace_target = items_[index];
 
-            for (size_t i = index; i < items_.size() && items_[i].content == replace_target.content; i++) {
+            for (size_t i : ::std::views::iota(index, items_.size())) {
+                if (items_[i].content == replace_target.content) {
+                    break;
+                }
                 items_[i].content = item;
             }
 
@@ -81,24 +88,27 @@ namespace quartz::core {
 
         Item replace_target = items_[index];
 
-        for (size_t i = 0; i + index < items_.size() && items_[i + index].content == replace_target.content; i++) {
-            items_[i + index].content = item;
-            items_[i + index].from_first = i;
+        for (size_t i : ::std::views::iota(index, items_.size())) {
+            if (items_[i].content == replace_target.content) {
+                break;
+            }
+            items_[i].content = item;
+            items_[i].from_first = i - index;
         }
 
         size_t first_replace = index - replace_target.from_first;
 
         size_t new_last = index + replace_target.to_next;
 
-        for (size_t i = index - 1; i >= first_replace; i--) {
+        for (size_t i : ::std::views::iota(first_replace, index)) {
             items_[i].to_next = index - i;
         }
 
-        for (size_t i = new_last - 1; i >= index; i--) {
+        for (size_t i : ::std::views::iota(index, new_last)) {
             items_[i].to_next = new_last - i;
         }
 
-        for (size_t i = index - 1; i >= first_replace; i--) {
+        for (size_t i : ::std::views::iota(first_replace, index)) {
             items_[i].from_first = index - i;
         }
 
@@ -111,13 +121,13 @@ namespace quartz::core {
             if (items_.back().content == item) {
                 size_t last_dist = items_.back().from_first;
 
-                for (size_t i = 1; i <= count; i++) {
+                for (size_t i : ::std::views::iota(static_cast<size_t>(1), count)) {
                     items_.emplace_back(Item{item, last_dist + i, Item::INVALID_INDEX});
                 }
 
                 size_t first_frame = items_.size() - last_dist - 1;
 
-                for (size_t i = items_.size() - 1; i >= first_frame; --i) {
+                for (size_t i : ::std::views::iota(first_frame, items_.size())) {
                     items_[i].to_next = items_.size() - i;
                 }
 
@@ -125,7 +135,7 @@ namespace quartz::core {
             }
         }
 
-        for (size_t i = 0; i < count; ++i) {
+        for (size_t i : ::std::views::iota(static_cast<size_t>(0), count)) {
             items_.emplace_back(Item{item, i, count - i});
         }
     }
@@ -139,7 +149,7 @@ namespace quartz::core {
         size_t start = index - items_[index].from_first;
         size_t end = index + items_[index].to_next;
 
-        for (size_t i = start; i < end; i++) {
+        for (size_t i : std::views::iota(start, end)) {
             items_[i].content = replace;
         }
     }
@@ -160,7 +170,7 @@ namespace quartz::core {
 
         size_t end_run = target_start;
 
-        for (size_t i = target_start; i < items_.size(); ++i) {
+        for (size_t i : ::std::views::iota(target_start, items_.size())) {
             if (items_[i].content != items_[index].content) {
                 break;
             }
@@ -170,7 +180,7 @@ namespace quartz::core {
             end_run = i;
         }
 
-        for (size_t i = end_run; i >= target_start; --i) {
+        for (size_t i : ::std::views::iota(target_start, end_run + 1)) {
             items_[i].to_next = end_run - i + 1;
         }
     }
@@ -185,7 +195,7 @@ namespace quartz::core {
 
         remove_frame(from);
 
-        insert_frame(to, item.content);
+        InsertResult res = insert_frame(to, item.content);
     }
 
     template <typename ItemT>
@@ -203,11 +213,10 @@ namespace quartz::core {
         if (items_.back().to_next != 1) {
             ItemT& last = items_.back().content;
 
-            for (size_t i = items_.size() - 1; items_[i].content == last; i--) {
-                if (i == 0) {
+            for (size_t i : ::std::views::iota(static_cast<size_t>(0), items_.size()) | ::std::views::reverse) {
+                if (items_[i].content != last) {
                     break;
                 }
-
                 items_[i].to_next = items_.size() - i;
             }
         }
@@ -219,7 +228,11 @@ namespace quartz::core {
     }
 
     template <typename ItemT>
-    std::tuple<ItemT, size_t, size_t> FrameContainer<ItemT>::operator[](size_t index) {
+    const std::tuple<ItemT, size_t, size_t> FrameContainer<ItemT>::operator[](size_t index) {
+        if (index >= size()) {
+            std::printf("Index %zu greater than size %zu\n", index, size());
+            std::abort();
+        }
         Item& item = items_[index];
         return std::make_tuple(item.content, item.from_first, item.to_next);
     }
