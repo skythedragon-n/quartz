@@ -53,10 +53,10 @@ namespace quartz::core {
                 return AddedToEnd{1};
             }
 
-            size_t for_len = index - items_.size();
+            size_t for_len = index - items_.size() + 1;
             size_t first_frame = items_.size() - last_item.from_first - 1;
 
-            for (size_t i : ::std::views::iota(static_cast<size_t>(1), for_len + 1)) {
+            for (size_t i : ::std::views::iota(static_cast<size_t>(1), for_len)) {
                 items_.emplace_back(Item{last_item.content, last_item.from_first + i, Item::INVALID_INDEX});
             }
 
@@ -66,7 +66,7 @@ namespace quartz::core {
 
             items_.emplace_back(Item{item, 0, 1});
 
-            return AddedToEnd{for_len + 1};
+            return AddedToEnd{for_len};
         }
 
         if (items_[index].content == item) {
