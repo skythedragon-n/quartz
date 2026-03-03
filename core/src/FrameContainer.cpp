@@ -77,7 +77,7 @@ namespace quartz::core {
             Item replace_target = items_[index];
 
             for (size_t i : ::std::views::iota(index, items_.size())) {
-                if (items_[i].content == replace_target.content) {
+                if (items_[i].content != replace_target.content) {
                     break;
                 }
                 items_[i].content = item;
@@ -88,14 +88,6 @@ namespace quartz::core {
 
         Item replace_target = items_[index];
 
-        for (size_t i : ::std::views::iota(index, items_.size())) {
-            if (items_[i].content == replace_target.content) {
-                break;
-            }
-            items_[i].content = item;
-            items_[i].from_first = i - index;
-        }
-
         size_t first_replace = index - replace_target.from_first;
 
         size_t new_last = index + replace_target.to_next;
@@ -105,11 +97,8 @@ namespace quartz::core {
         }
 
         for (size_t i : ::std::views::iota(index, new_last)) {
-            items_[i].to_next = new_last - i;
-        }
-
-        for (size_t i : ::std::views::iota(first_replace, index)) {
-            items_[i].from_first = index - i;
+            items_[i].from_first = i - index;
+            items_[i].content = item;
         }
 
         return Normal{};
