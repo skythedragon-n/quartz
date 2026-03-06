@@ -18,9 +18,11 @@
 cmake_minimum_required(VERSION 4.0)
 project(quartz VERSION "0.0.0")
 
-set(${CMAKE_PROJECT_VERSION} "0.0.0pre-alpha")
+set(CMAKE_PROJECT_VERSION "0.0.0pre-alpha")
 
-set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD 26)
+
+add_compile_options(-Wall -Wextra -Wpedantic -Wshadow)
 
 add_subdirectory(core)
 add_subdirectory(lib)
@@ -166,5 +168,13 @@ else()
 	message(FATAL_ERROR "No Windows build preparations. Sorry")
 endif()
 
+add_executable(quartz_test
+test/test_FrameContainer.cpp
+
+)
+target_link_libraries(quartz_test Catch2::Catch2WithMain)
+target_link_libraries(quartz_test quartz_lib)
+add_dependencies(quartz_test quartz_core_headers quartz_lib_headers)
+
 add_custom_target(quartz_headers)
-add_dependencies(quartz_headers quartz_core_headers)
+add_dependencies(quartz_headers quartz_core_headers quartz_lib_headers)
