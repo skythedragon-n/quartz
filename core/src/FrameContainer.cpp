@@ -16,7 +16,7 @@ namespace quartz::core {
     template <typename ItemT>
     ::std::expected<typename FrameContainer<ItemT>::InsertSuccess, typename FrameContainer<ItemT>::InsertFailure>
     FrameContainer<ItemT>::insert_frame(size_t index, ItemT item) {
-        if (items_.size() <= index) {
+        if (index >= items_.size()) {
             if (items_.empty()) {
                 //You can't fill the list with the last frame in it up to 'index' if there is no last frame
                 if (index != 0) {
@@ -76,11 +76,35 @@ namespace quartz::core {
         if (items_[index].from_first == 0) {
             Item replace_target = items_[index];
 
+            size_t end_run = index;
+
             for (size_t i : ::std::views::iota(index, items_.size())) {
                 if (items_[i].content != replace_target.content) {
+                    end_run = i;
                     break;
                 }
                 items_[i].content = item;
+            }
+
+            size_t start_run = index;
+
+            bool do_redex = false;
+
+            if (index != 0 && items_[index - 1].content == item) {
+                start_run = index - items_[index - 1].from_first - 1;
+                do_redex = true;
+            }
+
+            if (end_run < items_.size() - 1 && items_[end_run + 1].content == item) {
+                end_run += items_[end_run + 1].to_next;
+                do_redex = true;
+            }
+
+            if (do_redex) {
+                for (size_t i : ::std::views::iota(start_run, end_run + 1)) {
+                    items_[i].to_next = end_run - i + 1;
+                    items_[i].from_first = i - start_run;
+                }
             }
 
             return Normal{};
@@ -92,6 +116,14 @@ namespace quartz::core {
 
         size_t new_last = index + replace_target.to_next;
 
+        if (new_last < items_.size() && items_[new_last].content == item) {
+            new_last += items_[new_last].to_next;
+        }
+
+        if (items_[first_replace].content == item) {
+            index = first_replace;
+        }
+
         for (size_t i : ::std::views::iota(first_replace, index)) {
             items_[i].to_next = index - i;
         }
@@ -99,6 +131,7 @@ namespace quartz::core {
         for (size_t i : ::std::views::iota(index, new_last)) {
             items_[i].from_first = i - index;
             items_[i].content = item;
+            items_[i].to_next = new_last - i;
         }
 
         return Normal{};
