@@ -190,20 +190,17 @@ namespace quartz::core {
 
         ItemT replace = items_[target_start - 1].content;
 
-        size_t end_run = target_start;
+        size_t end_run = index + items_[index].to_next;
 
-        for (size_t i : ::std::views::iota(target_start, items_.size())) {
-            if (items_[i].content != items_[index].content) {
-                break;
-            }
+        for (size_t i : ::std::views::iota(target_start, end_run)) {
             items_[i].content = replace;
-            items_[i].from_first = target_start - i;
-
-            end_run = i;
         }
 
-        for (size_t i : ::std::views::iota(target_start, end_run + 1)) {
-            items_[i].to_next = end_run - i + 1;
+        target_start -= items_[target_start - 1].from_first + 1;
+
+        for (size_t i : ::std::views::iota(target_start, end_run)) {
+            items_[i].from_first = i - target_start;
+            items_[i].to_next = end_run - i;
         }
     }
 

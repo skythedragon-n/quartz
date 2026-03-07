@@ -181,9 +181,9 @@ TEST_CASE("Remove Frames", "[FrameContainer]") {
 
     test_container.remove_frame(3);
 
-    std::vector expected = {1, 1, 1, 2, 2, 2, 2};
-    std::vector<size_t> expected_from_first = {0, 1, 2, 0, 1, 2, 3};
-    std::vector<size_t> expected_to_next = {3, 2, 1, 4, 3, 2, 1};
+    std::vector expected = {1, 1, 1, 1, 1, 1, 3};
+    std::vector<size_t> expected_from_first = {0, 1, 2, 3, 4, 5, 0};
+    std::vector<size_t> expected_to_next = {6, 5, 4, 3, 2, 1, 1};
 
     REQUIRE(check_contents(test_container, expected, expected_from_first, expected_to_next));
 }
