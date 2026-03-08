@@ -18,22 +18,30 @@ src/drawing_utils.hpp
 src/id_sys.cpp
 src/id_sys.hpp
 src/core_errors.hpp
+src/core_errors.hpp
+src/core_errors.hpp
+src/AnimatedLayer.cpp
+src/AnimatedLayer.hpp
 src/FrameContainer.cpp
 src/FrameContainer.hpp
+src/Instance.hpp
+src/Frame.hpp
+src/Frame.cpp
+
 )
 
-set(CORE_HEADER_STAMP "${CMAKE_CURRENT_SOURCE_DIR}/header.stamp")
-
-set(QUARTZ_CORE_HEADER_DIR "/include/quartz/core")
+set(QUARTZ_CORE_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/quartz/core")
 
 target_include_directories(quartz_core PUBLIC include)
 
 set(QUARTZ_CORE_HEADER_FILES
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/AnimatedLayer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/AnimFile.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Context.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core_errors.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Drawing.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/drawing_utils.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/Frame.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/FrameContainer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/id_sys.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Instance.hpp"
@@ -43,20 +51,14 @@ set(QUARTZ_CORE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Symbol.hpp"
 )
 
-add_custom_command(
-    OUTPUT "${CORE_HEADER_STAMP}"
+add_custom_target(quartz_core_headers ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_SOURCE_DIR}${QUARTZ_CORE_HEADER_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${QUARTZ_CORE_HEADER_FILES}
-        "${CMAKE_CURRENT_SOURCE_DIR}${QUARTZ_CORE_HEADER_DIR}"
-    COMMAND ${CMAKE_COMMAND} -E touch "${CORE_HEADER_STAMP}"
-    DEPENDS ${HEADER_FILES}
+        "${QUARTZ_CORE_HEADER_DIR}"
+    DEPENDS ${QUARTZ_CORE_HEADER_FILES}
     COMMENT "Copying core headers"
     VERBATIM
-)
-
-add_custom_target(quartz_core_headers
-    DEPENDS "${CORE_HEADER_STAMP}"
 )
 
 add_dependencies(quartz_core quartz_core_headers)

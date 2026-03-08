@@ -7,6 +7,20 @@
 
 #include "Frame.hpp"
 
-namespace quartz::core {
+#include <utility>
 
+namespace quartz::core {
+    using namespace frame_types;
+
+    Frame::Frame(std::variant<Empty, Normal> data) :
+    data_(std::move(data))
+    {}
+
+    Frame Frame::empty() {
+        return Frame(Empty());
+    }
+
+    Frame Frame::normal(Drawing drawing) {
+        return Frame(Normal{{}, std::move(drawing)});
+    }
 }
