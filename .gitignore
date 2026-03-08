@@ -98,3 +98,5 @@ sftpbatch
 remote.sh
 
 *.stamp
+
+*/include/*
