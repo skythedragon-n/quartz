@@ -77,5 +77,10 @@ namespace quartz::core {
             }
             return ::std::get<T>(data_);
         }
+
+        template<symbol_types::SymbolType T>
+        void set(T& data) {
+            data_ = data;
+        }
     };
 }
