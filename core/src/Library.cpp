@@ -7,28 +7,54 @@
 
 #include "Library.hpp"
 
+#include <utility>
+
 #include "LibraryFolder.hpp"
 
 namespace quartz::core {
-    Library::Library(CtorKey, ::std::string group, LibraryId id, AnimFile* file) :
-    group_(group),
-    root_(id, file),
+    Library::Library(AnimKey, ::std::string group, LibraryId id, AnimFile* file) :
+    root_(id),
+    group_(::std::move(group)),
     file_(file)
     {}
 
-    void Library::add_folder(::std::string name) {
-        root_.add_folder(name);
+    ::std::expected<void, AddFailure> Library::add_symbol(const ::std::string& name, SymbolId id) {
+        return root_.add_symbol(name, id);
     }
 
-    ::std::expected<void, AddFailure> Library::add_symbol(::std::string name, Symbol::Type type) {
-        return root_.add_symbol(name, type);
+    ::std::optional<SymbolId> Library::remove_symbol(const ::std::string& name) {
+        return root_.remove_symbol(name);
     }
 
-    ::std::expected<SymbolId, FindFailure> Library::find_symbol(::std::string path) {
-        return root_.find_symbol(path);
+    ::std::optional<SymbolId> Library::find_symbol(const ::std::string& name) const {
+        return root_.find_symbol(name);
     }
 
-    ::std::expected<FolderId, FindFailure> Library::find_folder(::std::string path) {
-        return root_.find_folder(path);
+    ::std::expected<void, AddFailure> Library::add_folder(const ::std::string& name, FolderId id) {
+        return root_.add_folder(name, id);
+    }
+
+    ::std::optional<FolderId> Library::remove_folder(const ::std::string& name) {
+        return root_.remove_folder(name);
+    }
+
+    ::std::optional<FolderId> Library::find_folder(const ::std::string& name) const {
+        return root_.find_folder(name);
+    }
+
+    ::std::optional<::std::variant<SymbolId, FolderId>> Library::find(const ::std::string& name) const {
+        return root_.find(name);
+    }
+
+    ::std::optional<::std::variant<SymbolId, FolderId>> Library::remove(const ::std::string& name) {
+        return root_.remove(name);
+    }
+
+    ::std::expected<void, RenameFailure> Library::rename(const ::std::string& old_name, const ::std::string& new_name) {
+        return root_.rename(old_name, new_name);
+    }
+
+    void Library::set_group(const ::std::string& group) {
+        group_ = group;
     }
 }
