@@ -34,18 +34,6 @@ namespace quartz::core {
 
         const FolderId id_;
 
-        /**
-         * @brief Sets LibraryFolder's parent to the inputted library
-         * @param parent Library to make new parent
-         */
-        void set_parent(LibraryId parent);
-
-        /**
-         * @brief Set LibraryFolder's parent to the inputted folder
-         * @param parent LibraryFolder to make new parent
-         */
-        void set_parent(FolderId parent);
-
         explicit LibraryFolder(LibraryId parent);
 
         friend class Library;
@@ -54,6 +42,12 @@ namespace quartz::core {
     public:
 
         LibraryFolder(AnimKey, ::std::string name, FolderId parent, FolderId id);
+
+        /**
+         * @brief Set LibraryFolder's parent to the inputted folder
+         * @param parent LibraryFolder to make new parent
+         */
+        void set_parent(::std::variant<FolderId, LibraryId> parent);
 
         /**
          * @brief Set folder name to inputted name

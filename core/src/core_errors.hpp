@@ -62,4 +62,9 @@ namespace quartz::core {
     enum class AddFailure {
         NameInUse
     };
+
+    enum class RenameFailure {
+        SourceNonexistant,
+        NameInUse
+    };
 }

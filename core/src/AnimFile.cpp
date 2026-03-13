@@ -8,8 +8,6 @@
 #include "AnimFile.hpp"
 
 namespace quartz::core {
-    AnimFile::AnimFile() = default;
-
     void AnimFile::set_width(uint64_t width) {
         width_ = width;
     }
@@ -29,7 +27,7 @@ namespace quartz::core {
 
     void AnimFile::add_library(::std::string group) {
         libraries_.emplace_back(
-            Library::CtorKey(),
+            AnimKey(),
             group,
             LibraryId {libraries_.size(), this},
             this
@@ -37,11 +35,10 @@ namespace quartz::core {
         libraries_by_group_[group] = {libraries_.size() - 1, this};
     }
 
-    SymbolId AnimFile::add_symbol(::std::string name, Symbol::Type type, FolderId parent) {
+    SymbolId AnimFile::add_symbol(::std::string name, FolderId parent) {
         symbols_.emplace_back(
             AnimKey(),
             name,
-            type,
             parent,
             SymbolId {symbols_.size(), this},
             this
@@ -51,45 +48,12 @@ namespace quartz::core {
 
     FolderId AnimFile::add_folder(::std::string name, FolderId parent) {
         folders_.emplace_back(
-            LibraryFolder::CtorKey(),
+            AnimKey(),
             name,
             parent,
-            FolderId {folders_.size(), this},
-            this
+            FolderId {folders_.size(), this}
         );
         return {folders_.size() - 1, this};
-    }
-
-    ::std::expected<SymbolId, FindFailure> AnimFile::find_symbol(::std::string path) {
-        size_t colon = path.find_first_of(':');
-
-        if (colon == ::std::string::npos) {
-            return ::std::unexpected(FindFailure::InvalidPath);
-        }
-
-        auto library_iter = libraries_by_group_.find(path.substr(0, colon));
-
-        if (library_iter == libraries_by_group_.end()) {
-            return ::std::unexpected(FindFailure::NoSuchPath);
-        }
-
-        return libraries_[library_iter->second.id].find_symbol(path.substr(colon + 1));
-    }
-
-    ::std::expected<FolderId, FindFailure> AnimFile::find_folder(::std::string path) {
-        size_t colon = path.find_first_of(':');
-
-        if (colon == ::std::string::npos) {
-            return ::std::unexpected(FindFailure::InvalidPath);
-        }
-
-        auto library_iter = libraries_by_group_.find(path.substr(0, colon));
-
-        if (library_iter == libraries_by_group_.end()) {
-            return ::std::unexpected(FindFailure::NoSuchPath);
-        }
-
-        return resolve_library(library_iter->second).value()->find_folder(path.substr(colon + 1));
     }
 
     ::std::expected<LibraryId, FindFailure> AnimFile::get_library(::std::string group) {

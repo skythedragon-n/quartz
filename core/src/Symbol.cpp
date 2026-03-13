@@ -7,10 +7,11 @@
 
 #include "Symbol.hpp"
 
+#include <utility>
+
 namespace quartz::core {
-    Symbol::Symbol(AnimKey, ::std::string name, Type type, FolderId parent, SymbolId id, AnimFile* file) :
-    name_(name),
-    type_(type),
+    Symbol::Symbol(AnimKey, ::std::string name, FolderId parent, SymbolId id, AnimFile* file) :
+    name_(std::move(name)),
     parent_(parent),
     id_(id),
     file_(file)

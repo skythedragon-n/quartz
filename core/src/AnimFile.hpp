@@ -48,7 +48,7 @@ namespace quartz::core {
          * Adds a new symbol the symbol index with the parameters inputted, and returns the Id of the symbol
          * that has just been created.
          */
-        SymbolId add_symbol(::std::string name, Symbol::Type type, FolderId parent);
+        SymbolId add_symbol(::std::string name, FolderId parent);
         /**
          * @brief Adds a new @link LibraryFolder @endlink to the document
          * @param name Name of the folder to be added
@@ -95,26 +95,6 @@ namespace quartz::core {
          */
         void add_library(::std::string group);
 
-        /**
-         * @brief Finds a symbol by its 'path'
-         * @param path The 'path' of the symbol to be searched for
-         * @return Either a @link SymbolId @endlink, or an error
-         *
-         * Attempts to find the symbol in the library tree referred to by the 'path'. If the attempt to
-         * find the symbol fails in some way, a @link FindFailure @endlink will be returned. Upon
-         * success, returns the Id of the found folder.
-         */
-        ::std::expected<SymbolId, FindFailure> find_symbol(::std::string path);
-        /**
-         * @brief Finds a folder by its 'path'
-         * @param path The 'path' of the folder to be found
-         * @return Either a @link FolderId @endlink, or an error
-         *
-         * Attempts to find the folder in the library tree referred to by the 'path'. If the attempt
-         * to find the symbol fails in some way, a `FindFailure` will be returned. Upon
-         * success, returns the Id of the found folder.
-         */
-        ::std::expected<FolderId, FindFailure> find_folder(::std::string path);
         /**
          * @brief Finds a library by its 'group'
          * @param group The 'group' of the library to be found

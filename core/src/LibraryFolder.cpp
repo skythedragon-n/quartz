@@ -14,14 +14,6 @@
 #include "overloads.hpp"
 
 namespace quartz::core {
-    void LibraryFolder::set_parent(LibraryId parent) {
-        parent_ = parent;
-    }
-
-    void LibraryFolder::set_parent(FolderId parent) {
-        parent_ = parent;
-    }
-
     LibraryFolder::LibraryFolder(AnimKey, ::std::string name, FolderId parent, FolderId id) :
     name_(std::move(name)),
     parent_(parent),
