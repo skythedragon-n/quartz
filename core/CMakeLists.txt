@@ -27,7 +27,7 @@ src/FrameContainer.hpp
 src/Instance.hpp
 src/Frame.hpp
 src/Frame.cpp
-
+src/overloads.hpp
 )
 
 set(QUARTZ_CORE_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/quartz/core")
@@ -49,6 +49,7 @@ set(QUARTZ_CORE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/LibraryFolder.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Stroke.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Symbol.hpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/overloads.hpp"
 )
 
 add_custom_target(quartz_core_headers ALL
