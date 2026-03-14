@@ -121,6 +121,12 @@ namespace quartz::core {
     template<typename T>
     using Id = TypedId<typename IdTag<T>::type>;
 
+    /**
+     * @brief Generic implementation of ID logic
+     * @tparam T Type for ID
+     *
+     * Implements ID logic, including addition, resolution, freeing & stale ID reuse
+     */
     template<typename T>
     class IdContainer {
         struct Container {
@@ -136,15 +142,43 @@ namespace quartz::core {
 
         IdContainer(AnimFile* file) : file_(file) {}
 
+        /**
+         * @brief Returns invalid ID of container's type
+         * @return Invalid ID
+         */
         static Id<T> invalid() { return Id<T>{}; }
 
+        /**
+         * @brief Frees Id, allowing for reuse
+         * @param id Id to free
+         *
+         * Attempts to free Id and add index to freelist
+         */
         void free(Id<T> id) {
-            if (is_valid(id)) {
+            if (id) {
+                if (id.storage_.file != file_) {
+                    return;
+                }
+
+                if (id.storage_.id >= data_.size()) {
+                    return;
+                }
+
+                if (data_[id.storage_.id].free) {
+                    return;
+                }
+
                 data_[id.storage_.id].free = true;
                 freelist_.push_back(id.storage_.id);
             }
         }
 
+        /**
+         * @brief Adds object, and gives it an Id.
+         * @tparam Args Constructor arguments types
+         * @param args Constructor arguments
+         * @return Id of object added
+         */
         template<typename... Args>
         Id<T> add(Args... args) {
             if (freelist_.empty()) {
@@ -160,6 +194,11 @@ namespace quartz::core {
             return Id<T>{id, file_, gen};
         }
 
+        /**
+         * @brief Resolves Id to a pointer to object
+         * @param id Id to resolve
+         * @return Object pointer or error
+         */
         ::std::expected<T*, ResolveFailure> resolve(Id<T> id) {
             if (!id) {
                 return ::std::unexpected(ResolveFailure::InvalidId);
