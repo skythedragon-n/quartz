@@ -8,6 +8,12 @@
 #include "AnimFile.hpp"
 
 namespace quartz::core {
+    AnimFile::AnimFile() :
+        symbols(this),
+        folders(this),
+        libraries(this)
+        {}
+
     void AnimFile::set_width(uint64_t width) {
         width_ = width;
     }

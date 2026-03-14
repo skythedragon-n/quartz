@@ -29,10 +29,6 @@ namespace quartz::core {
      * which are indexed by the object's Ids
      */
     class AnimFile {
-        ::std::vector<Library> libraries_;
-        ::std::vector<Symbol> symbols_;
-        ::std::vector<LibraryFolder> folders_;
-
         ::std::unordered_map<::std::string, LibraryId> libraries_by_group_;
 
         uint64_t width_ = 0, height_ = 0;
@@ -84,8 +80,17 @@ namespace quartz::core {
          */
         ::std::expected<LibraryId, FindFailure> get_library(::std::string group);
 
+        /**
+         * @brief Symbol index
+         */
         IdContainer<Symbol> symbols;
+        /**
+         * @brief LibraryFolder index
+         */
         IdContainer<LibraryFolder> folders;
+        /**
+         * @brief Library index
+         */
         IdContainer<Library> libraries;
     };
 }
