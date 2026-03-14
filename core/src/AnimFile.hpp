@@ -92,5 +92,13 @@ namespace quartz::core {
          * @brief Library index
          */
         IdContainer<Library> libraries;
+        /**
+         * @brief Layer index
+         */
+        IdContainer<AnimatedLayer> layers;
+        /**
+         * @brief Frame index
+         */
+        IdContainer<Frame> frames;
     };
 }

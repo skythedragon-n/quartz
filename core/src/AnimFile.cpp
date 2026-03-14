@@ -11,7 +11,9 @@ namespace quartz::core {
     AnimFile::AnimFile() :
         symbols(this),
         folders(this),
-        libraries(this)
+        libraries(this),
+        layers(this),
+        frames(this)
         {}
 
     void AnimFile::set_width(uint64_t width) {
