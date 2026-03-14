@@ -10,11 +10,11 @@
 #include <utility>
 
 namespace quartz::core {
-    Symbol::Symbol(AnimKey, ::std::string name, FolderId parent, SymbolId id, AnimFile* file) :
+    Symbol::Symbol(IdKey, AnimFile* file, ::std::string name, FolderId parent, SymbolId id) :
     name_(std::move(name)),
-    parent_(parent),
+    file_(file),
     id_(id),
-    file_(file)
+    parent_(parent)
     {}
 
     void Symbol::set_name(::std::string name) {

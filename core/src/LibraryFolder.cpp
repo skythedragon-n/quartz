@@ -14,7 +14,7 @@
 #include "overloads.hpp"
 
 namespace quartz::core {
-    LibraryFolder::LibraryFolder(AnimKey, ::std::string name, FolderId parent, FolderId id) :
+    LibraryFolder::LibraryFolder(IdKey, ::std::string name, FolderId parent, FolderId id) :
     name_(std::move(name)),
     parent_(parent),
     id_(id)
@@ -178,7 +178,7 @@ namespace quartz::core {
         auto removed = remove(old_name);
 
         if (!removed) {
-            return ::std::unexpected(RenameFailure::SourceNonexistant);
+            return ::std::unexpected(RenameFailure::SourceNonexistent);
         }
 
         ::qtil::match(*removed,

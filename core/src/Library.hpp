@@ -25,7 +25,7 @@ namespace quartz::core {
 
     public:
 
-        Library(AnimKey, ::std::string group, LibraryId id, AnimFile* file);
+        Library(IdKey, ::std::string group, LibraryId id, AnimFile* file);
 
         Library() = delete;
 

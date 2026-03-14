@@ -12,7 +12,7 @@
 #include "LibraryFolder.hpp"
 
 namespace quartz::core {
-    Library::Library(AnimKey, ::std::string group, LibraryId id, AnimFile* file) :
+    Library::Library(IdKey, ::std::string group, LibraryId id, AnimFile* file) :
     root_(id),
     group_(::std::move(group)),
     file_(file)

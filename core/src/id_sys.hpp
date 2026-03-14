@@ -27,9 +27,10 @@ namespace quartz::core {
     class Drawing;
     struct Instance;
 
-    struct AnimKey {
+    struct IdKey {
     private:
-        AnimKey() = default;
+        IdKey() = default;
+        template<typename>
         friend class AnimFile;
     };
 

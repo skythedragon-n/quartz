@@ -27,7 +27,7 @@ namespace quartz::core {
 
     void AnimFile::add_library(::std::string group) {
         libraries_.emplace_back(
-            AnimKey(),
+            IdKey(),
             group,
             LibraryId {libraries_.size(), this},
             this
@@ -37,18 +37,18 @@ namespace quartz::core {
 
     SymbolId AnimFile::add_symbol(::std::string name, FolderId parent) {
         symbols_.emplace_back(
-            AnimKey(),
+            IdKey(),
+            this,
             name,
             parent,
-            SymbolId {symbols_.size(), this},
-            this
+            SymbolId {symbols_.size(), this}
         );
         return {symbols_.size() - 1, this};
     }
 
     FolderId AnimFile::add_folder(::std::string name, FolderId parent) {
         folders_.emplace_back(
-            AnimKey(),
+            IdKey(),
             name,
             parent,
             FolderId {folders_.size(), this}

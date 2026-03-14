@@ -54,7 +54,7 @@ namespace quartz::core {
 
     public:
 
-        Symbol(AnimKey, ::std::string name, FolderId parent, SymbolId id, AnimFile* file);
+        Symbol(IdKey, AnimFile* file, ::std::string name, FolderId parent, SymbolId id);
 
         void set_name(::std::string name);
 
