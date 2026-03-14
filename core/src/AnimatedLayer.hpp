@@ -19,10 +19,11 @@ namespace quartz::core {
 
         ::std::string name_;
         Color color_;
+        SymbolId parent_;
 
     public:
 
-        AnimatedLayer(::std::string name, Color color);
+        AnimatedLayer(IdKey, AnimFile*, ::std::string name, Color color, SymbolId parent, AnimLayerId);
 
         /**
          * @brief Return reference to frames in the layer

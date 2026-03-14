@@ -10,9 +10,10 @@
 #include <utility>
 
 namespace quartz::core {
-    AnimatedLayer::AnimatedLayer(::std::string  name, const Color color) :
+    AnimatedLayer::AnimatedLayer(IdKey, AnimFile*, ::std::string name, Color color, SymbolId parent, AnimLayerId) :
     name_(std::move(name)),
-    color_(color)
+    color_(color),
+    parent_(parent)
     {}
 
     FrameContainer<FrameId>& AnimatedLayer::get_frames() {
