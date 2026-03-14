@@ -17,11 +17,11 @@
 namespace quartz::core {
     namespace symbol_types {
         struct LayeredAnimation {
-            std::vector<AnimatedLayer> layers;
+            ::std::vector<AnimatedLayer> layers;
         };
 
         struct Scene {
-            std::vector<AnimatedLayer> layers;
+            ::std::vector<AnimatedLayer> layers;
         };
 
         struct DrawingSymbol {
@@ -47,7 +47,6 @@ namespace quartz::core {
         const SymbolId id_;
 
         FolderId parent_;
-        void set_parent(FolderId parent);
 
         friend class Library;
         friend class AnimFile;
@@ -56,18 +55,22 @@ namespace quartz::core {
 
         Symbol(IdKey, AnimFile* file, ::std::string name, FolderId parent, SymbolId id);
 
-        void set_name(::std::string name);
+        void set_name(const ::std::string& name);
+
+        void set_parent(FolderId parent);
 
         [[nodiscard]] ::std::string name() const { return name_; }
 
+        [[nodiscard]] FolderId parent() const { return parent_; }
+
         template<symbol_types::SymbolType T>
         [[nodiscard]] bool is() const {
-            return std::holds_alternative<T>(data_);
+            return ::std::holds_alternative<T>(data_);
         }
 
         template<symbol_types::SymbolType T>
         [[nodiscard]] ::std::optional<T*> get() {
-            if (!std::holds_alternative<T>(data_)) {
+            if (!::std::holds_alternative<T>(data_)) {
                 return ::std::nullopt;
             }
             return &::std::get<T>(data_);
@@ -80,7 +83,7 @@ namespace quartz::core {
 
         template<typename Visitor>
         decltype(auto) visit(Visitor&& visitor) {
-            return std::visit(::std::forward<Visitor>(visitor), data_);
+            return ::std::visit(::std::forward<Visitor>(visitor), data_);
         }
 
         template<typename Visitor>

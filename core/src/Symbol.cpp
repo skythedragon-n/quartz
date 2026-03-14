@@ -17,11 +17,11 @@ namespace quartz::core {
     parent_(parent)
     {}
 
-    void Symbol::set_name(::std::string name) {
+    void Symbol::set_name(const ::std::string& name) {
         name_ = name;
     }
 
-    void Symbol::set_parent(FolderId parent) {
+    void Symbol::set_parent(const FolderId parent) {
         parent_ = parent;
     }
 }
