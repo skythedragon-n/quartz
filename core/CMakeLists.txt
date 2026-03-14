@@ -15,7 +15,6 @@ src/Drawing.hpp
 src/Stroke.cpp
 src/Stroke.hpp
 src/drawing_utils.hpp
-src/id_sys.cpp
 src/id_sys.hpp
 src/core_errors.hpp
 src/core_errors.hpp

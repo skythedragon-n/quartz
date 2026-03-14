@@ -26,34 +26,8 @@ namespace quartz::core {
     }
 
     void AnimFile::add_library(::std::string group) {
-        libraries_.emplace_back(
-            IdKey(),
-            group,
-            LibraryId {libraries_.size(), this},
-            this
-        );
-        libraries_by_group_[group] = {libraries_.size() - 1, this};
-    }
-
-    SymbolId AnimFile::add_symbol(::std::string name, FolderId parent) {
-        symbols_.emplace_back(
-            IdKey(),
-            this,
-            name,
-            parent,
-            SymbolId {symbols_.size(), this}
-        );
-        return {symbols_.size() - 1, this};
-    }
-
-    FolderId AnimFile::add_folder(::std::string name, FolderId parent) {
-        folders_.emplace_back(
-            IdKey(),
-            name,
-            parent,
-            FolderId {folders_.size(), this}
-        );
-        return {folders_.size() - 1, this};
+        LibraryId id = libraries.add(group);
+        libraries_by_group_[group] = id;
     }
 
     ::std::expected<LibraryId, FindFailure> AnimFile::get_library(::std::string group) {
@@ -62,53 +36,5 @@ namespace quartz::core {
         }
 
         return libraries_by_group_.at(group);
-    }
-
-    ::std::expected<Symbol*, ResolveFailure> AnimFile::resolve_symbol(SymbolId id) {
-        if (id == SYMBOL_ID_INVALID) {
-            return ::std::unexpected(ResolveFailure::InvalidId);
-        }
-
-        if (id.file != this) {
-            return ::std::unexpected(ResolveFailure::WrongFile);
-        }
-
-        if (id.id >= symbols_.size()) {
-            return ::std::unexpected(ResolveFailure::NoSuchObject);
-        }
-
-        return &symbols_[id.id];
-    }
-
-    ::std::expected<LibraryFolder*, ResolveFailure> AnimFile::resolve_folder(FolderId id) {
-        if (id == FOLDER_ID_INVALID) {
-            return ::std::unexpected(ResolveFailure::InvalidId);
-        }
-
-        if (id.file != this) {
-            return ::std::unexpected(ResolveFailure::WrongFile);
-        }
-
-        if (id.id >= folders_.size()) {
-            return ::std::unexpected(ResolveFailure::NoSuchObject);
-        }
-
-        return &folders_[id.id];
-    }
-
-    ::std::expected<Library*, ResolveFailure> AnimFile::resolve_library(LibraryId id) {
-        if (id == LIBRARY_ID_INVALID) {
-            return ::std::unexpected(ResolveFailure::InvalidId);
-        }
-
-        if (id.file != this) {
-            return ::std::unexpected(ResolveFailure::WrongFile);
-        }
-
-        if (id.id >= libraries_.size()) {
-            return ::std::unexpected(ResolveFailure::NoSuchObject);
-        }
-
-        return &libraries_[id.id];
     }
 }

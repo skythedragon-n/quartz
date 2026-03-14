@@ -59,6 +59,8 @@ namespace quartz::core {
     public:
         TypedId() = default;
 
+        static constexpr TypedId INVALID = TypedId{};
+
         friend bool operator==(const TypedId&, const TypedId&) = default;
         friend bool operator!=(const TypedId&, const TypedId&) = default;
 
@@ -114,8 +116,8 @@ namespace quartz::core {
      * Id's contain two members, an `id` member, which is an index into the AnimFile's object table for that type, and
      * a `file` member, which is a pointer to the Id's file.
      *
-     * DO NOT SET THESE MEMBERS UNDER ANY CIRCUMSTANCES. SUCH IS UNDEFINED BEHAVIOR, AND COULD CAUSE ANYTHING TO HAPPEN,
-     * INCLUDING, BUT NOT LIMITED TO YOUR COMPUTER FILLING YOUR HOME WITH AN INORDINATE NUMBER OF PUPPIES & RAINBOWS.
+     * **DO NOT SET THESE MEMBERS UNDER ANY CIRCUMSTANCES. SUCH IS UNDEFINED BEHAVIOR, AND COULD CAUSE ANYTHING TO HAPPEN,
+     * INCLUDING, BUT NOT LIMITED TO YOUR COMPUTER FILLING YOUR HOME WITH AN INORDINATE NUMBER OF PUPPIES & RAINBOWS.**
      */
 
     template<typename T>
@@ -180,7 +182,7 @@ namespace quartz::core {
          * @return Id of object added
          */
         template<typename... Args>
-        Id<T> add(Args... args) {
+        Id<T> add(Args&&... args) {
             if (freelist_.empty()) {
                 data_.emplace_back(args..., Id<T>{data_.size(), file_});
                 return Id<T>{data_.size() - 1, file_};
@@ -189,7 +191,17 @@ namespace quartz::core {
             size_t id = freelist_.back();
             size_t gen = data_[id].generation + 1;
             freelist_.pop_back();
-            data_[id] = Container{T{IdKey{}, file_, args..., Id<T>{id, file_, gen}}, gen};
+
+            ::std::destroy_at(::std::addressof(data_[id].object));
+            ::std::construct_at(
+                ::std::addressof(data_[id].object),
+                IdKey{},
+                file_,
+                ::std::forward<Args>(args)...,
+                Id<T>{id, file_, gen});
+
+            data_[id].generation = gen;
+            data_[id].free = false;
 
             return Id<T>{id, file_, gen};
         }
@@ -224,24 +236,10 @@ namespace quartz::core {
         }
     };
 
-    struct SymbolId {size_t id; AnimFile* file = nullptr; };
-    struct InstanceId { size_t id; AnimFile* file = nullptr; };
-    struct FolderId { size_t id; AnimFile* file = nullptr; };
-    struct LibraryId { size_t id; AnimFile* file = nullptr; };
-    struct FrameId { size_t id; AnimFile* file = nullptr; };
-    struct AnimLayerId { size_t id; AnimFile* file = nullptr; };
-
-    bool operator==(const SymbolId& lhs, const SymbolId& rhs);
-    bool operator==(const InstanceId& lhs, const InstanceId& rhs);
-    bool operator==(const FolderId& lhs, const FolderId& rhs);
-    bool operator==(const LibraryId& lhs, const LibraryId& rhs);
-    bool operator==(const FrameId& lhs, const FrameId& rhs);
-    bool operator==(const AnimLayerId& lhs, const AnimLayerId& rhs);
-
-    constexpr SymbolId SYMBOL_ID_INVALID = {size_t(-1)};
-    constexpr InstanceId INSTANCE_ID_INVALID = {size_t(-1)};
-    constexpr FolderId FOLDER_ID_INVALID = {size_t(-1)};
-    constexpr LibraryId LIBRARY_ID_INVALID = {size_t(-1)};
-    constexpr FrameId FRAME_ID_INVALID = {size_t(-1)};
-    constexpr AnimLayerId ANIM_LAYER_ID_INVALID = {size_t(-1)};
+    using SymbolId = Id<Symbol>;
+    using InstanceId = Id<Instance>;
+    using FolderId = Id<LibraryFolder>;
+    using LibraryId = Id<Library>;
+    using FrameId = Id<Frame>;
+    using AnimLayerId = Id<AnimatedLayer>;
 }

@@ -23,59 +23,11 @@ namespace quartz::core {
     LibraryFolder::LibraryFolder(LibraryId parent) :
     name_("root"),
     parent_(parent),
-    id_(FOLDER_ID_INVALID)
+    id_(FolderId::INVALID)
     {}
 
     void LibraryFolder::set_name(::std::string name) {
         name_ = std::move(name);
-    }
-
-    ::std::expected<SymbolId, FindFailure> LibraryFolder::find_symbol_by_path(::std::string path) {
-        ::std::size_t first_sep = path.find_first_of('/');
-
-        if (first_sep == ::std::string::npos) {
-            auto iter = symbols_.find(path);
-
-            if (iter == symbols_.end()) {
-                return ::std::unexpected(FindFailure::NoSuchPath);
-            }
-
-            return iter->second;
-        }
-
-        auto iter = folders_.find(path.substr(0, first_sep));
-
-        if (iter == folders_.end()) {
-            return ::std::unexpected(FindFailure::NoSuchPath);
-        }
-
-        FolderId folder = iter->second;
-
-        return folder.file->resolve_folder(folder).value()->find_symbol_by_path(path.substr(first_sep + 1));
-    }
-
-    ::std::expected<FolderId, FindFailure> LibraryFolder::find_folder_by_path(::std::string path) {
-        ::std::size_t first_sep = path.find_first_of('/');
-
-        if (first_sep == ::std::string::npos) {
-            auto iter = folders_.find(path);
-
-            if (iter == folders_.end()) {
-                return ::std::unexpected(FindFailure::NoSuchPath);
-            }
-
-            return iter->second;
-        }
-
-        auto iter = folders_.find(path.substr(0, first_sep));
-
-        if (iter == folders_.end()) {
-            return ::std::unexpected(FindFailure::NoSuchPath);
-        }
-
-        FolderId folder = iter->second;
-
-        return folder.file->resolve_folder(folder).value()->find_folder_by_path(path.substr(first_sep + 1));
     }
 
     ::std::expected<void, AddFailure> LibraryFolder::add_symbol(const ::std::string& name, SymbolId id) {
@@ -104,7 +56,7 @@ namespace quartz::core {
         if (!symbols_.contains(name)) {
             return ::std::nullopt;
         }
-        
+
         return symbols_.at(name);
     }
 

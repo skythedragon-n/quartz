@@ -38,28 +38,6 @@ namespace quartz::core {
         uint64_t width_ = 0, height_ = 0;
         uint64_t fps_ = 0;
 
-        /**
-         * @brief Adds a new @link Symbol @endlink to the document
-         * @param name name of the symbol to be added
-         * @param type Type of the symbol to be added
-         * @param parent The parent folder of the symbol
-         * @return Returns the Id of the newly minted symbol
-         *
-         * Adds a new symbol the symbol index with the parameters inputted, and returns the Id of the symbol
-         * that has just been created.
-         */
-        SymbolId add_symbol(::std::string name, FolderId parent);
-        /**
-         * @brief Adds a new @link LibraryFolder @endlink to the document
-         * @param name Name of the folder to be added
-         * @param parent The parent folder of this folder
-         * @return The Id of the newly minted folder
-         *
-         * Adds a new folder to the folder index with the parmeters inputted, and return the Id
-         * of the newly created folder
-         */
-        FolderId add_folder(::std::string name, FolderId parent);
-
         friend class Library;
         friend class LibraryFolder;
         friend class Symbol;
@@ -106,41 +84,8 @@ namespace quartz::core {
          */
         ::std::expected<LibraryId, FindFailure> get_library(::std::string group);
 
-        /**
-         * @brief Resolves a @link SymbolId @endlink to its requisite symbol.
-         * @param id Id of the symbol to be resolved
-         * @return Either a pointer to the resolved @link Symbol @endlink or a @link ResolveFailure @endlink
-         *
-         * Attempts to use the file's Symbol index to find the symbol with this Id. If the file
-         * embedded in the Id does not match the value of `this`, a `ResolveFailure::WrongFile` will
-         * be returned. If the Id is null, a `ResolveFailure::InvalidId` is returned. If the index is
-         * out of bounds, or the object being resolved has been marked for deletion, a `ResolveFailure::NoSuchObject`
-         * is returned. Upon success, a pointer to the resolved Symbol is returned.
-         */
-        ::std::expected<Symbol*, ResolveFailure> resolve_symbol(SymbolId id);
-        /**
-         * @brief Resolves a @link FolderId @endlink to its requisite folder
-         * @param id Id of the folder to be resolved
-         * @return Either a pointer to the resolved @link LibraryFolder @endlink or a @link ResolveFailure @endlink
-         *
-         * Attempts to use the file's LibraryFolder index to find the folder with this Id. If the file
-         * embedded in the Id does not match the value of `this`, a `ResolveFailure::WrongFile` will
-         * be returned. If the Id is null, a `ResolveFailure::InvalidId` is returned. If the index is
-         * out of bounds, or the object being resolved has been marked for deletion, a `ResolveFailure::NoSuchObject`
-         * is returned. Upon success, a pointer to the resolved LibraryFolder is returned.
-         */
-        ::std::expected<LibraryFolder*, ResolveFailure> resolve_folder(FolderId id);
-        /**
-         * @brief Resolves a @link LibraryId @endlink to its requisite folder
-         * @param id Id of the folder to be resolved
-         * @return Either a pointer to the resolved @link Library @endlink or an error
-         *
-         * Attempts to use the file's Library index to find the symbol with this Id. If the file
-         * embedded in the Id does not match the value of `this`, a `ResolveFailure::WrongFile` will
-         * be returned. If the Id is null, a `ResolveFailure::InvalidId` is returned. If the index is
-         * out of bounds, or the object being resolved has been marked for deletion, a `ResolveFailure::NoSuchObject`
-         * is returned. Upon success, a pointer to the resolved Library is returned.
-         */
-        ::std::expected<Library*, ResolveFailure> resolve_library(LibraryId id);
+        IdContainer<Symbol> symbols;
+        IdContainer<LibraryFolder> folders;
+        IdContainer<Library> libraries;
     };
 }
