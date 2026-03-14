@@ -36,6 +36,10 @@ namespace quartz::core {
             size_t id;
             size_t gen;
             AnimFile* file;
+
+            bool operator==(const IdStorage& other) const {
+                return other.id == id && other.gen == gen && other.file == file;
+            }
         };
     }
 
@@ -106,10 +110,10 @@ namespace quartz::core {
     struct IdTag<Library> { using type = LibraryTag; };
 
     template<>
-    struct IdTag<FolderTag> { using type = FolderTag; };
+    struct IdTag<Frame> { using type = FrameTag; };
 
     template<>
-    struct IdTag<AnimLayerTag> { using type = AnimLayerTag; };
+    struct IdTag<AnimatedLayer> { using type = AnimLayerTag; };
 
     /**
      * @page ids ID explanation
@@ -184,7 +188,12 @@ namespace quartz::core {
         template<typename... Args>
         Id<T> add(Args&&... args) {
             if (freelist_.empty()) {
-                data_.emplace_back(args..., Id<T>{data_.size(), file_});
+                data_.emplace_back(T{
+                    IdKey{},
+                    file_,
+                    std::forward<Args>(args)...,
+                    Id<T>{data_.size(), file_}
+                });
                 return Id<T>{data_.size() - 1, file_};
             }
 
