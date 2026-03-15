@@ -1,7 +1,7 @@
 #    Quartz Project
 #    Copyright (C) 2026 SkyTheDragon
 #
-#    This program is free software: you can redistribute it and/or modify
+#    Quartz is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
@@ -13,6 +13,8 @@
 #
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+#    All files contained within are licensed under the GPLv3
 
 
 cmake_minimum_required(VERSION 4.0)
@@ -22,7 +24,7 @@ set(CMAKE_PROJECT_VERSION "0.0.0pre-alpha")
 
 set(CMAKE_CXX_STANDARD 26)
 
-add_compile_options(-Wall -Wextra -Wpedantic -Wshadow)
+add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -fno-exceptions -fno-rtti)
 
 add_subdirectory(core)
 add_subdirectory(lib)
