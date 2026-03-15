@@ -15,8 +15,4 @@ namespace quartz::core {
     color_(color),
     parent_(parent)
     {}
-
-    FrameContainer<FrameId>& AnimatedLayer::get_frames() {
-        return frames_;
-    }
 }

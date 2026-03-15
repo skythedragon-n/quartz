@@ -14,8 +14,6 @@
 
 namespace quartz::core {
     class AnimatedLayer {
-        FrameContainer<FrameId> frames_;
-
         ::std::string name_;
         Color color_;
         SymbolId parent_;
@@ -24,11 +22,7 @@ namespace quartz::core {
 
         AnimatedLayer(IdKey, AnimFile*, ::std::string name, Color color, SymbolId parent, AnimLayerId);
 
-        /**
-         * @brief Return reference to frames in the layer
-         * @return Reference to frames
-         */
-        FrameContainer<FrameId>& get_frames();
+        FrameContainer<FrameId> frames;
 
         /**
          * @brief Gets layer name
