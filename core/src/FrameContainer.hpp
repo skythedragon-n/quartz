@@ -16,6 +16,7 @@ namespace quartz::core {
 
     template<typename ItemT>
     class FrameContainer {
+    public:
         struct Item {
             static constexpr size_t INVALID_INDEX = ::std::numeric_limits<size_t>::max();
 
@@ -24,9 +25,11 @@ namespace quartz::core {
             size_t to_next;
         };
 
+    private:
         ::std::vector<Item> items_;
 
     public:
+
         struct NoFrames {};
 
         struct SameFrames {};
@@ -77,7 +80,7 @@ namespace quartz::core {
 
         Iterator at(size_t index);
 
-        const ::std::tuple<ItemT, size_t, size_t> operator[](size_t index);
+        Item operator[](size_t index) const;
 
         Iterator begin();
         Iterator end();

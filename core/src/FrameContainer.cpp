@@ -7,10 +7,11 @@
 
 #include "FrameContainer.hpp"
 
-#include <numeric>
 #include <ranges>
+#include <format>
 
 #include "id_sys.hpp"
+#include "panic.hpp"
 
 namespace quartz::core {
     template <typename ItemT>
@@ -247,10 +248,9 @@ namespace quartz::core {
     }
 
     template <typename ItemT>
-    const std::tuple<ItemT, size_t, size_t> FrameContainer<ItemT>::operator[](size_t index) {
+    FrameContainer<ItemT>::Item FrameContainer<ItemT>::operator[](size_t index) const {
         if (index >= size()) {
-            std::printf("Index %zu greater than size %zu\n", index, size());
-            std::abort();
+            ::qtil::panic(::std::format("Index {} greater than size {}\n", index, size()));
         }
         Item& item = items_[index];
         return std::make_tuple(item.content, item.from_first, item.to_next);
