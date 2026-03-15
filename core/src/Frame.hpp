@@ -6,6 +6,7 @@
 //
 
 #pragma once
+#include <optional>
 #include <variant>
 #include <vector>
 
@@ -25,17 +26,38 @@ namespace quartz::core {
     }
 
     class Frame {
-        ::std::variant<frame_types::Empty, frame_types::Normal> data_;
-        Frame() = delete;
-        explicit Frame(::std::variant<frame_types::Empty, frame_types::Normal> data);
-
+        using FrameData = ::std::variant<frame_types::Empty, frame_types::Normal>;
+        FrameData data_;
     public:
-        static Frame empty();
-        static Frame normal(Drawing drawing = Drawing());
+        Frame(IdKey, AnimFile*, const FrameData& data, FrameId);
+        Frame() = delete;
 
         template<frame_types::FrameType T>
-        T& get_data() {
+        [[nodiscard]] bool is() const {
+            return std::holds_alternative<FrameData>(data_);
+        }
+
+        template<frame_types::FrameType T>
+        [[nodiscard]] ::std::optional<T*> get() const {
+            if (!::std::holds_alternative<T>(data_)) {
+                return ::std::nullopt;
+            }
             return ::std::get<T>(data_).drawing;
+        }
+
+        template<frame_types::FrameType T>
+        void set(T data) {
+            data_ = data;
+        }
+
+        template<typename Visitor>
+        decltype(auto) visit(Visitor&& visitor) {
+            return ::std::visit(::std::forward<Visitor>(visitor), data_);
+        }
+
+        template<typename Visitor>
+        decltype(auto) visit(Visitor&& visitor) const {
+            return std::visit(::std::forward<Visitor>(visitor), data_);
         }
     };
 }
