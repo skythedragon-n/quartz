@@ -141,6 +141,15 @@ namespace quartz::core {
             bool free = false;
         };
 
+        static_assert(sizeof(Container) > 0, "sizeof(Container)==0?");
+        constexpr size_t CHUNK_SIZE = ([]() {
+            if (1'048'576u / sizeof(Container) != 0) {
+                return 1'048'576u / sizeof(Container);
+            } else {
+                return 4;
+            }
+        })();
+
         ::std::vector<Container> data_;
         ::std::vector<size_t> freelist_;
         AnimFile* file_ = nullptr;
@@ -188,6 +197,22 @@ namespace quartz::core {
         template<typename... Args>
         Id<T> add(Args&&... args) {
             if (freelist_.empty()) {
+                size_t capacity = data_.capacity();
+
+                if (capacity == data_.size()) {
+                    size_t doubled_capacity = capacity ? capacity * 2 : 1;
+
+                    bool doubled_ok = capacity && (doubled_capacity / 2 == capacity) && doubled_capacity > capacity;
+
+                    if (capacity == 0 || (doubled_ok && doubled_capacity <= CHUNK_SIZE)) {
+                        data_.reserve(doubled_capacity);
+                    } else {
+                        size_t target = capacity + CHUNK_SIZE;
+                        if (target < capacity) target = std::numeric_limits<size_t>::max();
+                        data_.reserve(target);
+                    }
+                }
+
                 data_.emplace_back(T{
                     IdKey{},
                     file_,
