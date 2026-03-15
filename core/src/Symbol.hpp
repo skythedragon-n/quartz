@@ -69,7 +69,7 @@ namespace quartz::core {
         }
 
         template<symbol_types::SymbolType T>
-        [[nodiscard]] ::std::optional<T*> get() {
+        [[nodiscard]] ::std::optional<T*> get() const {
             if (!::std::holds_alternative<T>(data_)) {
                 return ::std::nullopt;
             }
