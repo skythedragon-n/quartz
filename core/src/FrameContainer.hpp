@@ -12,6 +12,8 @@
 #include <variant>
 #include <expected>
 
+#include "./id_sys.hpp"
+
 namespace quartz::core {
 
     template<typename ItemT>
@@ -26,7 +28,7 @@ namespace quartz::core {
         };
 
     private:
-        ::std::vector<Item> items_;
+        ::std::vector<Item> items_{};
 
     public:
 
@@ -89,4 +91,6 @@ namespace quartz::core {
 
         void clear();
     };
+
+    using FatFrame = FrameContainer<FrameId>::Item;
 }
