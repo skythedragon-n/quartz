@@ -8,6 +8,7 @@
 #pragma once
 
 #include <cstddef>
+#include <limits>
 #include <expected>
 #include <vector>
 
@@ -146,7 +147,7 @@ namespace quartz::core {
             if (1'048'576u / sizeof(Container) != 0) {
                 return 1'048'576u / sizeof(Container);
             } else {
-                return 4;
+                return static_cast<size_t>(4);
             }
         })();
 

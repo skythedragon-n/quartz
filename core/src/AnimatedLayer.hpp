@@ -8,9 +8,9 @@
 #pragma once
 #include <string>
 
-#include "drawing_utils.hpp"
-#include "id_sys.hpp"
-#include "quartz/core/FrameContainer.hpp"
+#include "./drawing_utils.hpp"
+#include "./id_sys.hpp"
+#include "./FrameContainer.hpp"
 
 namespace quartz::core {
     class AnimatedLayer {

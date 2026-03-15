@@ -7,7 +7,9 @@
 
 #pragma once
 
+#include <string>
+
 namespace qtil {
     [[noreturn]]
-    void panic(const char* message) noexcept;
+    void panic(::std::string message) noexcept;
 }

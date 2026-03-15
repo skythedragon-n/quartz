@@ -252,8 +252,7 @@ namespace quartz::core {
         if (index >= size()) {
             ::qtil::panic(::std::format("Index {} greater than size {}\n", index, size()));
         }
-        Item& item = items_[index];
-        return std::make_tuple(item.content, item.from_first, item.to_next);
+        return items_[index];
     }
 
     template <typename ItemT>
