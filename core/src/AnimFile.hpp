@@ -10,9 +10,10 @@
 #include <expected>
 #include <string>
 #include <unordered_map>
-#include <vector>
 
 #include "Library.hpp"
+#include "Frame.hpp"
+#include "AnimatedLayer.hpp"
 #include "id_sys.hpp"
 #include "core_errors.hpp"
 #include "Symbol.hpp"
