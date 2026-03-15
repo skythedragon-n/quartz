@@ -30,6 +30,7 @@ namespace quartz::core {
         FrameData data_;
     public:
         Frame(IdKey, AnimFile*, const FrameData& data, FrameId);
+        Frame(IdKey, AnimFile*, FrameId);
         Frame() = delete;
 
         [[nodiscard]] const FrameData& data() const { return data_; }
