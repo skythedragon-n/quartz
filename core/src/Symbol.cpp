@@ -5,7 +5,7 @@
 // Created by skythedragon on 2/7/26.
 //
 
-#include "Symbol.hpp"
+#include "./Symbol.hpp"
 
 #include <utility>
 
