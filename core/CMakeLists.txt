@@ -17,8 +17,6 @@ src/Stroke.hpp
 src/drawing_utils.hpp
 src/id_sys.hpp
 src/core_errors.hpp
-src/core_errors.hpp
-src/core_errors.hpp
 src/AnimatedLayer.cpp
 src/AnimatedLayer.hpp
 src/FrameContainer.cpp
@@ -31,7 +29,7 @@ src/panic.hpp
 src/panic.cpp
 )
 
-set(QUARTZ_CORE_HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include/quartz/core")
+set(QUARTZ_CORE_HEADER_DIR "/include/quartz/core")
 
 target_include_directories(quartz_core PUBLIC include)
 
@@ -58,7 +56,7 @@ add_custom_target(quartz_core_headers ALL
     COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_SOURCE_DIR}${QUARTZ_CORE_HEADER_DIR}"
     COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${QUARTZ_CORE_HEADER_FILES}
-        "${QUARTZ_CORE_HEADER_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}${QUARTZ_CORE_HEADER_DIR}"
     DEPENDS ${QUARTZ_CORE_HEADER_FILES}
     COMMENT "Copying core headers"
     VERBATIM
