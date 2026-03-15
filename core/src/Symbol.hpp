@@ -17,7 +17,7 @@
 namespace quartz::core {
     namespace symbol_types {
         struct LayeredAnimation {
-            ::std::vector<AnimatedLayer> layers;
+            ::std::vector<AnimLayerId> layers;
         };
 
         struct Scene {
