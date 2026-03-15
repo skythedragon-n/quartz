@@ -39,8 +39,13 @@ namespace quartz::core {
     }
 
     class Symbol {
+        using SymbolData = ::std::variant<
+            symbol_types::LayeredAnimation,
+            symbol_types::Scene,
+            symbol_types::DrawingSymbol,
+            symbol_types::Void>;
         ::std::string name_;
-        ::std::variant<symbol_types::LayeredAnimation, symbol_types::Scene, symbol_types::DrawingSymbol, symbol_types::Void> data_;
+        SymbolData data_;
 
         AnimFile* file_ = nullptr;
 
@@ -54,6 +59,9 @@ namespace quartz::core {
     public:
 
         Symbol(IdKey, AnimFile* file, ::std::string name, FolderId parent, SymbolId id);
+        Symbol(IdKey, AnimFile* file, const Symbol& symbol, SymbolId id);
+
+        [[nodiscard]] const SymbolData& data() const { return data_; }
 
         void set_name(const ::std::string& name);
 
