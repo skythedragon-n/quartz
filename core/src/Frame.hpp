@@ -17,7 +17,7 @@ namespace quartz::core {
     namespace frame_types {
         struct Empty {};
         struct Normal {
-            std::vector<InstanceId> instances;
+            std::vector<InstanceId> instances{};
             Drawing drawing;
         };
 
@@ -26,7 +26,9 @@ namespace quartz::core {
     }
 
     class Frame {
+    public:
         using FrameData = ::std::variant<frame_types::Empty, frame_types::Normal>;
+    private:
         FrameData data_;
     public:
         Frame(IdKey, AnimFile*, const FrameData& data, FrameId);
