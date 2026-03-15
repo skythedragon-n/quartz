@@ -32,9 +32,11 @@ namespace quartz::core {
         Frame(IdKey, AnimFile*, const FrameData& data, FrameId);
         Frame() = delete;
 
+        [[nodiscard]] const FrameData& data() const { return data_; }
+
         template<frame_types::FrameType T>
         [[nodiscard]] bool is() const {
-            return std::holds_alternative<FrameData>(data_);
+            return std::holds_alternative<T>(data_);
         }
 
         template<frame_types::FrameType T>
