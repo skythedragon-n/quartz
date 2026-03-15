@@ -9,9 +9,9 @@
 
 #include <ranges>
 #include <format>
+#include <qtil/panic.hpp>
 
 #include "id_sys.hpp"
-#include "panic.hpp"
 
 namespace quartz::core {
     template <typename ItemT>

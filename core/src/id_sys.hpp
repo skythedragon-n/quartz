@@ -142,7 +142,7 @@ namespace quartz::core {
         };
 
         static_assert(sizeof(Container) > 0, "sizeof(Container)==0?");
-        constexpr size_t CHUNK_SIZE = ([]() {
+        static constexpr size_t CHUNK_SIZE = ([]() {
             if (1'048'576u / sizeof(Container) != 0) {
                 return 1'048'576u / sizeof(Container);
             } else {

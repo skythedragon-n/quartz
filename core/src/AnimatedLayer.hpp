@@ -7,7 +7,6 @@
 
 #pragma once
 #include <string>
-#include <vector>
 
 #include "drawing_utils.hpp"
 #include "id_sys.hpp"

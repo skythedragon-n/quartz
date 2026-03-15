@@ -1,7 +1,5 @@
 
 add_library(quartz_core
-src/Context.cpp
-src/Context.hpp
 src/AnimFile.cpp
 src/AnimFile.hpp
 src/Library.cpp
@@ -24,9 +22,6 @@ src/FrameContainer.hpp
 src/Instance.hpp
 src/Frame.hpp
 src/Frame.cpp
-src/overloads.hpp
-src/panic.hpp
-src/panic.cpp
 )
 
 set(QUARTZ_CORE_HEADER_DIR "/include/quartz/core")
@@ -36,7 +31,6 @@ target_include_directories(quartz_core PUBLIC include)
 set(QUARTZ_CORE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/AnimatedLayer.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/AnimFile.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/Context.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/core_errors.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Drawing.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/drawing_utils.hpp"
@@ -48,8 +42,6 @@ set(QUARTZ_CORE_HEADER_FILES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/LibraryFolder.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Stroke.hpp"
     "${CMAKE_CURRENT_SOURCE_DIR}/src/Symbol.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/overloads.hpp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/src/panic.hpp"
 )
 
 add_custom_target(quartz_core_headers ALL
