@@ -30,5 +30,45 @@ namespace quartz::core {
          * @return Reference to frames
          */
         FrameContainer<FrameId>& get_frames();
+
+        /**
+         * @brief Gets layer name
+         * @return Name of layer
+         */
+        [[nodiscard]] std::string name() const {
+            return name_;
+        }
+
+        /**
+         * @brief Gets layer color
+         * @return Layer color
+         */
+        [[nodiscard]] Color color() const {
+            return color_;
+        }
+
+        /**
+         * @brief Gets layer's parent Symbol
+         * @return Layer's parent
+         */
+        [[nodiscard]] SymbolId parent() const {
+            return parent_;
+        }
+
+        /**
+         * @brief Sets layer's name
+         * @param name New name for layer
+         */
+        void set_name(const std::string& name) {
+            name_ = name;
+        }
+
+        /**
+         * @brief Sets Layer's color
+         * @param color New color for layer
+         */
+        void set_color(const Color& color) {
+            color_ = color;
+        }
     };
 }
