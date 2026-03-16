@@ -1,10 +1,16 @@
 
 add_library(quartz_lib
+src/monolayer_timeline_system.cpp
+src/monolayer_timeline_system.hpp
+src/library_system.hpp
+src/library_system.cpp
 )
 
 target_include_directories(quartz_lib PUBLIC include/)
 
 set(QUARTZ_LIB_HEADER_FILES
+"${CMAKE_CURRENT_SOURCE_DIR}/src/monolayer_timeline_system.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/library_system.hpp"
 )
 
 set(QUARTZ_LIB_HEADER_DIR "/include/quartz/lib/")
