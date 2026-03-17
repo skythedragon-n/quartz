@@ -32,7 +32,10 @@ add_subdirectory(lib)
 
 target_link_libraries(quartz_core qtil)
 add_dependencies(quartz_core qtil_headers)
-target_link_libraries(quartz_lib quartz_core qtil)
+
+target_link_libraries(quartz_lib_core_lib PUBLIC quartz_core)
+
+target_link_libraries(quartz_lib PUBLIC quartz_core qtil)
 add_dependencies(quartz_lib quartz_core_headers qtil_headers)
 
 Include(FetchContent)

@@ -11,7 +11,7 @@
 
 namespace qtil {
     template<typename T>
-    ::std::vector<T>::iterator iter_at(const ::std::vector<T>& vec, size_t index) {
+    ::std::vector<T>::iterator iter_at(::std::vector<T>& vec, size_t index) {
         auto it = vec.begin();
 
         ::std::advance(it, index);

@@ -81,7 +81,8 @@ namespace quartz::core {
             if (!::std::holds_alternative<T>(data_)) {
                 return ::std::nullopt;
             }
-            return &::std::get<T>(data_);
+            const T* t = ::std::addressof(::std::get<T>(data_));
+            return const_cast<T*>(t);
         }
 
         template<symbol_types::SymbolType T>

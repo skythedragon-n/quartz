@@ -100,3 +100,5 @@ remote.sh
 *.stamp
 
 */include/*
+lib/*/include/*
+*.mp4
