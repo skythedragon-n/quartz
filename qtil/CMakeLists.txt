@@ -4,12 +4,14 @@ src/overloads.hpp
 src/panic.hpp
 src/panic.cpp
 src/vector_util.hpp
+src/casts.hpp
 )
 
 set(QTIL_HEADER_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/src/overloads.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/src/panic.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/src/vector_util.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/casts.hpp"
 )
 
 set(QTIL_HEADER_DIR "/include/qtil/")
