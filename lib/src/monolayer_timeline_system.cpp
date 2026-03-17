@@ -15,6 +15,7 @@
 #include <quartz/core/Symbol.hpp>
 #include <quartz/core/AnimFile.hpp>
 #include <quartz/core/AnimatedLayer.hpp>
+#include <qtil/casts.hpp>
 
 namespace quartz::lib {
     ::std::expected<core::AnimLayerId, LayerOpError>
@@ -190,6 +191,62 @@ namespace quartz::lib {
         }
 
         return frame;
+    }
+
+    ::std::expected<void, FrameOpError>
+    move_frame(core::AnimFile& file, core::AnimLayerId target, size_t frame, size_t len, int64_t delta) {
+        auto layer_res = file.layers.resolve(target);
+
+        auto u_delta = ::qtil::pun_cast<size_t>(delta);
+
+        if (!layer_res) {
+            return ::std::unexpected(layer_res.error());
+        }
+
+        core::AnimatedLayer* layer = layer_res.value();
+
+        if (layer->frames.size() >= frame + len || layer->frames.size() >= frame) {
+            return ::std::unexpected(FrameOpFailure::OutOfBoundsOp);
+        }
+
+        if (frame + len + u_delta >= layer->frames.size() || frame + u_delta >= layer->frames.size()) {
+            return ::std::unexpected(FrameOpFailure::OutOfBoundsOp);
+        }
+
+        if (layer->frames[frame].from_first != 0) {
+            core::FrameId frame_id = layer->frames[frame].content;
+            auto frame_res = duplicate_frame(file, frame_id);
+
+            if (!frame_res) {
+                ::qtil::panic("Invalid frame id in layer!");
+            }
+
+            core::FrameId duplicate_frame = *frame_res;
+
+            layer->frames.replace_frame(frame, duplicate_frame);
+
+            auto insert_res = layer->frames.insert_frame(frame, frame_id);
+
+            if (!insert_res) {
+                ::qtil::panic("FrameContainer misbehaving, normal insert returned error");
+            }
+        }
+
+        size_t next_index = frame;
+        size_t max = frame + len;
+
+        ::std::vector<size_t> frames;
+
+        while (next_index <= max) {
+            frames.emplace_back(next_index);
+            next_index += layer->frames[next_index].to_next;
+        }
+
+        for (size_t frame_index : frames) {
+            layer->frames.move_frame(frame_index, frame_index + u_delta);
+        }
+
+        return {};
     }
 
     ::std::expected<core::FatFrame, FrameOpError>

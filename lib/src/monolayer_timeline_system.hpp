@@ -65,9 +65,8 @@ namespace quartz::lib {
     ::std::expected<core::FrameId, FrameOpError>
     add_keyframe(core::AnimFile& file, const core::AnimLayerId& target, const core::Frame::FrameData& data, size_t index);
 
-    //Implement later, brain fatigued
-    ::std::expected<void, core::ResolveFailure>
-    move_frame(core::AnimFile& file, core::AnimLayerId target, size_t frame, int64_t delta);
+    ::std::expected<void, FrameOpError>
+    move_frame(core::AnimFile& file, core::AnimLayerId target, size_t frame, size_t len, int64_t delta);
 
     ::std::expected<core::FatFrame, FrameOpError>
     get_frame(core::AnimFile& file, core::AnimLayerId target, size_t frame);
