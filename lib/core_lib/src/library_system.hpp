@@ -11,14 +11,15 @@
 #include <string>
 #include <quartz/core/core_errors.hpp>
 #include <quartz/core/id_sys.hpp>
+#include <quartz/core/AnimFile.hpp>
 
 namespace quartz::lib {
-    ::std::expected<core::SymbolId, ::std::variant<core::FindFailure, core::ResolveFailure>> find_symbol_in_folder(
+    ::std::expected<core::SymbolId, core::FindFailure> find_symbol_in_folder(
         core::AnimFile& file,
         core::FolderId folder,
         const ::std::string& path);
 
-    ::std::expected<core::FolderId, ::std::variant<core::FindFailure, core::ResolveFailure>> find_folder_in_folder(
+    ::std::expected<core::FolderId, core::FindFailure> find_folder_in_folder(
         core::AnimFile& file,
         core::FolderId folder,
         const ::std::string& path);
@@ -41,5 +42,13 @@ namespace quartz::lib {
     ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename_folder(
         core::AnimFile& file,
         core::FolderId folder,
-        ::std::string new_name);
+        const ::std::string& new_name);
+
+    ::std::expected<core::SymbolId, core::FindFailure> find_symbol(
+        core::AnimFile& file,
+        ::std::string path);
+
+    ::std::expected<core::FolderId, core::FindFailure> find_folder(
+        core::AnimFile& file,
+        ::std::string path);
 }

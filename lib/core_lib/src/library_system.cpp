@@ -10,11 +10,10 @@
 #include <quartz/core/AnimFile.hpp>
 #include <quartz/core/LibraryFolder.hpp>
 
-#include "../../../qtil/src/panic.hpp"
-#include "qtil/vector_util.hpp"
+#include <qtil/panic.hpp>
 
 namespace quartz::lib {
-    ::std::expected<core::SymbolId, std::variant<core::FindFailure, core::ResolveFailure>> find_symbol_in_folder(
+    ::std::expected<core::SymbolId, core::FindFailure> find_symbol_in_folder(
         core::AnimFile& file,
         core::FolderId folder_id,
         const ::std::string& path)
@@ -22,12 +21,12 @@ namespace quartz::lib {
         auto res = file.folders.resolve(folder_id);
 
         if (!res.has_value()) {
-            return ::std::unexpected(res.error());
+            ::qtil::panic("Folder contains invalid ID!");
         }
 
-        core::LibraryFolder* folder_p = res.value();
+        core::LibraryFolder* folder_p = *res;
 
-        ::std::size_t first_sep = path.find_first_of('/');
+        size_t first_sep = path.find_first_of('/');
 
         if (first_sep == ::std::string::npos) {
             auto output = folder_p->find_symbol(path);
@@ -50,7 +49,7 @@ namespace quartz::lib {
         return find_symbol_in_folder(file, folder, path.substr(first_sep + 1));
     }
 
-    ::std::expected<core::FolderId, ::std::variant<core::FindFailure, core::ResolveFailure>> find_folder_in_folder(
+    ::std::expected<core::FolderId, core::FindFailure> find_folder_in_folder(
         core::AnimFile& file,
         core::FolderId folder,
         const ::std::string& path)
@@ -58,12 +57,12 @@ namespace quartz::lib {
         auto res = file.folders.resolve(folder);
 
         if (!res.has_value()) {
-            return ::std::unexpected(res.error());
+            ::qtil::panic("Folder contains invalid ID!");
         }
 
-        core::LibraryFolder* folder_p = res.value();
+        core::LibraryFolder* folder_p = *res;
 
-        ::std::size_t first_sep = path.find_first_of('/');
+        size_t first_sep = path.find_first_of('/');
 
         if (first_sep == ::std::string::npos) {
             auto output = folder_p->find_folder(path);
@@ -96,7 +95,7 @@ namespace quartz::lib {
             return ::std::unexpected(folder_res.error());
         }
 
-        core::LibraryFolder* folder_p = folder_res.value();
+        core::LibraryFolder* folder_p = *folder_res;
 
         core::FolderId new_folder = file.folders.add(name, parent);
 
@@ -119,7 +118,7 @@ namespace quartz::lib {
             return ::std::unexpected(folder_res.error());
         }
 
-        core::LibraryFolder* folder_p = folder_res.value();
+        core::LibraryFolder* folder_p = *folder_res;
 
         core::SymbolId new_symbol = file.symbols.add(name, parent);
 
@@ -150,7 +149,7 @@ namespace quartz::lib {
             ::qtil::panic("Symbol has invalid parent!");
         }
 
-        core::LibraryFolder* parent_p = parent_res.value();
+        core::LibraryFolder* parent_p = *parent_res;
 
         auto rename_res = parent_p->rename(symbol_p->name(), new_name);
 
@@ -164,14 +163,14 @@ namespace quartz::lib {
     ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename_folder(
         core::AnimFile& file,
         core::FolderId folder,
-        ::std::string new_name) {
+        const ::std::string& new_name) {
         auto folder_res = file.folders.resolve(folder);
 
         if (!folder_res) {
             return ::std::unexpected(folder_res.error());
         }
 
-        core::LibraryFolder* folder_p = folder_res.value();
+        core::LibraryFolder* folder_p = *folder_res;
 
         auto rename_res = folder_p->rename(folder_p->name(), new_name);
 
@@ -180,5 +179,45 @@ namespace quartz::lib {
         }
 
         folder_p->set_name(new_name);
+    }
+
+    ::std::expected<core::SymbolId, core::FindFailure> find_symbol(
+        core::AnimFile& file,
+        ::std::string path) {
+        size_t first_sep = path.find_first_of(':');
+
+        if (first_sep == ::std::string::npos) {
+            return ::std::unexpected(core::FindFailure::NoSuchPath);
+        }
+
+        auto library_res = file.get_library(path.substr(0, first_sep));
+
+        if (!library_res) {
+            return ::std::unexpected(library_res.error());
+        }
+
+        core::Library* library = *file.libraries.resolve(*library_res);
+
+        ::std::string subpath = path.substr(first_sep + 1);
+
+        size_t second_sep = subpath.find_first_of('/');
+
+        if (second_sep == ::std::string::npos) {
+            auto out_res = library->find_symbol(subpath.substr(0, second_sep));
+
+            if (!out_res) {
+                return ::std::unexpected(core::FindFailure::NoSuchPath);
+            }
+
+            return *out_res;
+        }
+
+        auto subfolder_res = library->find_folder(subpath.substr(0, second_sep));
+
+        if (!subfolder_res) {
+            return ::std::unexpected(core::FindFailure::NoSuchPath);
+        }
+
+        return find_symbol_in_folder(file, *subfolder_res, subpath.substr(second_sep + 1));
     }
 }
