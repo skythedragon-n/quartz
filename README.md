@@ -22,7 +22,7 @@
 
 On February 1st 2026, Adobe sent out an email to all Adobe users telling them that Adobe animate would be discontinued.
 This caused the entire OSC to spiral into a panic. Later that day, our leader, Mothi, decided to create this project.
-Early on the next day, SkyTheDragon joined the project and started coding on th 3rd of February. This project is result
+Early on the next day, SkyTheDragon joined the project and started coding on the 3rd of February. This project is result
 of our hard work and dedication.
 
 We intend to one day create a fully fledged piece of animation software that can be used to create animations in place 
