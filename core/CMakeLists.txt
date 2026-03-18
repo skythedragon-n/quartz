@@ -25,6 +25,7 @@ src/Frame.cpp
 )
 
 set(QUARTZ_CORE_HEADER_DIR "/include/quartz/core")
+set(QUARTZ_CORE_HEADER_INCDIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
 target_include_directories(quartz_core PUBLIC include)
 
