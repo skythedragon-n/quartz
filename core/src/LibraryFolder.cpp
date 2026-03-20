@@ -14,7 +14,7 @@
 #include "AnimFile.hpp"
 
 namespace quartz::core {
-    LibraryFolder::LibraryFolder(IdKey, ::std::string name, FolderId parent, FolderId id) :
+    LibraryFolder::LibraryFolder(IdKey, AnimFile*, ::std::string name, FolderId parent, FolderId id) :
     name_(std::move(name)),
     parent_(parent),
     id_(id)
