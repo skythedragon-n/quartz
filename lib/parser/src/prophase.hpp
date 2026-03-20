@@ -7,5 +7,9 @@
 
 #pragma once
 
+#include <expected>
+#include <pugixml.hpp>
+
 namespace quartz::lib::parser {
+    ::std::expected<void, ::pugi::xml_parse_result> prophase(::pugi::xml_document& doc, const ::std::string& path);
 }
