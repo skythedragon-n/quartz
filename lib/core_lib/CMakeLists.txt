@@ -21,7 +21,7 @@ add_custom_target(quartz_lib_core_lib_headers ALL
         ${QUARTZ_LIB_CORE_LIB_HEADER_FILES}
         ${CMAKE_CURRENT_SOURCE_DIR}${QUARTZ_LIB_CORE_LIB_HEADER_DIR}
     DEPENDS ${QUARTZ_LIB_CORE_LIB_HEADER_FILES}
-    COMMENT "Copying lib headers"
+    COMMENT "Copying core_lib headers"
     VERBATIM
 )
 

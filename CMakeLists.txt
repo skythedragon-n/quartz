@@ -178,10 +178,10 @@ endif()
 
 add_executable(quartz_test
 test/test_FrameContainer.cpp
-
 )
 target_link_libraries(quartz_test Catch2::Catch2WithMain)
 target_link_libraries(quartz_test quartz_lib)
+target_link_libraries(quartz_lib_parser PUBLIC xml)
 add_dependencies(quartz_test quartz_core_headers quartz_lib_headers)
 
 add_custom_target(quartz_headers)

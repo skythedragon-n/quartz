@@ -1,16 +1,18 @@
 
 add_subdirectory(core_lib)
+add_subdirectory(parser)
 
 add_library(quartz_lib_deps ../cmake_helpers/empty.cpp)
 target_include_directories(quartz_lib_deps PUBLIC QUARTZ_CORE_HEADER_INCDIR)
 
 target_link_libraries(quartz_lib_core_lib PUBLIC quartz_lib_deps)
+target_link_libraries(quartz_lib_parser PUBLIC quartz_lib_deps)
 
 add_library(quartz_lib ../cmake_helpers/empty.cpp)
-target_link_libraries(quartz_lib PUBLIC quartz_lib_core_lib)
+target_link_libraries(quartz_lib PUBLIC quartz_lib_core_lib quartz_lib_parser)
 
-add_dependencies(quartz_lib quartz_lib_core_lib_headers)
+add_dependencies(quartz_lib quartz_lib_core_lib_headers quartz_lib_parser_headers)
 
 add_custom_target(quartz_lib_headers)
 
-add_dependencies(quartz_lib_headers quartz_lib_core_lib_headers)
+add_dependencies(quartz_lib_headers quartz_lib_core_lib_headers quartz_lib_parser_headers)
