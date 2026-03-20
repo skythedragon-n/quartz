@@ -2,6 +2,8 @@
 add_library(quartz_lib_parser
 src/prophase.cpp
 src/prophase.hpp
+src/metaphase.cpp
+src/metaphase.hpp
 )
 
 target_include_directories(quartz_lib_parser PUBLIC include)
