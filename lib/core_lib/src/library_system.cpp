@@ -113,6 +113,34 @@ namespace quartz::lib::core_lib {
         return new_folder;
     }
 
+    ::std::expected<core::FolderId, ::std::variant<core::ResolveFailure, core::AddFailure>> add_folder(
+        core::AnimFile& file,
+        core::LibraryId parent,
+        ::std::string name) {
+        auto library_res = file.libraries.resolve(parent);
+
+        if (!library_res) {
+            return ::std::unexpected(library_res.error());
+        }
+
+        core::Library* library_p = *library_res;
+
+        if (!library_p->open(name)) {
+            return ::std::unexpected(core::AddFailure::NameInUse);
+        }
+
+        core::FolderId new_folder = file.folders.add(name, parent);
+
+        auto add_res = library_p->add_folder(name, new_folder);
+
+        if (!add_res) {
+            file.folders.free(new_folder);
+            return ::std::unexpected(add_res.error());
+        }
+
+        return new_folder;
+    }
+
     ::std::expected<core::SymbolId, ::std::variant<core::ResolveFailure, core::AddFailure>> add_symbol(
         core::AnimFile& file,
         core::FolderId parent,
@@ -132,6 +160,34 @@ namespace quartz::lib::core_lib {
         core::SymbolId new_symbol = file.symbols.add(name, parent);
 
         auto add_res = folder_p->add_symbol(name, new_symbol);
+
+        if (!add_res) {
+            file.symbols.free(new_symbol);
+            return ::std::unexpected(add_res.error());
+        }
+
+        return new_symbol;
+    }
+
+    ::std::expected<core::SymbolId, ::std::variant<core::ResolveFailure, core::AddFailure>> add_symbol(
+        core::AnimFile& file,
+        core::LibraryId parent,
+        ::std::string name) {
+        auto library_res = file.libraries.resolve(parent);
+
+        if (!library_res) {
+            return ::std::unexpected(library_res.error());
+        }
+
+        core::Library* library_p = *library_res;
+
+        if (!library_p->open(name)) {
+            return ::std::unexpected(core::AddFailure::NameInUse);
+        }
+
+        core::SymbolId new_symbol = file.symbols.add(name, parent);
+
+        auto add_res = library_p->add_symbol(name, new_symbol);
 
         if (!add_res) {
             file.symbols.free(new_symbol);
@@ -168,6 +224,8 @@ namespace quartz::lib::core_lib {
         }
 
         symbol_p->set_name(new_name);
+
+        return {};
     }
 
     ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename_folder(

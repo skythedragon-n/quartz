@@ -29,9 +29,19 @@ namespace quartz::lib::core_lib {
         core::FolderId parent,
         ::std::string name);
 
+    ::std::expected<core::FolderId, ::std::variant<core::ResolveFailure, core::AddFailure>> add_folder(
+        core::AnimFile& file,
+        core::LibraryId parent,
+        ::std::string name);
+
     ::std::expected<core::SymbolId, ::std::variant<core::ResolveFailure, core::AddFailure>> add_symbol(
         core::AnimFile& file,
         core::FolderId parent,
+        ::std::string name);
+
+    ::std::expected<core::SymbolId, ::std::variant<core::ResolveFailure, core::AddFailure>> add_symbol(
+        core::AnimFile& file,
+        core::LibraryId parent,
         ::std::string name);
 
     ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename_symbol(
