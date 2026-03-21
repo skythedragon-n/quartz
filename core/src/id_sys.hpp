@@ -116,15 +116,6 @@ namespace quartz::core {
     template<>
     struct IdTag<AnimatedLayer> { using type = AnimLayerTag; };
 
-    /**
-     * @page ids ID explanation
-     * Id's contain two members, an `id` member, which is an index into the AnimFile's object table for that type, and
-     * a `file` member, which is a pointer to the Id's file.
-     *
-     * **DO NOT SET THESE MEMBERS UNDER ANY CIRCUMSTANCES. SUCH IS UNDEFINED BEHAVIOR, AND COULD CAUSE ANYTHING TO HAPPEN,
-     * INCLUDING, BUT NOT LIMITED TO YOUR COMPUTER FILLING YOUR HOME WITH AN INORDINATE NUMBER OF PUPPIES & RAINBOWS.**
-     */
-
     template<typename T>
     using Id = TypedId<typename IdTag<T>::type>;
 
