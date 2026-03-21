@@ -144,6 +144,13 @@ namespace quartz::core {
         ::std::expected<void, RenameFailure> rename(const ::std::string& old_name, const ::std::string& new_name);
 
         /**
+         * @brief Checks if name is available.
+         * @param name Name to check availability of
+         * @return Is name available?
+         */
+        bool open(const ::std::string& name) const;
+
+        /**
          * @brief Gets the name of this folder
          * @return Name of the folder
          */
