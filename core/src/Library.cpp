@@ -57,4 +57,8 @@ namespace quartz::core {
     void Library::set_group(const ::std::string& group) {
         group_ = group;
     }
+
+    bool Library::open(const std::string& name) const {
+        return root_.open(name);
+    }
 }
