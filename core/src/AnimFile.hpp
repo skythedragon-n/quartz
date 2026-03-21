@@ -68,7 +68,7 @@ namespace quartz::core {
          * @brief Adds a library to the document
          * @param group The 'group' of the newly added library
          */
-        ::std::expected<void, AddFailure> add_library(::std::string group);
+        ::std::expected<LibraryId, AddFailure> add_library(::std::string group);
 
         /**
          * @brief Finds a library by its 'group'
