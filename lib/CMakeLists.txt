@@ -6,7 +6,7 @@ add_library(quartz_lib_deps ../cmake_helpers/empty.cpp)
 target_include_directories(quartz_lib_deps PUBLIC QUARTZ_CORE_HEADER_INCDIR)
 
 target_link_libraries(quartz_lib_core_lib PUBLIC quartz_lib_deps)
-target_link_libraries(quartz_lib_parser PUBLIC quartz_lib_deps)
+target_link_libraries(quartz_lib_parser PUBLIC quartz_lib_deps quartz_lib_core_lib)
 
 add_library(quartz_lib ../cmake_helpers/empty.cpp)
 target_link_libraries(quartz_lib PUBLIC quartz_lib_core_lib quartz_lib_parser)
