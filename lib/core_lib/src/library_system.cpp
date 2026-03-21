@@ -97,11 +97,16 @@ namespace quartz::lib::core_lib {
 
         core::LibraryFolder* folder_p = *folder_res;
 
+        if (!folder_p->open(name)) {
+            return ::std::unexpected(core::AddFailure::NameInUse);
+        }
+
         core::FolderId new_folder = file.folders.add(name, parent);
 
         auto add_res = folder_p->add_folder(name, new_folder);
 
         if (!add_res) {
+            file.folders.free(new_folder);
             return ::std::unexpected(add_res.error());
         }
 
