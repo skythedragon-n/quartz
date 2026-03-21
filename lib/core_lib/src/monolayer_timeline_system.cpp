@@ -17,7 +17,7 @@
 #include <quartz/core/AnimatedLayer.hpp>
 #include <qtil/casts.hpp>
 
-namespace quartz::lib {
+namespace quartz::lib::core_lib {
     ::std::expected<core::AnimLayerId, LayerOpError>
     add_layer(core::AnimFile& file, core::SymbolId target, std::string name, core::Color color) {
         auto sym = file.symbols.resolve(target);

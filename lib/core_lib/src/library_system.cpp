@@ -12,7 +12,7 @@
 
 #include <qtil/panic.hpp>
 
-namespace quartz::lib {
+namespace quartz::lib::core_lib {
     ::std::expected<core::SymbolId, core::FindFailure> find_symbol_in_folder(
         core::AnimFile& file,
         core::FolderId folder_id,

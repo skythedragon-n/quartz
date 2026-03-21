@@ -14,7 +14,7 @@
 #include <quartz/core/id_sys.hpp>
 #include <quartz/core/drawing_utils.hpp>
 
-namespace quartz::lib {
+namespace quartz::lib::core_lib {
     enum class LayerOpFailure {
         SymbolWrongType,
         OutOfBoundsLayerIndex,
