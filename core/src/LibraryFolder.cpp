@@ -30,6 +30,10 @@ namespace quartz::core {
         name_ = std::move(name);
     }
 
+    void LibraryFolder::set_parent(std::variant<LibraryId, FolderId> parent) {
+        parent_ = parent;
+    }
+
     ::std::expected<void, AddFailure> LibraryFolder::add_symbol(const ::std::string& name, SymbolId id) {
         if (symbols_.contains(name) || folders_.contains(name)) {
             return ::std::unexpected(AddFailure::NameInUse);

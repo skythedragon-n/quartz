@@ -47,7 +47,7 @@ namespace quartz::core {
          * @brief Set LibraryFolder's parent to the inputted folder
          * @param parent LibraryFolder to make new parent
          */
-        void set_parent(::std::variant<FolderId, LibraryId> parent);
+        void set_parent(::std::variant<LibraryId, FolderId> parent);
 
         /**
          * @brief Set folder name to inputted name
