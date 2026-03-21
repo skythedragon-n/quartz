@@ -54,34 +54,6 @@ namespace quartz::core {
          * @param name New name for folder
          */
         void set_name(::std::string name);
-
-        /**
-         * @brief Add a symbol to the folder
-         * @param name Name of symbol to be added
-         * @deprecated LibrayFolder API reconfiguration removes this method
-         */
-        [[nodiscard]] ::std::expected<void, AddFailure> add_symbol(::std::string name);
-        /**
-         * @brief Adds a subfolder to the folder
-         * @deprecated LibrayFolder API reconfiguration removes this method
-         */
-        [[nodiscard]] ::std::expected<void, AddFailure> add_folder(::std::string name);
-
-        /**
-         * @brief finds Symbol at path
-         * @param path path of Symbol to find
-         * @return Symbols's ID, or error
-         * @deprecated LibrayFolder API reconfiguration removes this method
-         */
-        [[deprecated]] ::std::expected<SymbolId, FindFailure> find_symbol_by_path(std::string path);
-        /**
-         * @brief finds LibraryFolder at path
-         * @param path path of LibraryFolder to find
-         * @return LibraryFolder's ID, or error
-         * @deprecated LibrayFolder API reconfiguration removes this method
-         */
-        [[deprecated]] ::std::expected<FolderId, FindFailure> find_folder_by_path(std::string path);
-
         /**
          * @brief Adds Symbol to folder
          * @param name Name of symbol to be added
