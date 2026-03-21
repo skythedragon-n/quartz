@@ -33,9 +33,14 @@ namespace quartz::core {
         fps_ = fps;
     }
 
-    void AnimFile::add_library(::std::string group) {
+    ::std::expected<void, AddFailure> AnimFile::add_library(::std::string group) {
+        if (libraries_by_group_.contains(group)) {
+            return ::std::unexpected(AddFailure::NameInUse);
+        }
+
         LibraryId id = libraries.add(group);
         libraries_by_group_[group] = id;
+        return {};
     }
 
     ::std::expected<LibraryId, FindFailure> AnimFile::get_library(::std::string group) {
