@@ -125,11 +125,16 @@ namespace quartz::lib::core_lib {
 
         core::LibraryFolder* folder_p = *folder_res;
 
+        if (!folder_p->open(name)) {
+            return ::std::unexpected(core::AddFailure::NameInUse);
+        }
+
         core::SymbolId new_symbol = file.symbols.add(name, parent);
 
         auto add_res = folder_p->add_symbol(name, new_symbol);
 
         if (!add_res) {
+            file.symbols.free(new_symbol);
             return ::std::unexpected(add_res.error());
         }
 
