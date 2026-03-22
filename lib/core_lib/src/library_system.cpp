@@ -197,7 +197,7 @@ namespace quartz::lib::core_lib {
         return new_symbol;
     }
 
-    ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename_symbol(
+    ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename(
         core::AnimFile& file,
         core::SymbolId symbol,
         ::std::string new_name) {
@@ -228,7 +228,7 @@ namespace quartz::lib::core_lib {
         return {};
     }
 
-    ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename_folder(
+    ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename(
         core::AnimFile& file,
         core::FolderId folder,
         const ::std::string& new_name) {
