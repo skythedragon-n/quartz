@@ -23,13 +23,41 @@ namespace quartz::lib::parser {
                 ::pugi::xml_node offender;
                 std::string group;
             };
+            struct FolderMissingName {
+                ::pugi::xml_node offender;
+            };
+            struct SymbolMissingName {
+                ::pugi::xml_node offender;
+            };
+            struct FolderNameTaken {
+                ::pugi::xml_node offender;
+                std::string name;
+            };
+            struct SymbolNameTaken {
+                ::pugi::xml_node offender;
+                std::string name;
+            };
         }
         using InvalidDocument = ::std::variant<
             document_problem::LibraryMissingGroup,
-            document_problem::LibraryGroupAlreadyExists>;
+            document_problem::LibraryGroupAlreadyExists,
+            document_problem::FolderMissingName,
+            document_problem::SymbolMissingName,
+            document_problem::FolderNameTaken,
+            document_problem::SymbolNameTaken>;
     }
 
     using AnaphaseError = ::std::variant<anaphase_errors::InvalidDocument>;
 
     ::std::expected<void, AnaphaseError> anaphase(core::AnimFile& file, const ::pugi::xml_document& doc);
+
+    ::std::expected<void, AnaphaseError> anaphase_parse_library(
+        core::AnimFile& file,
+        ::pugi::xml_node library,
+        core::LibraryId id);
+
+    ::std::expected<void, AnaphaseError> anaphase_parse_folder(
+        core::AnimFile& file,
+        ::pugi::xml_node folder,
+        core::FolderId id);
 }
