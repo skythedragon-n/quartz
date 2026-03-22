@@ -247,6 +247,8 @@ namespace quartz::lib::core_lib {
         }
 
         folder_p->set_name(new_name);
+
+        return {};
     }
 
     ::std::expected<core::SymbolId, core::FindFailure> find_symbol(
