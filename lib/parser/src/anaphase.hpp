@@ -17,8 +17,10 @@ namespace quartz::lib::parser {
     namespace anaphase_errors {
         namespace document_problem {
             struct LibraryMissingGroup {
+                ::pugi::xml_node offender;
             };
             struct LibraryGroupAlreadyExists {
+                ::pugi::xml_node offender;
                 std::string group;
             };
         }
@@ -29,5 +31,5 @@ namespace quartz::lib::parser {
 
     using AnaphaseError = ::std::variant<anaphase_errors::InvalidDocument>;
 
-    ::std::expected<void, AnaphaseError> anaphase(core::AnimFile& file, ::pugi::xml_document& doc);
+    ::std::expected<void, AnaphaseError> anaphase(core::AnimFile& file, const ::pugi::xml_document& doc);
 }
