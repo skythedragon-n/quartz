@@ -94,7 +94,7 @@ namespace quartz::core {
          */
         ::std::expected<void, RenameFailure> rename(const ::std::string& old_name, const ::std::string& new_name);
 
-        [[nodiscard]] bool open(const ::std::string& name) const;
+        [[nodiscard]] bool available(const ::std::string& name) const;
 
         /**
          * @brief Get Library's group

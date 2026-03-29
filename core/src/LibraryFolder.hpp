@@ -120,7 +120,7 @@ namespace quartz::core {
          * @param name Name to check availability of
          * @return Is name available?
          */
-        [[nodiscard]] bool open(const ::std::string& name) const;
+        [[nodiscard]] bool available(const ::std::string& name) const;
 
         /**
          * @brief Gets the name of this folder

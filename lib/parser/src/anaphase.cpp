@@ -57,7 +57,7 @@ namespace quartz::lib::parser {
                     anaphase_errors::document_problem::FolderMissingName{folder_node});
             }
 
-            if (!library_p->open(name.as_string())) {
+            if (!library_p->available(name.as_string())) {
                 return ::std::unexpected(anaphase_errors::document_problem::FolderNameTaken{
                     folder_node,
                     name.as_string()});
@@ -89,7 +89,7 @@ namespace quartz::lib::parser {
                     anaphase_errors::document_problem::SymbolMissingName{symbol_node});
             }
 
-            if (!library_p->open(name.as_string())) {
+            if (!library_p->available(name.as_string())) {
                 return ::std::unexpected(anaphase_errors::document_problem::SymbolNameTaken{
                     symbol_node,
                     name.as_string()});
@@ -128,7 +128,7 @@ namespace quartz::lib::parser {
                     anaphase_errors::document_problem::FolderMissingName{folder_node});
             }
 
-            if (!folder_p->open(name.as_string())) {
+            if (!folder_p->available(name.as_string())) {
                 return ::std::unexpected(anaphase_errors::document_problem::FolderNameTaken{
                     folder_node,
                     name.as_string()
@@ -161,7 +161,7 @@ namespace quartz::lib::parser {
                     anaphase_errors::document_problem::SymbolMissingName{symbol_node});
             }
 
-            if (!folder_p->open(name.as_string())) {
+            if (!folder_p->available(name.as_string())) {
                 return ::std::unexpected(anaphase_errors::document_problem::SymbolNameTaken{
                     symbol_node,
                     name.as_string()

@@ -154,7 +154,7 @@ namespace quartz::core {
         return {};
     }
 
-    bool LibraryFolder::open(const std::string& name) const {
+    bool LibraryFolder::available(const std::string& name) const {
         return !(symbols_.contains(name) || folders_.contains(name));
     }
 }
