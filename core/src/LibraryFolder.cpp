@@ -20,6 +20,12 @@ namespace quartz::core {
     id_(id)
     {}
 
+    LibraryFolder::LibraryFolder(IdKey, AnimFile*, std::string name, LibraryId parent, FolderId id) :
+    name_(std::move(name)),
+    parent_(parent),
+    id_(id)
+    {}
+
     LibraryFolder::LibraryFolder(LibraryId parent) :
     name_("root"),
     parent_(parent),

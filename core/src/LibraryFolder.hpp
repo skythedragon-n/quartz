@@ -42,6 +42,7 @@ namespace quartz::core {
     public:
 
         LibraryFolder(IdKey, AnimFile*, ::std::string name, FolderId parent, FolderId id);
+        LibraryFolder(IdKey, AnimFile*, ::std::string name, LibraryId parent, FolderId id);
 
         /**
          * @brief Set LibraryFolder's parent to the inputted folder

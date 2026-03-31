@@ -97,7 +97,7 @@ namespace quartz::lib::core_lib {
 
         core::LibraryFolder* folder_p = *folder_res;
 
-        if (!folder_p->open(name)) {
+        if (!folder_p->available(name)) {
             return ::std::unexpected(core::AddFailure::NameInUse);
         }
 
@@ -125,7 +125,7 @@ namespace quartz::lib::core_lib {
 
         core::Library* library_p = *library_res;
 
-        if (!library_p->open(name)) {
+        if (!library_p->available(name)) {
             return ::std::unexpected(core::AddFailure::NameInUse);
         }
 
@@ -153,7 +153,7 @@ namespace quartz::lib::core_lib {
 
         core::LibraryFolder* folder_p = *folder_res;
 
-        if (!folder_p->open(name)) {
+        if (!folder_p->available(name)) {
             return ::std::unexpected(core::AddFailure::NameInUse);
         }
 
@@ -181,7 +181,7 @@ namespace quartz::lib::core_lib {
 
         core::Library* library_p = *library_res;
 
-        if (!library_p->open(name)) {
+        if (!library_p->available(name)) {
             return ::std::unexpected(core::AddFailure::NameInUse);
         }
 
