@@ -51,7 +51,7 @@ namespace quartz::core {
 
         const SymbolId id_;
 
-        FolderId parent_;
+        ::std::variant<FolderId, LibraryId> parent_;
 
         friend class Library;
         friend class AnimFile;
@@ -59,6 +59,7 @@ namespace quartz::core {
     public:
 
         Symbol(IdKey, AnimFile* file, ::std::string name, FolderId parent, SymbolId id);
+        Symbol(IdKey, AnimFile* file, ::std::string name, LibraryId parent, SymbolId id);
         Symbol(IdKey, AnimFile* file, const Symbol& symbol, SymbolId id);
 
         [[nodiscard]] const SymbolData& data() const { return data_; }
@@ -69,7 +70,7 @@ namespace quartz::core {
 
         [[nodiscard]] ::std::string name() const { return name_; }
 
-        [[nodiscard]] FolderId parent() const { return parent_; }
+        [[nodiscard]] ::std::variant<FolderId, LibraryId> parent() const { return parent_; }
 
         template<symbol_types::SymbolType T>
         [[nodiscard]] bool is() const {

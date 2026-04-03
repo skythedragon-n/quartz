@@ -18,6 +18,14 @@ namespace quartz::core {
     data_(symbol_types::Void{})
     {}
 
+    Symbol::Symbol(IdKey, AnimFile* file, ::std::string name, LibraryId parent, SymbolId id) :
+        name_(std::move(name)),
+        file_(file),
+        id_(id),
+        parent_(parent),
+        data_(symbol_types::Void{})
+    {}
+
     Symbol::Symbol(IdKey, AnimFile* file, const Symbol& symbol, SymbolId id) :
     name_(symbol.name()),
     file_(file),
