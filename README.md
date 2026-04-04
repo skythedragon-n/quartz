@@ -12,8 +12,8 @@
 
 <p>
 <a href="https://discord.gg/qHdVzrqmSJ"><img src="https://img.shields.io/badge/Discord-Community-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord"></a>
-<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="https://img.shields.io/badge/_%7C%7C%7C_-black?style=for-the-badge" alt="Block"></a>
-<a href="https://www.youtube.com/@officialquartzteam"><img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube"></a>
+<a href="https://www.youtube.com/watch?v=aqY12x6XpTs"><img src="https://img.shields.io/badge/_%7C%7C%7C_-black?style=for-the-badge" alt="Block"></a>
+<a href="https://www.youtube.com/@officialquartzteam"><img alt="YouTube Channel Subscribers" src="https://img.shields.io/youtube/channel/subscribers/UCqS5xwCTLXc8Ppxv_TUGbKQ?style=for-the-badge&logo=youtube&labelColor=%23FF0000&color=%23000000&link=https%3A%2F%2Fwww.youtube.com%2F%40officialquartzteam"></a>
 </p>
 </div>
 
