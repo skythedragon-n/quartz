@@ -129,7 +129,7 @@ namespace quartz::core {
     class IdContainer {
         struct Container {
             T object;
-            size_t generation = 1;
+            size_t generation = 0;
             bool free = false;
         };
 
@@ -258,7 +258,7 @@ namespace quartz::core {
                 return ::std::unexpected(ResolveFailure::TargetDeleted);
             }
 
-            return &data_[id.storage_.id].object;
+            return ::std::addressof(data_[id.storage_.id].object);
         }
     };
 
