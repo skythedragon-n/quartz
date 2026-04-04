@@ -11,6 +11,7 @@
 #include <quartz/core/LibraryFolder.hpp>
 
 #include <qtil/panic.hpp>
+#include <qtil/overloads.hpp>
 
 namespace quartz::lib::core_lib {
     ::std::expected<core::SymbolId, core::FindFailure> find_symbol_in_folder(
@@ -209,23 +210,49 @@ namespace quartz::lib::core_lib {
 
         core::Symbol* symbol_p = *symbol_res;
 
-        auto parent_res = file.folders.resolve(symbol_p->parent());
+        auto parent_id = symbol_p->parent();
 
-        if (!parent_res) {
-            ::qtil::panic("Symbol has invalid parent!");
-        }
+        using f_res = ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>>;
 
-        core::LibraryFolder* parent_p = *parent_res;
+        return ::qtil::match(parent_id,
+            [&file, symbol_p, &new_name](core::LibraryId library_id) -> f_res {
+                auto parent_res = file.libraries.resolve(library_id);
 
-        auto rename_res = parent_p->rename(symbol_p->name(), new_name);
+                if (!parent_res) {
+                    ::qtil::panic("Symbol has invalid parent!");
+                }
 
-        if (!rename_res) {
-            return ::std::unexpected(rename_res.error());
-        }
+                core::Library* parent_p = *parent_res;
 
-        symbol_p->set_name(new_name);
+                auto rename_res = parent_p->rename(symbol_p->name(), new_name);
 
-        return {};
+                if (!rename_res) {
+                    return ::std::unexpected(rename_res.error());
+                }
+
+                symbol_p->set_name(new_name);
+
+                return {};
+            },
+            [&file, symbol_p, &new_name](core::FolderId folder_id) -> f_res {
+                auto parent_res = file.folders.resolve(folder_id);
+
+                if (!parent_res) {
+                    ::qtil::panic("Symbol has invalid parent!");
+                }
+
+                core::LibraryFolder* parent_p = *parent_res;
+
+                auto rename_res = parent_p->rename(symbol_p->name(), new_name);
+
+                if (!rename_res) {
+                    return ::std::unexpected(rename_res.error());
+                }
+
+                symbol_p->set_name(new_name);
+
+                return {};
+            });
     }
 
     ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>> rename(
@@ -240,15 +267,49 @@ namespace quartz::lib::core_lib {
 
         core::LibraryFolder* folder_p = *folder_res;
 
-        auto rename_res = folder_p->rename(folder_p->name(), new_name);
+        auto parent_id = folder_p->parent();
 
-        if (!rename_res) {
-            return ::std::unexpected(rename_res.error());
-        }
+        using f_res = ::std::expected<void, ::std::variant<core::ResolveFailure, core::RenameFailure>>;
 
-        folder_p->set_name(new_name);
+        return ::qtil::match(parent_id,
+            [&file, folder_p, &new_name](core::LibraryId library_id) -> f_res {
+                auto parent_res = file.libraries.resolve(library_id);
 
-        return {};
+                if (!parent_res) {
+                    ::qtil::panic("Folder has invalid parent!");
+                }
+
+                core::Library* parent_p = *parent_res;
+
+                auto rename_res = parent_p->rename(folder_p->name(), new_name);
+
+                if (!rename_res) {
+                    return ::std::unexpected(rename_res.error());
+                }
+
+                folder_p->set_name(new_name);
+
+                return {};
+            },
+            [&file, folder_p, &new_name](core::FolderId folder_id) -> f_res {
+                auto parent_res = file.folders.resolve(folder_id);
+
+                if (!parent_res) {
+                    ::qtil::panic("Folder has invalid parent!");
+                }
+
+                core::LibraryFolder* parent_p = *parent_res;
+
+                auto rename_res = parent_p->rename(folder_p->name(), new_name);
+
+                if (!rename_res) {
+                    return ::std::unexpected(rename_res.error());
+                }
+
+                folder_p->set_name(new_name);
+
+                return {};
+            });
     }
 
     ::std::expected<core::SymbolId, core::FindFailure> find_symbol(
