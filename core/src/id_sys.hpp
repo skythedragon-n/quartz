@@ -178,6 +178,10 @@ namespace quartz::core {
                     return;
                 }
 
+                if (id.storage_.gen != data_[id.storage_.id].generation) {
+                    return;
+                }
+
                 data_[id.storage_.id].free = true;
                 freelist_.push_back(id.storage_.id);
             }
