@@ -31,6 +31,8 @@ namespace quartz::core {
     class Stroke;
     class Drawing;
     struct Instance;
+    template<typename T>
+    class TestHelpers;
 
     namespace detail {
         struct IdStorage {
@@ -86,6 +88,7 @@ namespace quartz::core {
 
         template<typename>
         friend class IdContainer;
+        friend class TestHelpers;
     };
 
     template<typename T>
