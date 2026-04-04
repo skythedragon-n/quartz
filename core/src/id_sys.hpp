@@ -267,6 +267,14 @@ namespace quartz::core {
 
             return ::std::addressof(data_[id.storage_.id].object);
         }
+
+        size_t size() {
+            return data_.size() - freelist_.size();
+        }
+
+        size_t capacity() {
+            return data_.capacity();
+        }
     };
 
     using SymbolId = Id<Symbol>;
