@@ -31,8 +31,6 @@ namespace quartz::core {
     class Stroke;
     class Drawing;
     struct Instance;
-    template<typename T>
-    class TestHelpers;
 
     namespace detail {
         struct IdStorage {
@@ -88,7 +86,8 @@ namespace quartz::core {
 
         template<typename>
         friend class IdContainer;
-        friend class TestHelpers;
+        template<typename>
+        friend class IdTestHelpers;
     };
 
     template<typename T>
@@ -155,6 +154,7 @@ namespace quartz::core {
         /**
          * @brief Returns invalid ID of container's type
          * @return Invalid ID
+         * @deprecated Ok, we don't need this anymore, just use the Id's INVALID constant. It's more clear
          */
         static Id<T> invalid() { return Id<T>{}; }
 
@@ -164,27 +164,32 @@ namespace quartz::core {
          *
          * Attempts to free Id and add index to freelist
          */
-        void free(Id<T> id) {
-            if (id) {
-                if (id.storage_.file != file_) {
-                    return;
-                }
-
-                if (id.storage_.id >= data_.size()) {
-                    return;
-                }
-
-                if (data_[id.storage_.id].free) {
-                    return;
-                }
-
-                if (id.storage_.gen != data_[id.storage_.id].generation) {
-                    return;
-                }
-
-                data_[id.storage_.id].free = true;
-                freelist_.push_back(id.storage_.id);
+        ::std::expected<void, ResolveFailure> free(Id<T> id) {
+            if (!id) {
+                return ::std::unexpected(ResolveFailure::InvalidId);
             }
+
+            if (id.storage_.file != file_) {
+                return ::std::unexpected(ResolveFailure::WrongFile);
+            }
+
+            if (id.storage_.id >= data_.size()) {
+                return ::std::unexpected(ResolveFailure::NoSuchObject);
+            }
+
+            if (data_[id.storage_.id].free) {
+                return ::std::unexpected(ResolveFailure::TargetDeleted);
+            }
+
+            if (id.storage_.gen != data_[id.storage_.id].generation) {
+                return ::std::unexpected(ResolveFailure::TargetDeleted);
+            }
+
+            data_[id.storage_.id].free = true;
+            freelist_.push_back(id.storage_.id);
+            ::std::destroy_at(::std::addressof(data_[id.storage_.id].object));
+
+            return {};
         }
 
         /**
@@ -225,7 +230,6 @@ namespace quartz::core {
             size_t gen = data_[id].generation + 1;
             freelist_.pop_back();
 
-            ::std::destroy_at(::std::addressof(data_[id].object));
             ::std::construct_at(
                 ::std::addressof(data_[id].object),
                 IdKey{},
