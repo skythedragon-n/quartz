@@ -178,6 +178,7 @@ endif()
 
 add_executable(quartz_test
 test/test_FrameContainer.cpp
+test/test_LibraryFolder.cpp
 )
 target_link_libraries(quartz_test Catch2::Catch2WithMain)
 target_link_libraries(quartz_test quartz_lib)
