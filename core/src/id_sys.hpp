@@ -12,7 +12,7 @@
 #include <expected>
 #include <vector>
 
-#include "core_errors.hpp"
+#include "./core_errors.hpp"
 
 /**
  * @file id_sys.hpp
@@ -99,6 +99,7 @@ namespace quartz::core {
     struct LibraryTag {};
     struct FrameTag {};
     struct AnimLayerTag {};
+    struct DrawingTag {};
 
     template<>
     struct IdTag<Symbol> { using type = SymbolTag; };
@@ -117,6 +118,9 @@ namespace quartz::core {
 
     template<>
     struct IdTag<AnimatedLayer> { using type = AnimLayerTag; };
+
+    template<>
+    struct IdTag<Drawing> { using type = DrawingTag; };
 
     template<typename T>
     using Id = TypedId<typename IdTag<T>::type>;
@@ -315,4 +319,5 @@ namespace quartz::core {
     using LibraryId = Id<Library>;
     using FrameId = Id<Frame>;
     using AnimLayerId = Id<AnimatedLayer>;
+    using DrawingId = Id<Drawing>;
 }
