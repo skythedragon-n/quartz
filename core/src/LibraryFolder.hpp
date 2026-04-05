@@ -12,9 +12,9 @@
 #include <variant>
 #include <expected>
 
-#include "id_sys.hpp"
-#include "core_errors.hpp"
-#include "Symbol.hpp"
+#include "./id_sys.hpp"
+#include "./core_errors.hpp"
+#include "./Symbol.hpp"
 
 namespace quartz::core {
     /**

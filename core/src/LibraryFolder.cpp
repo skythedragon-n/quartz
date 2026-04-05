@@ -5,13 +5,13 @@
 // Created by skythedragon on 2/7/26.
 //
 
-#include "LibraryFolder.hpp"
+#include "./LibraryFolder.hpp"
 
 #include <utility>
 #include <iostream>
 #include <qtil/overloads.hpp>
 
-#include "AnimFile.hpp"
+#include "./AnimFile.hpp"
 
 namespace quartz::core {
     LibraryFolder::LibraryFolder(IdKey, AnimFile*, ::std::string name, FolderId parent, FolderId id) :
