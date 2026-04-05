@@ -7,7 +7,8 @@
     <library group="library">
         <folder name="dummy">
             <symbol type="drawing" name="infold">
-                <stroke points="[(200,200),<(200,200),(0,0)>,(0,0)]" thickness="10.0" color="#000000"/>
+                <points lc="[(0,0),(200,200)]"/>
+                <stroke points="[0,1]" color="#000000" thickness="10px"/>
             </symbol>
         </folder>
     </library>
