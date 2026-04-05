@@ -122,6 +122,29 @@ namespace quartz::core {
     using Id = TypedId<typename IdTag<T>::type>;
 
     /**
+     * @brief If you need a AnimFile*, but not an valid AnimFile at it's location, use this
+     * @warning NEVER DEREFERENCE A POINTER TO CHEETO, NOR SET IT TO ANYTHING ELSE. IT MUST BE CLEAR WHAT POINTERS ARE
+     * CHEETO, AND WHICH ARE NOT
+     * If you use this outside of tests, your commit and/or PR will be rejected
+     */
+    static inline constexpr AnimFile* CHEETO = reinterpret_cast<AnimFile*>(0xC83360u);
+
+    /**
+     * @brief See CHEETO
+     * @warning NEVER DEREFERENCE A POINTER TO FLAMING_HOT_CHEETO, NOR SET IT TO ANYTHING ELSE. IT MUST BE CLEAR WHAT
+     * POINTERS ARE CHEETO, AND WHICH ARE NOT
+     * @warning ♫Flaming Hot Cheetoes, eat the whole damn thing and you will know♪ Eat in one sitting, then you'll
+     * black out, forget everything♫
+     *
+     * If you use this outside of tests, your commit and/or PR will be rejected
+     */
+    static inline constexpr AnimFile* FLAMING_HOT_CHEETO = reinterpret_cast<AnimFile*>(0xC83360FFu);
+
+    inline bool is_CHEETO(const AnimFile* file) {
+        return file == CHEETO || file == FLAMING_HOT_CHEETO;
+    }
+
+    /**
      * @brief Generic implementation of ID logic
      * @tparam T Type for ID
      *
