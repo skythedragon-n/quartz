@@ -189,6 +189,7 @@ namespace quartz::core {
                 case CheetoType::Flaming:
                     return IdContainer{FLAMING_HOT_CHEETO};
             }
+            return IdContainer{CHEETO};
         }
 
         IdContainer(AnimFile* file) : file_(file) {}
