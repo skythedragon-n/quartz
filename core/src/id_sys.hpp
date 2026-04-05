@@ -127,7 +127,7 @@ namespace quartz::core {
      * CHEETO, AND WHICH ARE NOT
      * If you use this outside of tests, your commit and/or PR will be rejected
      */
-    static inline constexpr AnimFile* CHEETO = reinterpret_cast<AnimFile*>(0xC83360u);
+    static inline AnimFile* CHEETO = reinterpret_cast<AnimFile*>(0xC83360u);
 
     /**
      * @brief See CHEETO
@@ -138,7 +138,7 @@ namespace quartz::core {
      *
      * If you use this outside of tests, your commit and/or PR will be rejected
      */
-    static inline constexpr AnimFile* FLAMING_HOT_CHEETO = reinterpret_cast<AnimFile*>(0xC83360FFu);
+    static inline AnimFile* FLAMING_HOT_CHEETO = reinterpret_cast<AnimFile*>(0xC83360FFu);
 
     /**
      * @brief Is it a CHEETO
