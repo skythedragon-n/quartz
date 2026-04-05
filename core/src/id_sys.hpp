@@ -140,6 +140,11 @@ namespace quartz::core {
      */
     static inline constexpr AnimFile* FLAMING_HOT_CHEETO = reinterpret_cast<AnimFile*>(0xC83360FFu);
 
+    /**
+     * @brief Is it a CHEETO
+     * @param file Is it a CHEETO
+     * @return Is it a CHEETO
+     */
     inline bool is_CHEETO(const AnimFile* file) {
         return file == CHEETO || file == FLAMING_HOT_CHEETO;
     }
@@ -171,6 +176,20 @@ namespace quartz::core {
         ::std::vector<size_t> freelist_;
         AnimFile* file_ = nullptr;
     public:
+
+        enum class CheetoType {
+            Normal,
+            Flaming
+        };
+
+        static IdContainer& cheeto(CheetoType type = CheetoType::Normal) {
+            switch (type) {
+                case CheetoType::Normal:
+                    return IdContainer{CHEETO};
+                case CheetoType::Flaming:
+                    return IdContainer{FLAMING_HOT_CHEETO};
+            }
+        }
 
         IdContainer(AnimFile* file) : file_(file) {}
 
