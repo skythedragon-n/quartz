@@ -177,21 +177,6 @@ namespace quartz::core {
         AnimFile* file_ = nullptr;
     public:
 
-        enum class CheetoType {
-            Normal,
-            Flaming
-        };
-
-        static IdContainer& cheeto(CheetoType type = CheetoType::Normal) {
-            switch (type) {
-                case CheetoType::Normal:
-                    return IdContainer{CHEETO};
-                case CheetoType::Flaming:
-                    return IdContainer{FLAMING_HOT_CHEETO};
-            }
-            return IdContainer{CHEETO};
-        }
-
         IdContainer(AnimFile* file) : file_(file) {}
 
         /**
