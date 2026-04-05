@@ -12,8 +12,11 @@
 #include <limits>
 
 namespace quartz::core {
+    using PointIndex = size_t;
+    using num_t = double;
+
     struct Point {
-        double x, y;
+        num_t x, y;
     };
 
     struct Color {
@@ -21,7 +24,8 @@ namespace quartz::core {
     };
 
     constexpr double NaN = ::std::numeric_limits<double>::quiet_NaN();
-    constexpr Point null_point = {NaN, NaN};
+    constexpr Point NULL_POINT = {NaN, NaN};
+    constexpr PointIndex NULL_POINT_INDEX = ::std::numeric_limits<size_t>::max();
 
     constexpr bool is_null(Point& p) {
         return ::std::isnan(p.x) || ::std::isnan(p.y);
@@ -31,6 +35,11 @@ namespace quartz::core {
         return ::std::isnan(p.x) || ::std::isnan(p.y);
     }
 
+    enum class TagentDirection {
+        Left,
+        Right
+    };
+
     struct BezierSection {
         enum class Lock {
             None,
@@ -38,15 +47,15 @@ namespace quartz::core {
             Complete
         };
 
-        Point start = null_point;
-        Point tangent1 = null_point, tangent2 = null_point;
+        PointIndex start = NULL_POINT_INDEX;
+        Point tangent1 = NULL_POINT, tangent2 = NULL_POINT;
         Lock lock = Lock::None;
     };
 
     struct Transform {
-        double xScale = 1.0, yScale = 1.0;
-        double rotation = 0.0;
-        double xOffset = 0.0, yOffset = 0.0;
-        double skewX = 0.0, skewY = 0.0;
+        num_t xScale = 1.0, yScale = 1.0;
+        num_t rotation = 0.0;
+        num_t xOffset = 0.0, yOffset = 0.0;
+        num_t skewX = 0.0, skewY = 0.0;
     };
 }
