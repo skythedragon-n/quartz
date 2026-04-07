@@ -101,5 +101,9 @@ namespace quartz::core {
          * @brief Frame index
          */
         IdContainer<Frame> frames;
+        /**
+         * @brief Drawing index
+         */
+        IdContainer<Drawing> drawings;
     };
 }
