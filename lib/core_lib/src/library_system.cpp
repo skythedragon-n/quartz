@@ -5,7 +5,7 @@
 // Created by skythedragon on 16 Feb 2026.
 //
 
-#include "library_system.hpp"
+#include "./library_system.hpp"
 
 #include <quartz/core/AnimFile.hpp>
 #include <quartz/core/LibraryFolder.hpp>
