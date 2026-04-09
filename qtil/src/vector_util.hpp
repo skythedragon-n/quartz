@@ -18,4 +18,15 @@ namespace qtil {
 
         return it;
     }
+
+    template<typename T>
+    class VecIterable {
+        ::std::vector<T>& vec_;
+
+    public:
+        VecIterable(std::vector<T>& vec) : vec_(vec) {}
+
+        auto begin() { return vec_.begin(); }
+        auto end() { return vec_.end(); }
+    };
 }
