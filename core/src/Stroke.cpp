@@ -44,9 +44,13 @@ namespace quartz::core {
 
     Stroke::Iterator::Iterator(Stroke* stroke, size_t index) : index_(index) {
         stroke_ = stroke;
-        drawing_ = stroke->file_->drawings.resolve(stroke->drawing_).or_else([] {
+        auto res = stroke->file_->drawings.resolve(stroke->drawing_);
+
+        if (!res) {
             ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
-        });
+        }
+
+        drawing_ = *res;
     }
 
     constexpr Stroke::Iterator::reference Stroke::Iterator::operator*() const {
@@ -201,9 +205,13 @@ namespace quartz::core {
     Stroke::item_ref_t Stroke::operator[](size_t index) const {
         BezierSection section = points_[index];
 
-        const Drawing* drawing =  file_->drawings.resolve(drawing_).or_else([] {
+        auto res =  file_->drawings.resolve(drawing_);
+
+        if (!res) {
             ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
-        });
+        }
+
+        const Drawing* drawing = *res;
 
         return item_ref_t{section.lastwise_tangent, (*drawing)[section.start], section.lastwise_tangent};
     }
