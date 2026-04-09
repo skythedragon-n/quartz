@@ -34,6 +34,9 @@ namespace quartz::core {
         num_t miter_limit_;
         DrawingId drawing_;
 
+        [[nodiscard]] Drawing* resolve_drawing();
+        [[nodiscard]] const Drawing* resolve_drawing() const;
+
     public:
         Stroke(
             AnimFile* file,
@@ -63,7 +66,7 @@ namespace quartz::core {
         class Iterator {
             size_t index_;
             Stroke* stroke_;
-            Drawing* drawing_;
+            Drawing* drawing_{};
 
             Iterator(size_t index, Stroke* stroke, Drawing* drawing) noexcept;
 
@@ -139,7 +142,7 @@ namespace quartz::core {
          * @param index The index at which to chop (chops including this index)
          * @return The bit you chopped off
          */
-        [[nodiscard]] Stroke& chop(size_t index);
+        [[nodiscard]] Stroke chop(size_t index);
 
         /**
          * @brief Indexes into data, and returns item at index. Couldn't be simpler

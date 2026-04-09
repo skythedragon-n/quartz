@@ -14,6 +14,26 @@
 #include "./AnimFile.hpp"
 
 namespace quartz::core {
+    Drawing* Stroke::resolve_drawing() {
+        auto res = file_->drawings.resolve(drawing_);
+
+        if (!res) {
+            ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
+        }
+
+        return *res;
+    }
+
+    const Drawing* Stroke::resolve_drawing() const {
+        auto res = file_->drawings.resolve(drawing_);
+
+        if (!res) {
+            ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
+        }
+
+        return *res;
+    }
+
     Stroke::Stroke(
         AnimFile* file,
         DrawingId drawing,
@@ -38,20 +58,14 @@ namespace quartz::core {
 
     constexpr Stroke::Iterator::Iterator() noexcept :
         index_(::std::numeric_limits<size_t>::max()),
-        stroke_(nullptr),
-        drawing_(nullptr)
+        stroke_(nullptr)
     {}
 
-    Stroke::Iterator::Iterator(Stroke* stroke, size_t index) : index_(index) {
-        stroke_ = stroke;
-        auto res = stroke->file_->drawings.resolve(stroke->drawing_);
-
-        if (!res) {
-            ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
-        }
-
-        drawing_ = *res;
-    }
+    Stroke::Iterator::Iterator(Stroke* stroke, size_t index) :
+        index_(index),
+        stroke_(stroke),
+        drawing_(stroke->resolve_drawing())
+    {}
 
     constexpr Stroke::Iterator::reference Stroke::Iterator::operator*() const {
         BezierSection section = stroke_->points_[index_];
@@ -190,7 +204,7 @@ namespace quartz::core {
         points_.push_back(section);
     }
 
-    Stroke& Stroke::chop(size_t index) {
+    Stroke Stroke::chop(size_t index) {
         Stroke chopped{file_, drawing_, thickness_, color_, corner_type_, miter_limit_};
 
         for (BezierSection& section : points_ | ::std::views::drop(index)) {
@@ -205,13 +219,7 @@ namespace quartz::core {
     Stroke::item_ref_t Stroke::operator[](size_t index) const {
         BezierSection section = points_[index];
 
-        auto res =  file_->drawings.resolve(drawing_);
-
-        if (!res) {
-            ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
-        }
-
-        const Drawing* drawing = *res;
+        const Drawing* drawing = resolve_drawing();
 
         return item_ref_t{section.lastwise_tangent, (*drawing)[section.start], section.lastwise_tangent};
     }
