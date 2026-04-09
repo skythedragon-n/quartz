@@ -56,7 +56,7 @@ namespace quartz::core {
         drawing_(drawing)
     {}
 
-    constexpr Stroke::Iterator::Iterator() noexcept :
+    Stroke::Iterator::Iterator() noexcept :
         index_(::std::numeric_limits<size_t>::max()),
         stroke_(nullptr)
     {}
@@ -67,7 +67,7 @@ namespace quartz::core {
         drawing_(stroke->resolve_drawing())
     {}
 
-    constexpr Stroke::Iterator::reference Stroke::Iterator::operator*() const {
+    Stroke::Iterator::reference Stroke::Iterator::operator*() const {
         BezierSection section = stroke_->points_[index_];
 
         const Point& middle = (*drawing_)[section.start];
@@ -75,7 +75,7 @@ namespace quartz::core {
         return reference{section.lastwise_tangent, middle, section.lastwise_tangent};
     }
 
-    constexpr Stroke::Iterator::pointer Stroke::Iterator::operator->() const {
+    Stroke::Iterator::pointer Stroke::Iterator::operator->() const {
         BezierSection section = stroke_->points_[index_];
 
         const Point& middle = (*drawing_)[section.start];
@@ -83,7 +83,7 @@ namespace quartz::core {
         return pointer{&section.lastwise_tangent, &middle, &section.lastwise_tangent};
     }
 
-    constexpr Stroke::Iterator::reference Stroke::Iterator::operator[](difference_type n) const {
+    Stroke::Iterator::reference Stroke::Iterator::operator[](difference_type n) const {
         size_t index = index_ + n;
         BezierSection section = stroke_->points_[index];
 
@@ -92,77 +92,77 @@ namespace quartz::core {
         return reference{section.lastwise_tangent, middle, section.lastwise_tangent};
     }
 
-    constexpr Stroke::Iterator& Stroke::Iterator::operator++() {
+    Stroke::Iterator& Stroke::Iterator::operator++() {
         index_++;
 
         return *this;
     }
 
-    constexpr Stroke::Iterator Stroke::Iterator::operator++(int) {
+    Stroke::Iterator Stroke::Iterator::operator++(int) {
         Iterator tmp = *this;
         index_++;
 
         return tmp;
     }
 
-    constexpr Stroke::Iterator& Stroke::Iterator::operator--() {
+    Stroke::Iterator& Stroke::Iterator::operator--() {
         index_--;
 
         return *this;
     }
 
-    constexpr Stroke::Iterator Stroke::Iterator::operator--(int) {
+    Stroke::Iterator Stroke::Iterator::operator--(int) {
         Iterator tmp = *this;
         index_--;
 
         return tmp;
     }
 
-    constexpr Stroke::Iterator& Stroke::Iterator::operator+=(difference_type n) {
+    Stroke::Iterator& Stroke::Iterator::operator+=(difference_type n) {
         index_ += n;
 
         return *this;
     }
 
-    constexpr Stroke::Iterator Stroke::Iterator::operator+(difference_type n) const {
+    Stroke::Iterator Stroke::Iterator::operator+(difference_type n) const {
         return Iterator{index_ + n, stroke_, drawing_};
     }
 
-    constexpr Stroke::Iterator& Stroke::Iterator::operator-=(difference_type n) {
+    Stroke::Iterator& Stroke::Iterator::operator-=(difference_type n) {
         index_ -= n;
 
         return *this;
     }
 
-    constexpr Stroke::Iterator Stroke::Iterator::operator-(difference_type n) const {
+    Stroke::Iterator Stroke::Iterator::operator-(difference_type n) const {
         return Iterator{index_ - n, stroke_, drawing_};
     }
 
-    constexpr Stroke::Iterator::difference_type Stroke::Iterator::operator-(const Iterator& other) const {
+    Stroke::Iterator::difference_type Stroke::Iterator::operator-(const Iterator& other) const {
         return std::bit_cast<difference_type>(index_ - other.index_);
     }
 
-    constexpr bool Stroke::Iterator::operator==(const Iterator& other) const {
+    bool Stroke::Iterator::operator==(const Iterator& other) const {
         return other.index_ == index_ && other.stroke_ == stroke_;
     }
 
-    constexpr bool Stroke::Iterator::operator!=(const Iterator& other) const {
+    bool Stroke::Iterator::operator!=(const Iterator& other) const {
         return !(*this == other);
     }
 
-    constexpr bool Stroke::Iterator::operator>(const Iterator& other) const {
+    bool Stroke::Iterator::operator>(const Iterator& other) const {
         return index_ > other.index_;
     }
 
-    constexpr bool Stroke::Iterator::operator<(const Iterator& other) const {
+    bool Stroke::Iterator::operator<(const Iterator& other) const {
         return index_ < other.index_;
     }
 
-    constexpr bool Stroke::Iterator::operator>=(const Iterator& other) const {
+    bool Stroke::Iterator::operator>=(const Iterator& other) const {
         return index_ >= other.index_;
     }
 
-    constexpr bool Stroke::Iterator::operator<=(const Iterator& other) const {
+    bool Stroke::Iterator::operator<=(const Iterator& other) const {
         return index_ <= other.index_;
     }
 

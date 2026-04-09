@@ -77,34 +77,34 @@ namespace quartz::core {
             using difference_type = ::std::ptrdiff_t;
             using iterator_category = ::std::random_access_iterator_tag;
 
-            constexpr Iterator() noexcept;
+            Iterator() noexcept;
             Iterator(Stroke* stroke, size_t index);
 
-            constexpr Iterator(const Iterator&) = default;
+            Iterator(const Iterator&) = default;
             Iterator& operator=(const Iterator&) = default;
 
-            constexpr reference operator*() const;
-            constexpr pointer operator->() const;
-            constexpr reference operator[](difference_type n) const;
+            reference operator*() const;
+            pointer operator->() const;
+            reference operator[](difference_type n) const;
 
-            constexpr Iterator& operator++();
-            constexpr Iterator operator++(int);
-            constexpr Iterator& operator--();
-            constexpr Iterator operator--(int);
+            Iterator& operator++();
+            Iterator operator++(int);
+            Iterator& operator--();
+            Iterator operator--(int);
 
-            constexpr Iterator& operator+=(difference_type n);
-            constexpr Iterator operator+(difference_type n) const;
-            constexpr Iterator& operator-=(difference_type n);
-            constexpr Iterator operator-(difference_type n) const;
+            Iterator& operator+=(difference_type n);
+            Iterator operator+(difference_type n) const;
+            Iterator& operator-=(difference_type n);
+            Iterator operator-(difference_type n) const;
 
-            constexpr difference_type operator-(const Iterator& other) const;
+            difference_type operator-(const Iterator& other) const;
 
-            constexpr bool operator==(const Iterator& other) const;
-            constexpr bool operator!=(const Iterator& other) const;
-            constexpr bool operator>(const Iterator& other) const;
-            constexpr bool operator<(const Iterator& other) const;
-            constexpr bool operator>=(const Iterator& other) const;
-            constexpr bool operator<=(const Iterator& other) const;
+            bool operator==(const Iterator& other) const;
+            bool operator!=(const Iterator& other) const;
+            bool operator>(const Iterator& other) const;
+            bool operator<(const Iterator& other) const;
+            bool operator>=(const Iterator& other) const;
+            bool operator<=(const Iterator& other) const;
 
             friend class Stroke;
         };
