@@ -6,18 +6,34 @@
 //
 
 #pragma once
+
 #include <vector>
 
-#include "Stroke.hpp"
+#include <qtil/vector_util.hpp>
+
+#include "./Stroke.hpp"
 
 namespace quartz::core {
 
     class Drawing {
-        std::vector<Stroke> strokes_;
+        ::std::vector<Stroke> strokes_;
+        ::std::vector<Point> points_;
+        AnimFile* file_;
+        DrawingId id_;
 
     public:
-        void add_stroke(Color color, double thickness, std::vector<Point> points);
+
+        Drawing(IdKey, AnimFile*, DrawingId);
+
+        void add_stroke(Color color, num_t thickness, CornerType corner_type = CornerType::Round, num_t miter_limit = 10.0);
         Stroke& get_stroke(size_t index);
-        ::std::vector<Stroke>& strokes() { return strokes_; }
+
+        void add_point(const Point& point);
+
+        ::qtil::VecIterable<Point> points() { return ::qtil::VecIterable{points_}; }
+        ::qtil::VecIterable<Stroke> strokes() { return ::qtil::VecIterable{strokes_}; }
+
+        Point& operator[](size_t index);
+        const Point& operator[](size_t index) const;
     };
 }

@@ -12,7 +12,6 @@
 #include <limits>
 
 namespace quartz::core {
-    using PointIndex = size_t;
     using num_t = double;
 
     struct Point {
@@ -25,19 +24,25 @@ namespace quartz::core {
 
     constexpr double NaN = ::std::numeric_limits<double>::quiet_NaN();
     constexpr Point NULL_POINT = {NaN, NaN};
-    constexpr PointIndex NULL_POINT_INDEX = ::std::numeric_limits<size_t>::max();
+    constexpr size_t NULL_POINT_INDEX = ::std::numeric_limits<size_t>::max();
 
     constexpr bool is_null(Point& p) {
         return ::std::isnan(p.x) || ::std::isnan(p.y);
     }
 
     constexpr bool is_nonnull(Point& p) {
-        return ::std::isnan(p.x) || ::std::isnan(p.y);
+        return !is_null(p);
     }
 
+    enum class CornerType {
+        Bevel,
+        Round,
+        Miter
+    };
+
     enum class TagentDirection {
-        Left,
-        Right
+        Lastwise,
+        Nextwise
     };
 
     struct BezierSection {
@@ -47,8 +52,8 @@ namespace quartz::core {
             Complete
         };
 
-        PointIndex start = NULL_POINT_INDEX;
-        Point tangent1 = NULL_POINT, tangent2 = NULL_POINT;
+        size_t start = NULL_POINT_INDEX;
+        Point lastwise_tangent = NULL_POINT, nextwise_tangent = NULL_POINT;
         Lock lock = Lock::None;
     };
 

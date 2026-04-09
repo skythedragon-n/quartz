@@ -8,15 +8,28 @@
 #include "Drawing.hpp"
 
 namespace quartz::core {
-    void Drawing::add_stroke(Color color, double thickness, std::vector<Point> points) {
-        strokes_.emplace_back(thickness, color);
+    Drawing::Drawing(IdKey, AnimFile* file, DrawingId id) :
+    file_(file),
+    id_(id)
+    {}
 
-        for (auto point : points) {
-            strokes_.rbegin()->add_point(point);
-        }
+    void Drawing::add_stroke(Color color, num_t thickness, CornerType corner_type, num_t miter_limit) {
+        strokes_.emplace_back(file_, id_, thickness, color, corner_type, miter_limit);
+    }
+
+    void Drawing::add_point(const Point& point) {
+        points_.emplace_back(point);
     }
 
     Stroke& Drawing::get_stroke(size_t index) {
         return strokes_[index];
+    }
+
+    Point& Drawing::operator[](size_t index) {
+        return points_[index];
+    }
+
+    const Point& Drawing::operator[](size_t index) const {
+        return points_[index];
     }
 }
