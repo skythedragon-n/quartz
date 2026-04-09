@@ -28,5 +28,6 @@ namespace qtil {
 
         auto begin() { return vec_.begin(); }
         auto end() { return vec_.end(); }
+        auto size() { return vec_.size(); }
     };
 }
