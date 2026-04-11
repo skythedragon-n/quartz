@@ -13,6 +13,8 @@
 #include <quartz/core/id_sys.hpp>
 #include <pugixml.hpp>
 
+#include "anaphase.hpp"
+
 /**
  * @file anaphase.hpp
  *
@@ -102,7 +104,7 @@ namespace quartz::lib::parser {
             document_problem::SymbolNameTaken>;
     }
 
-    using AnaphaseError = ::std::variant<anaphase_errors::InvalidDocument>;
+    using AnaphaseError = ::std::vector<anaphase_errors::InvalidDocument>;
 
     /**
      * @brief Parses library structure into file

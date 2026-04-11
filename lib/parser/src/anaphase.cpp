@@ -13,25 +13,40 @@
 
 namespace quartz::lib::parser {
     ::std::expected<void, AnaphaseError> anaphase(core::AnimFile& file, const ::pugi::xml_document& doc) {
+        using namespace anaphase_errors::document_problem;
+        AnaphaseError problems;
+
         for (const ::pugi::xml_node library_node : doc.child("quartz_document").children("library")) {
             const ::pugi::xml_attribute group = library_node.attribute("group");
 
             if (!group) {
-                return ::std::unexpected(anaphase_errors::document_problem::LibraryMissingGroup{library_node});
+                problems.emplace_back(LibraryMissingGroup{library_node});
+                continue;
             }
 
             auto add_res = file.add_library(group.as_string());
 
             if (!add_res) {
-                return ::std::unexpected(
-                    anaphase_errors::document_problem::LibraryGroupAlreadyExists{
-                        library_node,
-                        group.as_string()});
+                problems.emplace_back( LibraryGroupAlreadyExists{
+                    library_node,
+                    group.as_string()
+                });
+                continue;
             }
 
             core::LibraryId library_id = *add_res;
 
             auto library_res = anaphase_parse_library(file, library_node, library_id);
+
+            if (!library_res) {
+                for (const auto& problem : library_res.error()) {
+                    problems.emplace_back(problem);
+                }
+            }
+        }
+
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
         }
 
         return {};
@@ -41,6 +56,10 @@ namespace quartz::lib::parser {
         core::AnimFile& file,
         const ::pugi::xml_node library,
         core::LibraryId id) {
+        using namespace anaphase_errors::document_problem;
+
+        AnaphaseError problems;
+
         auto library_res = file.libraries.resolve(id);
 
         if (!library_res) {
@@ -53,23 +72,18 @@ namespace quartz::lib::parser {
             const ::pugi::xml_attribute name = folder_node.attribute("name");
 
             if (!name) {
-                return ::std::unexpected(
-                    anaphase_errors::document_problem::FolderMissingName{folder_node});
-            }
-
-            if (!library_p->available(name.as_string())) {
-                return ::std::unexpected(anaphase_errors::document_problem::FolderNameTaken{
-                    folder_node,
-                    name.as_string()});
+                problems.emplace_back(FolderMissingName{folder_node});
+                continue;
             }
 
             auto add_res = core_lib::add_folder(file, id, name.as_string());
 
             if (!add_res) {
-                return ::std::unexpected(anaphase_errors::document_problem::FolderNameTaken{
+                problems.emplace_back(FolderNameTaken{
                     folder_node,
                     name.as_string()
                 });
+                continue;
             }
 
             core::FolderId folder_id = *add_res;
@@ -77,7 +91,9 @@ namespace quartz::lib::parser {
             auto parse_res = anaphase_parse_folder(file, folder_node, folder_id);
 
             if (!parse_res) {
-                return ::std::unexpected(parse_res.error());
+                for (const auto& problem : parse_res.error()) {
+                    problems.emplace_back(problem);
+                }
             }
         }
 
@@ -85,24 +101,22 @@ namespace quartz::lib::parser {
             const ::pugi::xml_attribute name = symbol_node.attribute("name");
 
             if (!name) {
-                return ::std::unexpected(
-                    anaphase_errors::document_problem::SymbolMissingName{symbol_node});
-            }
-
-            if (!library_p->available(name.as_string())) {
-                return ::std::unexpected(anaphase_errors::document_problem::SymbolNameTaken{
-                    symbol_node,
-                    name.as_string()});
+                problems.emplace_back(SymbolMissingName{symbol_node});
+                continue;
             }
 
             auto add_res = core_lib::add_symbol(file, id, name.as_string());
 
             if (!add_res) {
-                return ::std::unexpected(anaphase_errors::document_problem::SymbolNameTaken{
-                    symbol_node,
-                    name.as_string()
-                });
+               problems.emplace_back(SymbolNameTaken{
+                   symbol_node,
+                   name.as_string()
+               });
             }
+        }
+
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
         }
 
         return {};
@@ -112,6 +126,10 @@ namespace quartz::lib::parser {
         core::AnimFile& file,
         const ::pugi::xml_node folder,
         core::FolderId id) {
+        using namespace anaphase_errors::document_problem;
+
+        AnaphaseError problems;
+
         auto folder_res = file.folders.resolve(id);
 
         if (!folder_res) {
@@ -124,24 +142,18 @@ namespace quartz::lib::parser {
             const ::pugi::xml_attribute name = folder_node.attribute("name");
 
             if (!name) {
-                return ::std::unexpected(
-                    anaphase_errors::document_problem::FolderMissingName{folder_node});
-            }
-
-            if (!folder_p->available(name.as_string())) {
-                return ::std::unexpected(anaphase_errors::document_problem::FolderNameTaken{
-                    folder_node,
-                    name.as_string()
-                });
+                problems.emplace_back(FolderMissingName{folder_node});
+                continue;
             }
 
             auto add_res = core_lib::add_folder(file, id, name.as_string());
 
             if (!add_res) {
-                return ::std::unexpected(anaphase_errors::document_problem::FolderNameTaken{
+                problems.emplace_back(FolderNameTaken{
                     folder_node,
                     name.as_string()
                 });
+                continue;
             }
 
             core::FolderId folder_id = *add_res;
@@ -157,25 +169,22 @@ namespace quartz::lib::parser {
             const ::pugi::xml_attribute name = symbol_node.attribute("name");
 
             if (!name) {
-                return ::std::unexpected(
-                    anaphase_errors::document_problem::SymbolMissingName{symbol_node});
-            }
-
-            if (!folder_p->available(name.as_string())) {
-                return ::std::unexpected(anaphase_errors::document_problem::SymbolNameTaken{
-                    symbol_node,
-                    name.as_string()
-                });
+                problems.emplace_back(SymbolMissingName{symbol_node});
+                continue;
             }
 
             auto add_res = core_lib::add_symbol(file, id, name.as_string());
 
             if (!add_res) {
-                return ::std::unexpected(anaphase_errors::document_problem::SymbolNameTaken{
+                problems.emplace_back(SymbolNameTaken{
                     symbol_node,
                     name.as_string()
                 });
             }
+        }
+
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
         }
 
         return {};
