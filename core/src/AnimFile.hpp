@@ -39,6 +39,21 @@ namespace quartz::core {
         friend class LibraryFolder;
         friend class Symbol;
 
+        class Libraries {
+            friend class AnimFile;
+            ::std::unordered_map<::std::string, LibraryId>& libraries_by_group_;
+
+            Libraries(::std::unordered_map<::std::string, LibraryId>& libraries_by_group) :
+                libraries_by_group_(libraries_by_group)
+            {}
+        public:
+
+            [[nodiscard]] decltype(libraries_by_group_.begin()) begin() const { return libraries_by_group_.begin(); }
+            [[nodiscard]] decltype(libraries_by_group_.end()) end() const { return libraries_by_group_.end(); }
+
+            [[nodiscard]] decltype(libraries_by_group_.size()) size() const { return libraries_by_group_.size(); }
+        };
+
     public:
         AnimFile();
 
@@ -80,6 +95,8 @@ namespace quartz::core {
          * exist, returns it's Id.
          */
         ::std::expected<LibraryId, FindFailure> get_library(::std::string group);
+
+        Libraries libraries_i();
 
         /**
          * @brief Symbol index

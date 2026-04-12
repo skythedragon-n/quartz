@@ -51,4 +51,8 @@ namespace quartz::core {
 
         return libraries_by_group_.at(group);
     }
+
+    AnimFile::Libraries AnimFile::libraries_i() {
+        return Libraries{libraries_by_group_};
+    }
 }
