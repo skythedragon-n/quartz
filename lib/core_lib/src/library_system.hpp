@@ -137,14 +137,34 @@ namespace quartz::lib::core_lib {
         core::AnimFile& file,
         ::std::string path);
 
+    /**
+     * @brief Finds the path of a folder
+     * @param file File to perform operations on
+     * @param folder Folder to find the path of
+     * @return Path of folder, or error
+     * Finds the path of a folder, recursing through each parent until the path is complete
+     */
     ::std::expected<::std::string, core::ResolveFailure> build_path(
         core::AnimFile& file,
         core::FolderId folder);
 
+    /**
+     * @brief Finds path of symbol
+     * @param file File to perform operations on
+     * @param symbol Symbol to find the path of
+     * @return Path of Symbol or error
+     * Finds the path of a folder, recursing through each parent until the path is complete
+     */
     ::std::expected<::std::string, core::ResolveFailure> build_path(
         core::AnimFile& file,
         core::SymbolId symbol);
 
+    /**
+     * @brief Ok, let's not delude ourselves; this one just return the group of the inputted library
+     * @param file File to perform operations on
+     * @param library Library to return group of
+     * @return Group of library
+     */
     ::std::expected<::std::string, core::ResolveFailure> build_path(
         core::AnimFile& file,
         core::LibraryId library);
