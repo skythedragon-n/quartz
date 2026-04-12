@@ -13,8 +13,6 @@
 #include <quartz/core/id_sys.hpp>
 #include <pugixml.hpp>
 
-#include "anaphase.hpp"
-
 /**
  * @file anaphase.hpp
  *
@@ -115,9 +113,9 @@ namespace quartz::lib::parser {
     ::std::expected<void, AnaphaseError> anaphase(core::AnimFile& file, const ::pugi::xml_document& doc);
 
     /**
-     * @brief Parses libraries content from document
+     * @brief Parses library's content from document
      * @param file File to load into
-     * @param library Xml of library being parsed
+     * @param library XML of library being parsed
      * @param id Id of library being parsed
      * @return Nothing, or error
      */
@@ -129,7 +127,7 @@ namespace quartz::lib::parser {
     /**
      * @brief Parse folder's content from document
      * @param file File to load into
-     * @param folder Xml of folder being parsed
+     * @param folder XML of folder being parsed
      * @param id Id of folder being parsed
      * @return Nothing or error
      */
