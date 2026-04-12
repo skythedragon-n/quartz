@@ -16,5 +16,11 @@ namespace quartz::lib::parser {
         SpecTooNew,
     };
 
+    /**
+     * @brief Parses in metadata
+     * @param file File to perform operations on
+     * @param doc Document to parse
+     * @return Nothing, or error
+     */
     ::std::expected<void, MetaphaseError> metaphase(core::AnimFile& file, ::pugi::xml_document& doc);
 }
