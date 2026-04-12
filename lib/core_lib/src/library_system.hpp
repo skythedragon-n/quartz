@@ -136,4 +136,16 @@ namespace quartz::lib::core_lib {
     ::std::expected<core::FolderId, core::FindFailure> find_folder(
         core::AnimFile& file,
         ::std::string path);
+
+    ::std::expected<::std::string, core::ResolveFailure> build_path(
+        core::AnimFile& file,
+        core::FolderId folder);
+
+    ::std::expected<::std::string, core::ResolveFailure> build_path(
+        core::AnimFile& file,
+        core::SymbolId symbol);
+
+    ::std::expected<::std::string, core::ResolveFailure> build_path(
+        core::AnimFile& file,
+        core::LibraryId library);
 }

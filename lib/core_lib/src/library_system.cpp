@@ -351,4 +351,86 @@ namespace quartz::lib::core_lib {
 
         return find_symbol_in_folder(file, *subfolder_res, subpath.substr(second_sep + 1));
     }
+
+    ::std::expected<::std::string, core::ResolveFailure> build_path(core::AnimFile& file, core::FolderId folder) {
+        auto folder_res = file.folders.resolve(folder);
+
+        if (!folder_res) {
+            return ::std::unexpected(folder_res.error());
+        }
+
+        core::LibraryFolder* folder_p = *folder_res;
+
+        auto folder_parent = folder_p->parent();
+
+        return ::qtil::match(folder_parent,
+            [&file, folder_p](core::LibraryId library_id) -> ::std::expected<::std::string, core::ResolveFailure> {
+                auto library_res = file.libraries.resolve(library_id);
+
+                if (!library_res) {
+                    return ::std::unexpected(library_res.error());
+                }
+
+                core::Library* library_p = *library_res;
+
+                return library_p->group() + ':' + folder_p->name();
+            },
+            [&file, folder_p](core::FolderId folder_id) -> ::std::expected<::std::string, core::ResolveFailure> {
+                auto parent_path = build_path(file, folder_id);
+
+                if (!parent_path) {
+                    return ::std::unexpected(parent_path.error());
+                }
+
+                return *parent_path + '/' + folder_p->name();
+            }
+        );
+    }
+
+    ::std::expected<::std::string, core::ResolveFailure> build_path(core::AnimFile& file, core::SymbolId symbol) {
+        auto symbol_res = file.symbols.resolve(symbol);
+
+        if (!symbol_res) {
+            return ::std::unexpected(symbol_res.error());
+        }
+
+        core::Symbol* symbol_p = *symbol_res;
+
+        auto symbol_parent = symbol_p->parent();
+
+        return ::qtil::match(symbol_parent,
+            [&file, symbol_p](core::LibraryId library_id) -> ::std::expected<::std::string, core::ResolveFailure> {
+                auto library_res = file.libraries.resolve(library_id);
+
+                if (!library_res) {
+                    return ::std::unexpected(library_res.error());
+                }
+
+                core::Library* library_p = *library_res;
+
+                return library_p->group() + ':' + symbol_p->name();
+            },
+            [&file, symbol_p](core::FolderId folder_id) -> ::std::expected<::std::string, core::ResolveFailure> {
+                auto parent_path = build_path(file, folder_id);
+
+                if (!parent_path) {
+                    return ::std::unexpected(parent_path.error());
+                }
+
+                return *parent_path + '/' + symbol_p->name();
+            }
+        );
+    }
+
+    ::std::expected<::std::string, core::ResolveFailure> build_path(core::AnimFile& file, core::LibraryId library) {
+        auto library_res = file.libraries.resolve(library);
+
+        if (!library_res) {
+            return ::std::unexpected(library_res.error());
+        }
+
+        core::Library* library_p = *library_res;
+
+        return library_p->group();
+    }
 }
