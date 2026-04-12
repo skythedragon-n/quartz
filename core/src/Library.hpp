@@ -101,5 +101,9 @@ namespace quartz::core {
          * @return Library's group
          */
         [[nodiscard]] ::std::string group() const { return group_; }
+
+        auto folders() { return root_.folders(); }
+
+        auto symbols() { return root_.symbols(); }
     };
 }

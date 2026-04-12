@@ -36,6 +36,22 @@ namespace quartz::core {
 
         explicit LibraryFolder(LibraryId parent);
 
+        template<typename T>
+        class Subobjects {
+            friend class LibraryFolder;
+            ::std::unordered_map<::std::string, T>& table_;
+
+            Subobjects(::std::unordered_map<::std::string, T>& table) :
+                table_(table)
+            {}
+        public:
+
+            [[nodiscard]] decltype(table_.begin()) begin() const { return table_.begin(); }
+            [[nodiscard]] decltype(table_.end()) end() const { return table_.end(); }
+
+            [[nodiscard]] decltype(table_.size()) size() const { return table_.size(); }
+        };
+
         friend class Library;
         friend class AnimFile;
 
@@ -134,5 +150,9 @@ namespace quartz::core {
          * @return Folder's parent's Id
          */
         [[nodiscard]] ::std::variant<LibraryId, FolderId> parent() const { return parent_; }
+
+        Subobjects<SymbolId> symbols();
+
+        Subobjects<FolderId> folders();
     };
 }

@@ -163,4 +163,12 @@ namespace quartz::core {
     bool LibraryFolder::available(const std::string& name) const {
         return !(symbols_.contains(name) || folders_.contains(name));
     }
+
+    LibraryFolder::Subobjects<FolderId> LibraryFolder::folders() {
+        return Subobjects{folders_};
+    }
+
+    LibraryFolder::Subobjects<SymbolId> LibraryFolder::symbols() {
+        return Subobjects{symbols_};
+    }
 }
