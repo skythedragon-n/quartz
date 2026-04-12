@@ -91,7 +91,7 @@ namespace quartz::lib::parser {
             };
         }
         /**
-         * Variant between all document problems
+         * @brief Variant between all document problems
          */
         using InvalidDocument = ::std::variant<
             document_problem::LibraryMissingGroup,
