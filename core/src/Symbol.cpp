@@ -11,27 +11,27 @@
 
 namespace quartz::core {
     Symbol::Symbol(IdKey, AnimFile* file, ::std::string name, FolderId parent, SymbolId id) :
-    name_(std::move(name)),
-    file_(file),
-    id_(id),
-    parent_(parent),
-    data_(symbol_types::Void{})
+        name_(std::move(name)),
+        data_(symbol_types::Void{}),
+        file_(file),
+        id_(id),
+        parent_(parent)
     {}
 
     Symbol::Symbol(IdKey, AnimFile* file, ::std::string name, LibraryId parent, SymbolId id) :
         name_(std::move(name)),
+        data_(symbol_types::Void{}),
         file_(file),
         id_(id),
-        parent_(parent),
-        data_(symbol_types::Void{})
+        parent_(parent)
     {}
 
     Symbol::Symbol(IdKey, AnimFile* file, const Symbol& symbol, SymbolId id) :
-    name_(symbol.name()),
-    file_(file),
-    id_(id),
-    parent_(symbol.parent()),
-    data_(symbol.data())
+        name_(symbol.name()),
+        data_(symbol.data()),
+        file_(file),
+        id_(id),
+        parent_(symbol.parent())
     {}
 
     void Symbol::set_name(const ::std::string& name) {
