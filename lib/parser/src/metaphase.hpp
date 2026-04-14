@@ -10,6 +10,13 @@
 #include <quartz/core/AnimFile.hpp>
 #include <pugixml.hpp>
 
+/**
+ * @file metaphase.hpp
+ *
+ * @authors SkyTheDragon
+ *
+ * This file contains the code for parsing the metadata out of a QAD document, the metaphase of file parsing
+ */
 namespace quartz::lib::parser {
     enum class MetaphaseError {
         InvalidDocument,
