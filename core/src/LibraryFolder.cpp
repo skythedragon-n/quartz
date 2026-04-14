@@ -155,7 +155,8 @@ namespace quartz::core {
                     ::std::cerr << "LIBRARYFOLDER MOVE FAILURE. REPORT IMMEDIATELY";
                     abort();
                 }
-            });
+            }
+        );
 
         return {};
     }
