@@ -21,7 +21,7 @@ namespace quartz::core {
         };
 
         struct Scene {
-            ::std::vector<AnimatedLayer> layers;
+            ::std::vector<AnimLayerId> layers;
         };
 
         struct DrawingSymbol {
