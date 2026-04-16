@@ -14,7 +14,7 @@
     </library>
     <library group="scene">
         <symbol name="scene1" type="scene">
-            <layer name="test">
+            <layer name="test" color="#43FA32">
                 <frame length="1">
                     <instance path="library:dummy/infold"/>
                 </frame>
