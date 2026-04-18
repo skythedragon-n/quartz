@@ -30,7 +30,7 @@ namespace quartz::core {
     class AnimatedLayer;
     class Stroke;
     class Drawing;
-    struct Instance;
+    class Instance;
 
     namespace detail {
         struct IdStorage {

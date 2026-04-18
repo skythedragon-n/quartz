@@ -22,6 +22,7 @@ src/FrameContainer.hpp
 src/Instance.hpp
 src/Frame.hpp
 src/Frame.cpp
+src/Instance.cpp
 )
 
 set(QUARTZ_CORE_HEADER_DIR "/include/quartz/core")

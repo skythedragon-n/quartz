@@ -11,8 +11,19 @@
 
 
 namespace quartz::core {
-    struct Instance {
-        SymbolId source;
+    class Instance {
+        SymbolId source_;
         Transform transform_;
+
+    public:
+        Instance(IdKey, AnimFile*, SymbolId source, Transform transform, InstanceId);
+
+        [[nodiscard]] SymbolId source() const;
+
+        void set_source(const SymbolId& source);
+
+        [[nodiscard]] Transform transform() const;
+
+        void set_transform(const Transform& transform);
     };
 }
