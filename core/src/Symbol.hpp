@@ -25,7 +25,7 @@ namespace quartz::core {
         };
 
         struct DrawingSymbol {
-            Drawing drawing;
+            DrawingId drawing;
         };
 
         struct Void {};
