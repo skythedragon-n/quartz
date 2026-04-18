@@ -122,5 +122,9 @@ namespace quartz::core {
          * @brief Drawing index
          */
         IdContainer<Drawing> drawings;
+        /**
+         * @brief Instance index
+         */
+        IdContainer<Instance> instances;
     };
 }
