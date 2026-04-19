@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include <cstddef>
+#include <deque>
 #include <limits>
 #include <expected>
 #include <vector>
@@ -177,7 +177,7 @@ namespace quartz::core {
         })();
 
         ::std::vector<Container> data_;
-        ::std::vector<size_t> freelist_;
+        ::std::deque<size_t> freelist_;
         AnimFile* file_ = nullptr;
     public:
 
@@ -255,12 +255,12 @@ namespace quartz::core {
                     std::forward<Args>(args)...,
                     Id<T>{data_.size(), file_}
                 });
-                return ::std::pair(Id<T>{data_.size() - 1, file_}, ::std::addressof(data_.back().object));
+                return ::std::pair{Id<T>{data_.size() - 1, file_}, ::std::addressof(data_.back().object)};
             }
 
             size_t id = freelist_.back();
             size_t gen = data_[id].generation + 1;
-            freelist_.pop_back();
+            freelist_.pop_front();
 
             ::std::construct_at(
                 ::std::addressof(data_[id].object),
