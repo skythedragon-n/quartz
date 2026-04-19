@@ -13,8 +13,8 @@ namespace quartz::core {
     id_(id)
     {}
 
-    void Drawing::add_stroke(Color color, num_t thickness, CornerType corner_type, num_t miter_limit) {
-        strokes_.emplace_back(file_, id_, thickness, color, corner_type, miter_limit);
+    Stroke& Drawing::add_stroke(Color color, num_t thickness, CornerType corner_type, num_t miter_limit) {
+        return strokes_.emplace_back(file_, id_, thickness, color, corner_type, miter_limit);
     }
 
     void Drawing::add_point(const Point& point) {

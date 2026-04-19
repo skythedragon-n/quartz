@@ -31,8 +31,9 @@ namespace quartz::core {
          * @param thickness Thickness of new stroke
          * @param corner_type Type of corner of new stroke
          * @param miter_limit Stroke's miter limit
+         * @return Reference to added stroke
          */
-        void add_stroke(Color color, num_t thickness, CornerType corner_type = CornerType::Round, num_t miter_limit = 10.0);
+        Stroke& add_stroke(Color color, num_t thickness, CornerType corner_type = CornerType::Round, num_t miter_limit = 10.0);
         /**
          * @brief Gets stroke at index
          * @param index Index of stroke to be gotten
