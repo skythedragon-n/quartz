@@ -228,10 +228,10 @@ namespace quartz::core {
          * @brief Adds object, and gives it an Id.
          * @tparam Args Constructor arguments types
          * @param args Constructor arguments
-         * @return Id of object added
+         * @return Id of object added, along with a pointer to it
          */
         template<typename... Args>
-        Id<T> add(Args&&... args) {
+        ::std::pair<Id<T>, T*> add_wp(Args&&... args) {
             if (freelist_.empty()) {
                 size_t capacity = data_.capacity();
 
@@ -255,7 +255,7 @@ namespace quartz::core {
                     std::forward<Args>(args)...,
                     Id<T>{data_.size(), file_}
                 });
-                return Id<T>{data_.size() - 1, file_};
+                return ::std::pair(Id<T>{data_.size() - 1, file_}, ::std::addressof(data_.back().object));
             }
 
             size_t id = freelist_.back();
@@ -272,7 +272,18 @@ namespace quartz::core {
             data_[id].generation = gen;
             data_[id].free = false;
 
-            return Id<T>{id, file_, gen};
+            return ::std::pair{Id<T>{id, file_, gen}, ::std::addressof(data_[id].object)};
+        }
+
+        /**
+         * @brief Adds object, and gives it an Id.
+         * @tparam Args Constructor arguments types
+         * @param args Constructor arguments
+         * @return Id of object added
+         */
+        template<typename... Args>
+        Id<T> add(Args... args) {
+            return add_wp(std::forward<Args>(args)...).first;
         }
 
         /**
