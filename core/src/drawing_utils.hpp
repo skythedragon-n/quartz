@@ -14,6 +14,10 @@
 namespace quartz::core {
     using num_t = double;
 
+    inline num_t parse_num(const ::std::string& str) {
+        return ::std::stod(str);
+    }
+
     struct Point {
         num_t x, y;
     };
