@@ -11,17 +11,38 @@
 #include <cmath>
 #include <limits>
 
+/**
+ * @file drawing_utils.hpp
+ *
+ * @authors SkyTheDragon
+ *
+ * Various utilities for drawings & storing drawing data
+ */
 namespace quartz::core {
+    /**
+     * @brief A number type alias for numbers storing drawing info
+     */
     using num_t = double;
 
+    /**
+     * @brief Parses a num_t, however a num_t needs to be parsed
+     * @param str String to parse a number from
+     * @return Parsed number
+     */
     inline num_t parse_num(const ::std::string& str) {
         return ::std::stod(str);
     }
 
+    /**
+     * @brief A point in 2D space
+     */
     struct Point {
         num_t x, y;
     };
 
+    /**
+     * @brief A 32-bit RGBA color
+     */
     struct Color {
         uint8_t r = 0, g = 0, b = 0, a = 255;
     };
