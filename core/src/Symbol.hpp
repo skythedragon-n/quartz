@@ -47,7 +47,7 @@ namespace quartz::core {
         ::std::string name_;
         SymbolData data_;
 
-        AnimFile* file_ = nullptr;
+        AnimFile* file_;
 
         const SymbolId id_;
 
