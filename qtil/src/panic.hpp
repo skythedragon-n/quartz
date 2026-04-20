@@ -10,6 +10,11 @@
 #include <string>
 
 namespace qtil {
+    /**
+     * @brief Exits instantly, printing message
+     * @param message Message to print
+     * paniks
+     */
     [[noreturn]]
     void panic(::std::string message) noexcept;
 }
