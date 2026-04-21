@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <cmath>
 #include <limits>
+#include <string>
 
 /**
  * @file drawing_utils.hpp
