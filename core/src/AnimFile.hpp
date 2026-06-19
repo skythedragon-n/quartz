@@ -11,13 +11,14 @@
 #include <string>
 #include <unordered_map>
 
-#include "Library.hpp"
-#include "Frame.hpp"
-#include "AnimatedLayer.hpp"
-#include "id_sys.hpp"
-#include "core_errors.hpp"
-#include "Symbol.hpp"
-
+#include "./Library.hpp"
+#include "./Frame.hpp"
+#include "./AnimatedLayer.hpp"
+#include "./id_sys.hpp"
+#include "./core_errors.hpp"
+#include "./Symbol.hpp"
+#include "./Drawing.hpp"
+#include "./Instance.hpp"
 
 namespace quartz::core {
     /**

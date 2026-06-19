@@ -14,6 +14,7 @@ namespace quartz::core {
         libraries(this),
         layers(this),
         frames(this),
+        instances(this),
         drawings(this)
     {}
 
