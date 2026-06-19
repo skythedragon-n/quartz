@@ -36,6 +36,7 @@ of Adobe Animate. We also intend to support converting .fla's to our format.
       </p>
       <p><strong>Quartz Intro!! Wow!</strong></p>
       <p>and out mascot, Artist Block!!! --------></p>
+      Thank you to DinoMcDinoFimz for making the logo and character assets
     </td>
     <td align="center" valign="top">
       <p align="center">
