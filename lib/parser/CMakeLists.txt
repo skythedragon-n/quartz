@@ -6,12 +6,17 @@ src/metaphase.cpp
 src/metaphase.hpp
 src/anaphase.hpp
 src/anaphase.cpp
+src/telophase.cpp
+src/telophase.hpp
 )
 
 target_include_directories(quartz_lib_parser PUBLIC include)
 
 set(QUARTZ_LIB_PARSER_HEADER_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/src/prophase.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/metaphase.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/anaphase.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/anaphase.hpp"
 )
 
 set(QUARTZ_LIB_PARSER_HEADER_DIR "/include/quartz/lib/parser/")
