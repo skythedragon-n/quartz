@@ -16,7 +16,7 @@ set(QUARTZ_LIB_PARSER_HEADER_FILES
 "${CMAKE_CURRENT_SOURCE_DIR}/src/prophase.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/src/metaphase.hpp"
 "${CMAKE_CURRENT_SOURCE_DIR}/src/anaphase.hpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/src/anaphase.hpp"
+"${CMAKE_CURRENT_SOURCE_DIR}/src/telophase.hpp"
 )
 
 set(QUARTZ_LIB_PARSER_HEADER_DIR "/include/quartz/lib/parser/")
