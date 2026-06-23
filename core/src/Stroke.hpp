@@ -138,6 +138,11 @@ namespace quartz::core {
          */
         void add_section(const BezierSection& section);
         /**
+         * @brief Adds a whole list of BezierSections, all at once
+         * @param sections List of sections to add
+         */
+        void add_sections(const ::std::vector<BezierSection>& sections);
+        /**
          * @brief Chops off the end of the stroke and returns the chopped section
          * @param index The index at which to chop (chops including this index)
          * @return The bit you chopped off

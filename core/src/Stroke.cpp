@@ -204,6 +204,12 @@ namespace quartz::core {
         points_.push_back(section);
     }
 
+    void Stroke::add_sections(const std::vector<BezierSection>& sections) {
+        for (const BezierSection& section : sections) {
+            points_.push_back(section);
+        }
+    }
+
     Stroke Stroke::chop(size_t index) {
         Stroke chopped{file_, drawing_, thickness_, color_, corner_type_, miter_limit_};
 
