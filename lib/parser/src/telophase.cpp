@@ -458,7 +458,7 @@ namespace quartz::lib::parser {
     }
 
     ::std::expected<void, TelophaseErrorL> telophase_parse_stroke(
-        core::Drawing* stroke,
+        core::Drawing* stroke_drawing,
         ::pugi::xml_node stroke_node) {
         using namespace telophase_errors::document_problem;
         using namespace telophase_errors::document_mismatch;
@@ -467,11 +467,61 @@ namespace quartz::lib::parser {
         ::pugi::xml_attribute color_attribute = stroke_node.attribute("color");
 
         if (!color_attribute) {
-            color_attribute = stroke_node.attribute("color");
             color_attribute.set_value("#000000");
         }
 
+        auto color_res = parse_color(color_attribute.value());
 
+        if (!color_res) {
+            return ::std::unexpected(TelophaseErrorL{FieldParseError {
+                color_attribute,
+                ::std::format("Invalid color: {}", color_attribute.value())
+            }});
+        }
+
+        core::Color color = *color_res;
+
+        ::pugi::xml_attribute thickness_attribute = stroke_node.attribute("thickness");
+
+        if (!thickness_attribute) {
+            problems.push_back( FieldMissing {
+                stroke_node,
+                "thickness"
+            });
+            thickness_attribute.set_value("0");
+        }
+
+        core::num_t thickness = core::parse_num(thickness_attribute.value());
+
+        core::Stroke& stroke = stroke_drawing->add_stroke(color, thickness);
+
+        ::pugi::xml_attribute sections_attribute = stroke_node.attribute("points");
+
+        if (!sections_attribute) {
+            problems.push_back( FieldMissing {
+                stroke_node,
+                "points"
+            });
+            sections_attribute.set_value("0");
+        }
+
+        auto maybe_sections = parse_bezier_sections(sections_attribute.value());
+
+        if (!maybe_sections) {
+            problems.push_back( FieldParseError {
+                sections_attribute,
+                maybe_sections.error().problem
+            });
+            maybe_sections = ::std::vector{ core::BezierSection {} };
+        }
+
+        stroke.add_sections(*maybe_sections);
+
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
+        }
+
+        return {};
     }
 
     std::expected<std::vector<core::Point>, PartialFieldParseError> parse_points(::std::string_view points_list_str) {
