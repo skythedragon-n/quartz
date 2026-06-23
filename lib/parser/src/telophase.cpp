@@ -486,7 +486,7 @@ namespace quartz::lib::parser {
 
         while (index < points_list_str.size()) {
             ::std::string_view point_str = points_list_str.substr(index);
-            auto point_res = parse_point(points_list_str.substr(index));
+            auto point_res = parse_point(point_str);
             auto [point, len] = *point_res;
             points.emplace_back(point);
             index += len;
