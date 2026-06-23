@@ -301,6 +301,7 @@ namespace quartz::lib::parser {
                 layer_node,
                 "color"
             });
+            layer_node.attribute("color").set_value("#000000");
         }
 
         ::std::string color_str = layer_node.attribute("color").value();
