@@ -51,6 +51,11 @@ namespace quartz::lib::parser {
                 ::pugi::xml_attribute offender;
                 ::std::string problem;
             };
+
+            struct FieldMissing {
+                ::pugi::xml_node offender;
+                ::std::string field_name;
+            };
         }
 
         namespace document_mismatch {
@@ -76,11 +81,14 @@ namespace quartz::lib::parser {
             document_problem::SymbolHasInvalidType,
             document_problem::InstanceMissingSymbol,
             document_problem::InstanceUnknownRef,
-            document_problem::FieldParseError>;
+            document_problem::FieldParseError,
+            document_problem::FieldMissing
+        >;
         using InputMismatch = ::std::variant<
             document_mismatch::LibraryNotFound,
             document_mismatch::FolderNotFound,
-            document_mismatch::SymbolNotFound>;
+            document_mismatch::SymbolNotFound
+        >;
     }
 
     using TelophaseError = ::std::variant<

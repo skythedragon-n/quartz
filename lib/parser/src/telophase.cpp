@@ -252,7 +252,7 @@ namespace quartz::lib::parser {
         core::symbol_types::LayeredAnimation layers;
 
         for (::pugi::xml_node layer_node : symbol_node.children("layer")) {
-            core::AnimLayerId layer_id = file.layers.add();
+            core::AnimLayerId layer_id = file.layers.add("", core::Color{113, 196, 243, 0});
 
             auto res = telophase_parse_anim_layer(file, symbol_p, layer_id, layer_node);
 
@@ -286,6 +286,33 @@ namespace quartz::lib::parser {
         }
 
         core::AnimatedLayer* layer_p = *layers_res;
+
+        if (!layer_node.attribute("name")) {
+            problems.push_back(FieldMissing {
+                layer_node,
+                "name"
+            });
+        }
+
+        layer_p->set_name(layer_node.attribute("name").value());
+
+        if (!layer_node.attribute("color")) {
+            problems.push_back(FieldMissing {
+                layer_node,
+                "color"
+            });
+        }
+
+        ::std::string color_str = layer_node.attribute("color").value();
+
+        auto color_res = parse_color(color_str);
+
+        if (!color_res) {
+            problems.push_back(FieldParseError {
+                layer_node.attribute("color"),
+                ::std::format("Invalid color: {}", color_str)
+            });
+        }
 
         for (::pugi::xml_node frame_node : layer_node.children("frame")) {
             size_t len = frame_node.attribute("length").as_ullong(1);
@@ -500,7 +527,7 @@ namespace quartz::lib::parser {
         if (index >= point_str.size() || point_str[index] != ',') {
             return ::std::unexpected( PartialFieldParseError {
                 ::std::format("Expected ',', got {}", point_str[index])
-            });       
+            });
         }
 
         index++;
