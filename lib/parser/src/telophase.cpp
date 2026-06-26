@@ -718,7 +718,7 @@ namespace quartz::lib::parser {
         if (!r || !g || !b || !a) {
             return ::std::unexpected( PartialFieldParseError {
                 ::std::format("Failed to parse color {}. Look, I'm too lazy to get my program to figure "
-                              "out the problem is RN, so you're smart, figure it out yourself", color_str)
+                              "out what the problem is RN, so you're smart, figure it out yourself", color_str)
             });
         }
 
