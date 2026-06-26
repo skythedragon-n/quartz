@@ -270,6 +270,50 @@ namespace quartz::lib::parser {
         return {};
     }
 
+    std::expected<void, TelophaseError> telophase_parse_drawing_symbol(
+        core::AnimFile& file,
+        core::SymbolId symbol_id,
+        pugi::xml_node symbol_node) {
+        using namespace telophase_errors::document_problem;
+        using namespace telophase_errors::document_mismatch;
+        ::std::vector<telophase_errors::InvalidDocument> problems;
+
+        auto symbol_res = file.symbols.resolve(symbol_id);
+
+        if (!symbol_res) {
+            ::qtil::panic("Symbol failed to resolve. Uh-oh.");
+        }
+
+        core::Symbol* symbol_p = *symbol_res;
+
+        auto drawing_symbol_res = symbol_p->get<core::symbol_types::DrawingSymbol>();
+
+        if (!drawing_symbol_res) {
+            return ::std::unexpected(telophase_errors::InputMismatch {
+                SymbolTypeMismatch {
+                    symbol_id,
+                    "drawing"
+                }
+            });
+        }
+
+        auto drawing_symbol_p = *drawing_symbol_res;
+
+        auto drawing_parse_res = telophase_parse_drawing(file, drawing_symbol_p->drawing, symbol_node);
+
+        if (!drawing_parse_res) {
+            auto& err = drawing_parse_res.error();
+
+            problems.insert(problems.end(), err.begin(), err.end());
+        }
+
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
+        }
+
+        return {};
+    }
+
     ::std::expected<void, TelophaseError> telophase_parse_anim_layer(
         core::AnimFile& file,
         core::Symbol* symbol_p,
