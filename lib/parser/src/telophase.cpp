@@ -671,8 +671,8 @@ namespace quartz::lib::parser {
             }
 
             index++;
-            }
-
-            return sections;
         }
+
+        return sections;
+    }
 }
