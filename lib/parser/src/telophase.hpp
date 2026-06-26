@@ -70,6 +70,11 @@ namespace quartz::lib::parser {
             struct SymbolNotFound {
                 ::std::string path;
             };
+
+            struct SymbolTypeMismatch {
+                core::SymbolId symbol;
+                ::std::string expected_type;
+            };
         }
 
         /**
@@ -87,7 +92,8 @@ namespace quartz::lib::parser {
         using InputMismatch = ::std::variant<
             document_mismatch::LibraryNotFound,
             document_mismatch::FolderNotFound,
-            document_mismatch::SymbolNotFound
+            document_mismatch::SymbolNotFound,
+            document_mismatch::SymbolTypeMismatch
         >;
     }
 
