@@ -84,11 +84,13 @@ namespace quartz::lib::parser {
         core::Library* library_p = *library_res;
 
         for (auto [name, id] : library_p->folders()) {
-            ::pugi::xml_node folder_node = library_node.child(name);
+            auto folder_nodes = library_node.select_nodes(::std::format("/folder[@name = \"{}\"]", name).c_str());
 
-            if (!folder_node) {
+            if (folder_nodes.empty()) {
                 return ::std::unexpected(FolderNotFound{name});
             }
+
+            ::pugi::xml_node folder_node = folder_nodes.first().node();
 
             auto res = telophase_parse_folder(file, id, folder_node);
 
@@ -102,11 +104,13 @@ namespace quartz::lib::parser {
         }
 
         for (auto [name, id] : library_p->symbols()) {
-            ::pugi::xml_node symbol_node = library_node.child(name);
+            auto symbol_nodes = library_node.select_nodes(::std::format("/symbol[@name = \"{}\"]", name).c_str());
 
-            if (!symbol_node) {
+            if (symbol_nodes.empty()) {
                 return ::std::unexpected(SymbolNotFound{name});
             }
+
+            ::pugi::xml_node symbol_node = symbol_nodes.first().node();
 
             auto res = telophase_parse_symbol(file, id, symbol_node);
 
@@ -143,11 +147,13 @@ namespace quartz::lib::parser {
         core::LibraryFolder* folder_p = *folder_res;
 
         for (const auto& [name, id] : folder_p->folders()) {
-           ::pugi::xml_node subfolder_node = folder_node.child(name);
+            auto subfolder_nodes = folder_node.select_nodes(::std::format("/folder[@name = \"{}\"]", name).c_str());
 
-            if (!subfolder_node) {
+            if (!subfolder_nodes.empty()) {
                 return ::std::unexpected(FolderNotFound{name});
             }
+
+            ::pugi::xml_node subfolder_node = subfolder_nodes.first().node();
 
             core::FolderId subfolder_id = *folder_p->find_folder(name);
 
@@ -163,11 +169,13 @@ namespace quartz::lib::parser {
         }
 
         for (const auto& [name, id] : folder_p->symbols()) {
-            ::pugi::xml_node symbol_node = folder_node.child(name);
+            auto symbol_nodes = folder_node.select_nodes(::std::format("/symbol[@name = \"{}\"]", name).c_str());
 
-            if (!symbol_node) {
+            if (!symbol_nodes.empty()) {
                 return ::std::unexpected(SymbolNotFound{name});
             }
+
+            ::pugi::xml_node symbol_node = symbol_nodes.first().node();
 
             core::SymbolId symbol_id = *folder_p->find_symbol(name);
 
