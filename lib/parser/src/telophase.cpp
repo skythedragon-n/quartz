@@ -273,6 +273,10 @@ namespace quartz::lib::parser {
             }
         }
 
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
+        }
+
         symbol_p->set(layers);
 
         return {};
