@@ -39,7 +39,7 @@ namespace quartz::lib::parser {
         using namespace telophase_errors::document_mismatch;
         ::std::vector<telophase_errors::InvalidDocument> problems;
 
-        ::pugi::xml_node doc_root = doc.child("quartz_document");
+        ::pugi::xml_node doc_root = doc.child("quartz-document");
 
         if (!doc_root) {
             problems.emplace_back(NoRoot{});
