@@ -16,7 +16,7 @@ namespace quartz::lib::parser {
         using namespace anaphase_errors::document_problem;
         AnaphaseError problems;
 
-        for (const ::pugi::xml_node library_node : doc.child("quartz_document").children("library")) {
+        for (const ::pugi::xml_node library_node : doc.child("quartz-document").children("library")) {
             const ::pugi::xml_attribute group = library_node.attribute("group");
 
             if (!group) {
