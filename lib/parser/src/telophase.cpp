@@ -54,6 +54,14 @@ namespace quartz::lib::parser {
             }
 
             auto res = telophase_parse_library(file, id, library_node);
+
+            if (!res) {
+                auto is_err = match_err(problems, res.error());
+
+                if (is_err) {
+                    return ::std::unexpected(*is_err);
+                }
+            }
         }
 
         return {};
@@ -199,7 +207,7 @@ namespace quartz::lib::parser {
 
         ::std::string type = type_res.value();
 
-        if (type == "layered-anim") {
+        if (type == "layered-anim" || type == "scene") {
             auto res = telophase_parse_layered_anim_symbol(file, symbol_id, symbol_node);
 
             if (!res) {
