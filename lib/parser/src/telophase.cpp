@@ -356,7 +356,9 @@ namespace quartz::lib::parser {
 
         core::Frame* frame_p = *frame_res;
 
-        core::frame_types::Normal frame_content{};
+        auto [drawing_id, drawing_p] = file.drawings.add_wp();
+
+        core::frame_types::Normal frame_content{.drawing = drawing_id};
 
         for (::pugi::xml_node instance_node : frame_node.children("instance")) {
             ::pugi::xml_attribute symbol_name_attr = instance_node.attribute("symbol");
