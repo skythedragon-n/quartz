@@ -157,7 +157,7 @@ namespace quartz::lib::core_lib {
 
         core::Frame* frame_p = *frame_res;
 
-        return file.frames.add(frame_p->data());
+        return file.frames.add(frame_p);
     }
 
     ::std::expected<core::FrameId, FrameOpError>

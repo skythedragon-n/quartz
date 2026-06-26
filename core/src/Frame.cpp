@@ -14,6 +14,10 @@ namespace quartz::core {
     data_(data)
     {}
 
+    Frame::Frame(IdKey, AnimFile*, const Frame* frame, FrameId) :
+    data_(frame->data_)
+    {}
+
     Frame::Frame(IdKey, AnimFile*, FrameId) :
     data_(frame_types::Empty{})
     {}
