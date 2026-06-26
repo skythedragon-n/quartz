@@ -9,7 +9,7 @@
 
 namespace quartz::lib::parser {
     ::std::expected<void, MetaphaseError> metaphase(core::AnimFile& file, ::pugi::xml_document& doc) {
-        ::pugi::xml_node doc_root = doc.child("quartz_document");
+        ::pugi::xml_node doc_root = doc.child("quartz-document");
 
         if (!doc_root) {
             return ::std::unexpected(MetaphaseError::InvalidDocument);
