@@ -18,7 +18,7 @@ namespace quartz::core {
         struct Empty {};
         struct Normal {
             std::vector<InstanceId> instances{};
-            Drawing drawing;
+            DrawingId drawing;
         };
 
         template<typename T>
