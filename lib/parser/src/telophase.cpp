@@ -252,7 +252,7 @@ namespace quartz::lib::parser {
         core::symbol_types::LayeredAnimation layers;
 
         for (::pugi::xml_node layer_node : symbol_node.children("layer")) {
-            core::AnimLayerId layer_id = file.layers.add("", core::Color{113, 196, 243, 0});
+            core::AnimLayerId layer_id = file.layers.add("", core::Color{113, 196, 243, 0}, symbol_id);
 
             auto res = telophase_parse_anim_layer(file, symbol_p, layer_id, layer_node);
 
