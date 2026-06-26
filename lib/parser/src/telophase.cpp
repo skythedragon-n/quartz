@@ -311,7 +311,7 @@ namespace quartz::lib::parser {
         if (!color_res) {
             problems.push_back(FieldParseError {
                 layer_node.attribute("color"),
-                ::std::format("Invalid color: {}", color_str)
+                color_res.error().problem
             });
         }
 
@@ -674,5 +674,54 @@ namespace quartz::lib::parser {
         }
 
         return sections;
+    }
+
+    std::expected<core::Color, PartialFieldParseError> parse_color(std::string_view color_str) {
+        auto hex_value = [](char c) -> ::std::optional<uint8_t> {
+            if (c >= '0' && c <= '9') {
+                return static_cast<uint8_t>(c - '0');
+                }
+
+            if (c >= 'a' && c <= 'f') {
+                return static_cast<uint8_t>(c - 'a' + 10);
+            }
+
+            if (c >= 'A' && c <= 'F') {
+                return static_cast<uint8_t>(c - 'A' + 10);
+            }
+
+            return ::std::nullopt;
+        };
+
+        auto parse_byte = [hex_value](char high, char low) -> ::std::optional<uint8_t> {
+        auto high_value = hex_value(high);
+        auto low_value = hex_value(low);
+
+        if (!high_value || !low_value) {
+                return ::std::nullopt;
+            }
+
+            return static_cast<uint8_t>((*high_value << 4) | *low_value);
+        };
+
+        if (color_str.size() != 9 || color_str[0] != '#') {
+            return ::std::unexpected( PartialFieldParseError {
+                ::std::format("Expected hex color in format #RRGGBBAA, but got {}", color_str)
+            });
+        }
+
+        auto r = parse_byte(color_str[1], color_str[2]);
+        auto g = parse_byte(color_str[3], color_str[4]);
+        auto b = parse_byte(color_str[5], color_str[6]);
+        auto a = parse_byte(color_str[7], color_str[8]);
+
+        if (!r || !g || !b || !a) {
+            return ::std::unexpected( PartialFieldParseError {
+                ::std::format("Failed to parse color {}. Look, I'm too lazy to get my program to figure "
+                              "out the problem is RN, so you're smart, figure it out yourself", color_str)
+            });
+        }
+
+        return core::Color{*r, *g, *b, *a};
     }
 }

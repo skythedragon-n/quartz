@@ -170,5 +170,5 @@ namespace quartz::lib::parser {
     ::std::expected<::std::vector<core::Point>, PartialFieldParseError> parse_points(::std::string_view points_list_str);
     ::std::expected<::std::vector<core::BezierSection>, PartialFieldParseError> parse_bezier_sections(::std::string_view bezier_sections_list_str);
     ::std::expected<::std::pair<core::Point, size_t>, PartialFieldParseError> parse_point(::std::string_view point_str);
-    ::std::expected<core::Color, void> parse_color(::std::string_view color_str);
+    ::std::expected<core::Color, PartialFieldParseError> parse_color(::std::string_view color_str);
 }
