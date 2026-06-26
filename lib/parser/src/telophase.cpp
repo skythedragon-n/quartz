@@ -298,20 +298,9 @@ namespace quartz::lib::parser {
 
         core::Symbol* symbol_p = *symbol_res;
 
-        auto drawing_symbol_res = symbol_p->get<core::symbol_types::DrawingSymbol>();
+        core::symbol_types::DrawingSymbol drawing_symbol{file.drawings.add()};
 
-        if (!drawing_symbol_res) {
-            return ::std::unexpected(telophase_errors::InputMismatch {
-                SymbolTypeMismatch {
-                    symbol_id,
-                    "drawing"
-                }
-            });
-        }
-
-        auto drawing_symbol_p = *drawing_symbol_res;
-
-        auto drawing_parse_res = telophase_parse_drawing(file, drawing_symbol_p->drawing, symbol_node);
+        auto drawing_parse_res = telophase_parse_drawing(file, drawing_symbol.drawing, symbol_node);
 
         if (!drawing_parse_res) {
             auto& err = drawing_parse_res.error();
@@ -322,6 +311,8 @@ namespace quartz::lib::parser {
         if (!problems.empty()) {
             return ::std::unexpected(problems);
         }
+
+        symbol_p->set(drawing_symbol);
 
         return {};
     }
