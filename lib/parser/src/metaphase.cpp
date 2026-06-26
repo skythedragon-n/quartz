@@ -21,7 +21,9 @@ namespace quartz::lib::parser {
             return ::std::unexpected(MetaphaseError::InvalidDocument);
         }
 
-        if (spec_version.value() != "0.1") {
+        ::std::string spec_val = spec_version.value();
+
+        if (spec_val != "0.1") {
             return ::std::unexpected(MetaphaseError::SpecTooNew);
         }
 
