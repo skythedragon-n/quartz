@@ -86,7 +86,7 @@ namespace quartz::lib::parser {
         core::Library* library_p = *library_res;
 
         for (auto [name, id] : library_p->folders()) {
-            auto folder_nodes = library_node.select_nodes(::std::format("/folder[@name = \"{}\"]", name).c_str());
+            auto folder_nodes = library_node.select_nodes(::std::format("./folder[@name = \"{}\"]", name).c_str());
 
             if (folder_nodes.empty()) {
                 return ::std::unexpected(FolderNotFound{name});
@@ -106,7 +106,7 @@ namespace quartz::lib::parser {
         }
 
         for (auto [name, id] : library_p->symbols()) {
-            auto symbol_nodes = library_node.select_nodes(::std::format("/symbol[@name = \"{}\"]", name).c_str());
+            auto symbol_nodes = library_node.select_nodes(::std::format("./symbol[@name = \"{}\"]", name).c_str());
 
             if (symbol_nodes.empty()) {
                 return ::std::unexpected(SymbolNotFound{name});
