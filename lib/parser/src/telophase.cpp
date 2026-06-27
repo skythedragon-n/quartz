@@ -426,7 +426,7 @@ namespace quartz::lib::parser {
         core::frame_types::Normal frame_content{.drawing = drawing_id};
 
         for (::pugi::xml_node instance_node : frame_node.children("instance")) {
-            ::pugi::xml_attribute symbol_name_attr = instance_node.attribute("symbol");
+            ::pugi::xml_attribute symbol_name_attr = instance_node.attribute("path");
 
             if (!symbol_name_attr) {
                 problems.emplace_back(InstanceMissingSymbol{instance_node});
