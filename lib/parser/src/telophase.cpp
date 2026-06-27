@@ -627,6 +627,8 @@ namespace quartz::lib::parser {
            if (std::isdigit(point_str[index]) || point_str[index] == '.') {
                num_str += point_str[index];
                index++;
+           } else {
+               break;
            }
         }
 
@@ -646,6 +648,8 @@ namespace quartz::lib::parser {
             if (::std::isdigit(point_str[index]) || point_str[index] == '.') {
                 num_str += point_str[index];
                 index++;
+            } else {
+                break;
             }
         }
 
