@@ -607,6 +607,7 @@ namespace quartz::lib::parser {
                     ::std::format("Expected ',', got {}", points_list_str[index])
                 });
             }
+            index++;
         }
 
         return points;
@@ -623,13 +624,24 @@ namespace quartz::lib::parser {
 
         ::std::string num_str;
 
+        if (point_str[index] == '-') {
+            num_str += point_str[index];
+            index++;
+        }
+
         while (index < point_str.size()) {
-           if (std::isdigit(point_str[index]) || point_str[index] == '.') {
-               num_str += point_str[index];
-               index++;
-           } else {
-               break;
-           }
+            if (std::isdigit(point_str[index]) || point_str[index] == '.') {
+                num_str += point_str[index];
+                index++;
+            } else {
+                break;
+            }
+        }
+
+        if (num_str.empty() || num_str == "-") {
+            return ::std::unexpected( PartialFieldParseError {
+                "Expected a number"
+            });
         }
 
         core::num_t x = core::parse_num(num_str);
