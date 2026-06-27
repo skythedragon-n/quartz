@@ -47,7 +47,7 @@ namespace quartz::lib::parser {
         }
 
         for (const auto& [name, id] : file.libraries_i()) {
-            auto library_nodes = doc_root.select_nodes(::std::format("./library[@name = \"{}\"]", name).c_str());
+            auto library_nodes = doc_root.select_nodes(::std::format("./library[@group = \"{}\"]", name).c_str());
 
             if (library_nodes.empty()) {
                 return ::std::unexpected(LibraryNotFound{name});
