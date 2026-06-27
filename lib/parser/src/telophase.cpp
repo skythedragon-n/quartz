@@ -47,11 +47,13 @@ namespace quartz::lib::parser {
         }
 
         for (const auto& [name, id] : file.libraries_i()) {
-            ::pugi::xml_node library_node = doc_root;
+            auto library_nodes = doc_root.select_nodes(::std::format("./library[@name = \"{}\"]", name).c_str());
 
-            if (!library_node) {
+            if (library_nodes.empty()) {
                 return ::std::unexpected(LibraryNotFound{name});
             }
+
+            ::pugi::xml_node library_node = library_nodes.first().node();
 
             auto res = telophase_parse_library(file, id, library_node);
 
@@ -147,7 +149,7 @@ namespace quartz::lib::parser {
         core::LibraryFolder* folder_p = *folder_res;
 
         for (const auto& [name, id] : folder_p->folders()) {
-            auto subfolder_nodes = folder_node.select_nodes(::std::format("/folder[@name = \"{}\"]", name).c_str());
+            auto subfolder_nodes = folder_node.select_nodes(::std::format("./folder[@name = \"{}\"]", name).c_str());
 
             if (!subfolder_nodes.empty()) {
                 return ::std::unexpected(FolderNotFound{name});
@@ -169,7 +171,7 @@ namespace quartz::lib::parser {
         }
 
         for (const auto& [name, id] : folder_p->symbols()) {
-            auto symbol_nodes = folder_node.select_nodes(::std::format("/symbol[@name = \"{}\"]", name).c_str());
+            auto symbol_nodes = folder_node.select_nodes(::std::format("./symbol[@name = \"{}\"]", name).c_str());
 
             if (!symbol_nodes.empty()) {
                 return ::std::unexpected(SymbolNotFound{name});
