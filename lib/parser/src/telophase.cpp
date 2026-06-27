@@ -151,7 +151,7 @@ namespace quartz::lib::parser {
         for (const auto& [name, id] : folder_p->folders()) {
             auto subfolder_nodes = folder_node.select_nodes(::std::format("./folder[@name = \"{}\"]", name).c_str());
 
-            if (!subfolder_nodes.empty()) {
+            if (subfolder_nodes.empty()) {
                 return ::std::unexpected(FolderNotFound{name});
             }
 
@@ -173,7 +173,7 @@ namespace quartz::lib::parser {
         for (const auto& [name, id] : folder_p->symbols()) {
             auto symbol_nodes = folder_node.select_nodes(::std::format("./symbol[@name = \"{}\"]", name).c_str());
 
-            if (!symbol_nodes.empty()) {
+            if (symbol_nodes.empty()) {
                 return ::std::unexpected(SymbolNotFound{name});
             }
 
