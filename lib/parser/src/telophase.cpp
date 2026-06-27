@@ -66,6 +66,10 @@ namespace quartz::lib::parser {
             }
         }
 
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
+        }
+
         return {};
     }
 
@@ -190,6 +194,10 @@ namespace quartz::lib::parser {
                     return ::std::unexpected(*is_err);
                 }
             }
+        }
+
+        if (!problems.empty()) {
+            return ::std::unexpected(problems);
         }
 
         return {};
