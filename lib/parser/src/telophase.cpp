@@ -163,7 +163,7 @@ namespace quartz::lib::parser {
 
             core::FolderId subfolder_id = *folder_p->find_folder(name);
 
-            auto res = telophase_parse_folder(file, folder_id, subfolder_node);
+            auto res = telophase_parse_folder(file, subfolder_id, subfolder_node);
 
             if (!res) {
                 ::std::optional<telophase_errors::InputMismatch> is_err = match_err(problems, res.error());
@@ -401,6 +401,16 @@ namespace quartz::lib::parser {
         if (!problems.empty()) {
             return ::std::unexpected(problems);
         }
+
+        auto symbol_data_maybe = symbol_p->get<core::symbol_types::LayeredAnimation>();
+
+        if (!symbol_data_maybe) {
+            ::qtil::panic("Layered animation symbol data not found! You needed to pass a LayeredAnimation!");
+        }
+
+        auto symbol_data_p = *symbol_data_maybe;
+
+        symbol_data_p->layers.emplace_back(layer_id);
 
         return {};
     }
