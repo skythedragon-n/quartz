@@ -1,0 +1,16 @@
+
+add_subdirectory(coesite)
+
+add_library(quartz_renderer_deps ../cmake_helpers/empty.cpp)
+target_include_directories(quartz_renderer_deps PUBLIC QUARTZ_CORE_HEADER_INCDIR)
+
+target_link_libraries(quartz_renderer_coesite PUBLIC quartz_renderer_deps)
+
+add_library(quartz_render ../cmake_helpers/empty.cpp)
+target_link_libraries(quartz_render PUBLIC quartz_renderer_coesite)
+
+add_dependencies(quartz_render quartz_renderer_coesite_headers)
+
+add_custom_target(quartz_renderer_headers)
+
+add_dependencies(quartz_renderer_headers quartz_renderer_coesite_headers)

@@ -29,6 +29,7 @@ add_compile_options(-Wall -Wextra -Wpedantic -Wshadow -fno-exceptions -fno-rtti)
 add_subdirectory(qtil)
 add_subdirectory(core)
 add_subdirectory(lib)
+add_subdirectory(renderer)
 
 target_link_libraries(quartz_core qtil)
 add_dependencies(quartz_core qtil_headers)
@@ -188,4 +189,4 @@ target_link_libraries(quartz_lib_parser PUBLIC xml)
 add_dependencies(quartz_test quartz_core_headers quartz_lib_headers)
 
 add_custom_target(quartz_headers)
-add_dependencies(quartz_headers quartz_core_headers quartz_lib_headers qtil_headers)
+add_dependencies(quartz_headers quartz_core_headers quartz_lib_headers qtil_headers quartz_renderer_headers)
