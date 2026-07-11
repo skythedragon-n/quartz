@@ -39,6 +39,9 @@ target_link_libraries(quartz_lib_deps PUBLIC quartz_core)
 target_link_libraries(quartz_lib PUBLIC quartz_core qtil)
 add_dependencies(quartz_lib quartz_core_headers qtil_headers)
 
+target_link_libraries(quartz_render PUBLIC quartz_core qtil)
+add_dependencies(quartz_render quartz_core_headers qtil_headers)
+
 Include(FetchContent)
 
 FetchContent_Declare(

@@ -2,7 +2,7 @@
 add_subdirectory(coesite)
 
 add_library(quartz_renderer_deps ../cmake_helpers/empty.cpp)
-target_include_directories(quartz_renderer_deps PUBLIC QUARTZ_CORE_HEADER_INCDIR)
+target_link_libraries(quartz_renderer_deps PUBLIC quartz_core)
 
 target_link_libraries(quartz_renderer_coesite PUBLIC quartz_renderer_deps)
 
