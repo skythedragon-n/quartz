@@ -102,8 +102,16 @@ namespace quartz::core {
          */
         [[nodiscard]] ::std::string group() const { return group_; }
 
+        /**
+         * @brief Returns an iterable object, which can be turned into iterators over the sub-symbols
+         * @return A cursed little wrapper called Subobjects that exists to hide the symbol table from the user
+         */
         auto folders() { return root_.folders(); }
 
+        /**
+         * @brief Returns an iterable object, which can be turned into iterators over the subfolders
+         * @return A cursed little wrapper called Subobjects that exists to hide the subfolder table from the user
+         */
         auto symbols() { return root_.symbols(); }
     };
 }

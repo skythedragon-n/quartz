@@ -151,8 +151,16 @@ namespace quartz::core {
          */
         [[nodiscard]] ::std::variant<LibraryId, FolderId> parent() const { return parent_; }
 
+        /**
+         * @brief Returns an iterable object, which can be turned into iterators over the sub-symbols
+         * @return A cursed little wrapper called Subobjects that exists to hide the symbol table from the user
+         */
         Subobjects<SymbolId> symbols();
 
+        /**
+         * @brief Returns an iterable object, which can be turned into iterators over the subfolders
+         * @return A cursed little wrapper called Subobjects that exists to hide the subfolder table from the user
+         */
         Subobjects<FolderId> folders();
     };
 }
