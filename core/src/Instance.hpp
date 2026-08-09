@@ -11,6 +11,12 @@
 
 
 namespace quartz::core {
+    /**
+     * @class Instance
+     * @authors SkyTheDragon
+     *
+     * @brief Represents an instance of a symbol.
+     */
     class Instance {
         SymbolId source_;
         Transform transform_;
@@ -18,12 +24,28 @@ namespace quartz::core {
     public:
         Instance(IdKey, AnimFile*, SymbolId source, Transform transform, InstanceId);
 
+        /**
+         * @brief Sets the source Symbol of the instance
+         * @return Source Symbol
+         */
         [[nodiscard]] SymbolId source() const;
 
+        /**
+         * @brief Sets the source symbol of the instance. Make sure to also handle the symbol's refcounts
+         * @param source Value to set
+         */
         void set_source(const SymbolId& source);
 
+        /**
+         * @brief Gets the transform the instance applies to the instanced symbol
+         * @return Transform of instance
+         */
         [[nodiscard]] Transform transform() const;
 
+        /**
+         *
+         * @param transform Transform
+         */
         void set_transform(const Transform& transform);
     };
 }
