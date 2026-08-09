@@ -25,6 +25,15 @@ namespace quartz::core {
         concept FrameType = ::std::same_as<T, Empty> || ::std::same_as<T, Normal>;
     }
 
+    /**
+     * @class Frame
+     * @brief Container for frame data
+     *
+     * @authors SkyTheDragon
+     *
+     * Contains data for a single frame in an animation. Uses a very similar API to that of Symbol, as it has very
+     * similar needs.
+     */
     class Frame {
     public:
         using FrameData = ::std::variant<frame_types::Empty, frame_types::Normal>;
@@ -36,11 +45,21 @@ namespace quartz::core {
         Frame(IdKey, AnimFile*, FrameId);
         Frame() = delete;
 
+        /**
+         * @brief Checks if the frame is of the specified type
+         * @tparam T Type to check for
+         * @return Is the frame of that type
+         */
         template<frame_types::FrameType T>
         [[nodiscard]] bool is() const {
             return std::holds_alternative<T>(data_);
         }
 
+        /**
+         * @brief Tries to get a pointer to frame data of specified type.
+         * @tparam T Frame type to get data for
+         * @return An optional pointer to the value of the data
+         */
         template<frame_types::FrameType T>
         [[nodiscard]] ::std::optional<T*> get() const {
             if (!::std::holds_alternative<T>(data_)) {
@@ -49,16 +68,33 @@ namespace quartz::core {
             return ::std::get<T>(data_).drawing;
         }
 
+        /**
+         * @brief Overwrites frame data, including frame type
+         * @tparam T Type of data to set
+         * @param data Value of data to set
+         */
         template<frame_types::FrameType T>
         void set(T data) {
             data_ = data;
         }
 
+        /**
+        * @brief Allows matching a Frame by its type
+        * @tparam Visitor Visitor type to be used
+        * @param visitor instance of visitor type
+        * @return Result of visitor visiting the frame
+        */
         template<typename Visitor>
         decltype(auto) visit(Visitor&& visitor) {
             return ::std::visit(::std::forward<Visitor>(visitor), data_);
         }
 
+        /**
+        * @brief Allows matching a Frame by its type, but const
+        * @tparam Visitor Visitor type to be used
+        * @param visitor instance of visitor type
+        * @return Result of visitor visiting the frame
+        */
         template<typename Visitor>
         decltype(auto) visit(Visitor&& visitor) const {
             return std::visit(::std::forward<Visitor>(visitor), data_);
