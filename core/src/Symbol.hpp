@@ -128,7 +128,7 @@ namespace quartz::core {
         }
 
         /**
-         * @brief Allows the user to set the symbol data and change its type
+         * @brief Overwrites symbol data with the specified data, including the symbol type.
          * @tparam T Symbol type of data being set
          * @param data Data
          */
