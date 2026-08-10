@@ -10,7 +10,7 @@
 #include <variant>
 
 /**
- * @brief Contains errors relavant to the 'core' lib
+ * @brief Contains errors relevant to the 'core' lib
  */
 namespace quartz::core {
     using success_t = ::std::monostate;
