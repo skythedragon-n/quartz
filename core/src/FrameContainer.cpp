@@ -19,12 +19,12 @@ namespace quartz::core {
     FrameContainer<ItemT>::insert_frame(size_t index, ItemT item) {
         if (index >= items_.size()) {
             if (items_.empty()) {
-                //You can't fill the list with the last frame in it up to 'index' if there is no last frame
+                // You can't fill the list with the last frame in it up to 'index' if there is no last frame
                 if (index != 0) {
                     return ::std::unexpected(NoFrames{});
                 }
 
-                //This is fine. No fill required. Just append 'item'
+                // This is fine. No fill required. Just append 'item'
                 items_.emplace_back(Item{item, 0, 1});
                 return AddedToEnd{1};
             }
