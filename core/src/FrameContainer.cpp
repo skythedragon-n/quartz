@@ -178,17 +178,17 @@ namespace quartz::core {
     }
 
     template <typename ItemT>
-    ::std::expected<ItemT, int> FrameContainer<ItemT>::remove_frame(size_t index) {
+    ::std::expected<ItemT, ::std::monostate> FrameContainer<ItemT>::remove_frame(size_t index) {
         if (index >= items_.size()) {
             // I'm delaying adding better error handling to FrameContainer, so you just get a generic number 0
-            return ::std::unexpected{0};
+            return ::std::unexpected{::std::monostate{}};
         }
 
         size_t target_start = index - items_[index].from_first;
 
         if (target_start == 0) {
             // Same as line 183
-            return ::std::unexpected{0};
+            return ::std::unexpected{::std::monostate{}};
         }
 
         ItemT replace = items_[target_start - 1].content;

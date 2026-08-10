@@ -124,7 +124,7 @@ namespace quartz::core {
          * @param index Index to remove frame at
          * @return Removed keyframe
          */
-        ::std::expected<ItemT, int> remove_frame(size_t index);
+        ::std::expected<ItemT, ::std::monostate> remove_frame(size_t index);
         /**
          * @brief Moves the keyframe at from to to, essential removing it at from, and inserting at to
          * @param from Source keyframe's position
