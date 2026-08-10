@@ -13,6 +13,12 @@
 #include "core_errors.hpp"
 
 namespace quartz::core {
+    /**
+     * @class Library
+     * @brief Represents a library containing symbols and other assets
+     *
+     * @authors SkyTheDragon
+     */
     class Library {
         LibraryFolder root_;
 
