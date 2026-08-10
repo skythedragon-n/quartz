@@ -43,8 +43,8 @@ namespace quartz::core {
         [[nodiscard]] Transform transform() const;
 
         /**
-         *
-         * @param transform Transform
+         * @brief Sets transform of the instance
+         * @param transform New value for transform
          */
         void set_transform(const Transform& transform);
     };
