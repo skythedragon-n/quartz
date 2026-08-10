@@ -83,6 +83,11 @@ namespace quartz::core {
         Lock lock = Lock::None;
     };
 
+    struct CoesiteBezierSection {
+        Point start_point = NULL_POINT;
+        Point lastwise_tangent = NULL_POINT, nextwise_tangent = NULL_POINT;
+    };
+
     struct Transform {
         num_t xScale = 1.0, yScale = 1.0;
         num_t rotation = 0.0;
