@@ -76,6 +76,7 @@ namespace quartz::core {
         //TODO: better error handling
         void replace_frame(size_t index, ItemT replace);
         void remove_frame(size_t index);
+        ::std::expected<ItemT, int> remove_frame(size_t index);
         void move_frame(size_t from, size_t to);
 
         void trim_to_size(size_t size);
