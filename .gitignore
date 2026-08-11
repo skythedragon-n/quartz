@@ -101,4 +101,5 @@ remote.sh
 
 */include/*
 lib/*/include/*
+renderer/*/include/*
 *.mp4
