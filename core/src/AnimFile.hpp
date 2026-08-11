@@ -98,8 +98,8 @@ namespace quartz::core {
         ::std::expected<LibraryId, FindFailure> get_library(::std::string group);
 
         /**
-         * @brief Gives iterator to Libraries in AnimFile
-         * @return Iterator over libraries in AnimFile
+         * @brief Gives iterable object for the Libraries in AnimFile
+         * @return Iterable over libraries in AnimFile
          */
         Libraries libraries_i();
 
