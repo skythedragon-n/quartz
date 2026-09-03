@@ -17,4 +17,6 @@ critical or higher priority are completed.
 
 ## "Later"
 
+- [ ] add remaining operator forwarding things to Lease
+
 ## Not important
