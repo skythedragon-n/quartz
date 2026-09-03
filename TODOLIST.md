@@ -1,5 +1,5 @@
 # File Usage 
-Put anything you think should be done at some point in the future in this file. But not feaures or bugs, but
+Put anything you think should be done at some point in the future in this file. But not features or bugs, but
 like, code improvements.
 
 Make sure all todo items are completed before a stable release. Before a pre-1.0 beta, make sure all todos of
