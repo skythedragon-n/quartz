@@ -34,8 +34,7 @@ namespace quartz::core {
         num_t miter_limit_;
         DrawingId drawing_;
 
-        [[nodiscard]] Drawing* resolve_drawing();
-        [[nodiscard]] const Drawing* resolve_drawing() const;
+        [[nodiscard]] Lease<Drawing> resolve_drawing() const;
 
     public:
         Stroke(
@@ -66,9 +65,9 @@ namespace quartz::core {
         class Iterator {
             size_t index_;
             Stroke* stroke_;
-            Drawing* drawing_{};
+            Lease<Drawing> drawing_{};
 
-            Iterator(size_t index, Stroke* stroke, Drawing* drawing) noexcept;
+            Iterator(size_t index, Stroke* stroke, Lease<Drawing> drawing) noexcept;
 
         public:
             using value_type = item_val_t;
@@ -80,8 +79,8 @@ namespace quartz::core {
             Iterator() noexcept;
             Iterator(Stroke* stroke, size_t index);
 
-            Iterator(const Iterator&) = default;
-            Iterator& operator=(const Iterator&) = default;
+            Iterator(const Iterator&);
+            Iterator& operator=(const Iterator&);
 
             reference operator*() const;
             pointer operator->() const;

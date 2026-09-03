@@ -14,24 +14,14 @@
 #include "./AnimFile.hpp"
 
 namespace quartz::core {
-    Drawing* Stroke::resolve_drawing() {
+    Lease<Drawing> Stroke::resolve_drawing() const {
         auto res = file_->drawings.resolve(drawing_);
 
         if (!res) {
             ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
         }
 
-        return *res;
-    }
-
-    const Drawing* Stroke::resolve_drawing() const {
-        auto res = file_->drawings.resolve(drawing_);
-
-        if (!res) {
-            ::qtil::panic("Drawing of stroke has been deleted? Really, well-behaving code should NOT do this!");
-        }
-
-        return *res;
+        return ::std::move(*res);
     }
 
     Stroke::Stroke(
@@ -50,11 +40,29 @@ namespace quartz::core {
         drawing_(drawing)
     {}
 
-    Stroke::Iterator::Iterator(size_t index, Stroke* stroke, Drawing* drawing) noexcept :
+    Stroke::Iterator::Iterator(size_t index, Stroke* stroke, Lease<Drawing> drawing) noexcept :
         index_(index),
         stroke_(stroke),
-        drawing_(drawing)
+        drawing_(::std::move(drawing))
     {}
+
+    Stroke::Iterator::Iterator(const Iterator& other) noexcept :
+        index_(other.index_),
+        stroke_(other.stroke_),
+        drawing_(other.drawing_.duplicate_lease())
+    {}
+
+    Stroke::Iterator& Stroke::Iterator::operator=(const Iterator& other) {
+        if (this == &other) {
+            return *this;
+        }
+
+        index_ = other.index_;
+        stroke_ = other.stroke_;
+        drawing_ = other.drawing_.duplicate_lease();
+
+        return *this;
+    }
 
     Stroke::Iterator::Iterator() noexcept :
         index_(::std::numeric_limits<size_t>::max()),
@@ -70,7 +78,7 @@ namespace quartz::core {
     Stroke::Iterator::reference Stroke::Iterator::operator*() const {
         BezierSection section = stroke_->points_[index_];
 
-        const Point& middle = (*drawing_)[section.start];
+        const Point& middle = drawing_[section.start];
 
         return reference{section.lastwise_tangent, middle, section.lastwise_tangent};
     }
@@ -78,7 +86,7 @@ namespace quartz::core {
     Stroke::Iterator::pointer Stroke::Iterator::operator->() const {
         BezierSection section = stroke_->points_[index_];
 
-        const Point& middle = (*drawing_)[section.start];
+        const Point& middle = drawing_->operator[](section.start);
 
         return pointer{&section.lastwise_tangent, &middle, &section.lastwise_tangent};
     }
@@ -87,7 +95,7 @@ namespace quartz::core {
         size_t index = index_ + n;
         BezierSection section = stroke_->points_[index];
 
-        const Point& middle = (*drawing_)[section.start];
+        const Point& middle = drawing_[section.start];
 
         return reference{section.lastwise_tangent, middle, section.lastwise_tangent};
     }
@@ -125,7 +133,7 @@ namespace quartz::core {
     }
 
     Stroke::Iterator Stroke::Iterator::operator+(difference_type n) const {
-        return Iterator{index_ + n, stroke_, drawing_};
+        return Iterator{index_ + n, stroke_, drawing_.duplicate_lease()};
     }
 
     Stroke::Iterator& Stroke::Iterator::operator-=(difference_type n) {
@@ -135,7 +143,7 @@ namespace quartz::core {
     }
 
     Stroke::Iterator Stroke::Iterator::operator-(difference_type n) const {
-        return Iterator{index_ - n, stroke_, drawing_};
+        return Iterator{index_ - n, stroke_, drawing_.duplicate_lease()};
     }
 
     Stroke::Iterator::difference_type Stroke::Iterator::operator-(const Iterator& other) const {
@@ -225,9 +233,9 @@ namespace quartz::core {
     Stroke::item_ref_t Stroke::operator[](size_t index) const {
         BezierSection section = points_[index];
 
-        const Drawing* drawing = resolve_drawing();
+        Lease<Drawing> drawing = resolve_drawing();
 
-        return item_ref_t{section.lastwise_tangent, (*drawing)[section.start], section.lastwise_tangent};
+        return item_ref_t{section.lastwise_tangent, drawing[section.start], section.lastwise_tangent};
     }
 
     Stroke::Iterator Stroke::begin() {

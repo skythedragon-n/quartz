@@ -58,7 +58,8 @@ namespace quartz::core {
         InvalidId,
         WrongFile,
         NoSuchObject,
-        TargetDeleted
+        TargetDeleted,
+        TargetLocked
     };
 
     /**

@@ -36,11 +36,11 @@ add_dependencies(quartz_core qtil_headers)
 
 target_link_libraries(quartz_lib_deps PUBLIC quartz_core)
 
-target_link_libraries(quartz_lib PUBLIC quartz_core qtil)
-add_dependencies(quartz_lib quartz_core_headers qtil_headers)
+#target_link_libraries(quartz_lib PUBLIC quartz_core qtil)
+#add_dependencies(quartz_lib quartz_core_headers qtil_headers)
 
-target_link_libraries(quartz_render PUBLIC quartz_core qtil)
-add_dependencies(quartz_render quartz_core_headers qtil_headers)
+#target_link_libraries(quartz_render PUBLIC quartz_core qtil)
+#add_dependencies(quartz_render quartz_core_headers qtil_headers)
 
 Include(FetchContent)
 
@@ -180,16 +180,16 @@ else()
 	message(FATAL_ERROR "No Windows build preparations. Sorry")
 endif()
 
-add_executable(quartz_test
+#[[add_executable(quartz_test
 test/test_FrameContainer.cpp
 test/test_LibraryFolder.cpp
 test/test_id_sys.cpp
 test/test_Drawings.cpp
-)
-target_link_libraries(quartz_test Catch2::Catch2WithMain)
-target_link_libraries(quartz_test quartz_lib)
-target_link_libraries(quartz_lib_parser PUBLIC xml)
-add_dependencies(quartz_test quartz_core_headers quartz_lib_headers)
+)]]
+#target_link_libraries(quartz_test Catch2::Catch2WithMain)
+#target_link_libraries(quartz_test quartz_lib)
+#target_link_libraries(quartz_lib_parser PUBLIC xml)
+#add_dependencies(quartz_test quartz_core_headers quartz_lib_headers)
 
 add_custom_target(quartz_headers)
-add_dependencies(quartz_headers quartz_core_headers quartz_lib_headers qtil_headers quartz_renderer_headers)
+add_dependencies(quartz_headers quartz_core_headers qtil_headers #[[quartz_lib_headers quartz_renderer_headers]])

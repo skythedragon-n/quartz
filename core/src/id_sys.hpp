@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <atomic>
 #include <deque>
 #include <limits>
 #include <expected>
@@ -153,6 +154,44 @@ namespace quartz::core {
         return file == CHEETO || file == FLAMING_HOT_CHEETO;
     }
 
+    template<typename T>
+    class Lease;
+    template<typename T>
+    class MutLease;
+
+    class LeaseKey {
+        template<typename T>
+        friend class IdContainer;
+        template<typename T>
+        friend class Lease;
+
+        LeaseKey() = default;
+    };
+
+    struct Slot {
+        size_t generation = 0;
+        ::std::atomic<size_t> held_const = 0;
+        bool free = false;
+        ::std::atomic<bool> held_mut = false;
+        ::std::atomic<bool> locked = false;
+
+        void wait_until_unleased() const {
+            while (held_mut.load(::std::memory_order_acquire)) {
+                held_mut.wait(true, ::std::memory_order_relaxed);
+            }
+
+            while (size_t count = held_const.load(::std::memory_order_acquire)) {
+                held_const.wait(count, ::std::memory_order_relaxed);
+            }
+        }
+
+        void wait_until_no_mut() const {
+            while (held_mut.load(::std::memory_order_acquire)) {
+                held_mut.wait(true, ::std::memory_order_relaxed);
+            }
+        }
+    };
+
     /**
      * @brief Generic implementation of ID logic
      * @tparam T Type for ID
@@ -161,24 +200,22 @@ namespace quartz::core {
      */
     template<typename T>
     class IdContainer {
-        struct Container {
-            T object;
-            size_t generation = 0;
-            bool free = false;
-        };
-
-        static_assert(sizeof(Container) > 0, "sizeof(Container)==0?");
+        static_assert(sizeof(T) > 0, "sizeof(Container)==0?");
         static constexpr size_t CHUNK_SIZE = ([]() {
-            if (1'048'576u / sizeof(Container) != 0) {
-                return 1'048'576u / sizeof(Container);
+            if (1'048'576u / sizeof(T) != 0) {
+                return 1'048'576u / sizeof(T);
             } else {
                 return static_cast<size_t>(4);
             }
         })();
 
-        ::std::vector<Container> data_;
+        ::std::vector<T> data_;
+        ::std::vector<Slot> slots_;
         ::std::deque<size_t> freelist_;
         AnimFile* file_ = nullptr;
+
+        friend class MutLease<T>;
+        friend class Lease<T>;
     public:
 
         IdContainer(AnimFile* file) : file_(file) {}
@@ -197,6 +234,9 @@ namespace quartz::core {
          * Attempts to free Id and add index to freelist
          */
         ::std::expected<void, ResolveFailure> free(Id<T> id) {
+            slots_[id.storage_.id].locked = true;
+            slots_[id.storage_.id].wait_until_unleased();
+
             if (!id) {
                 return ::std::unexpected(ResolveFailure::InvalidId);
             }
@@ -217,7 +257,7 @@ namespace quartz::core {
                 return ::std::unexpected(ResolveFailure::TargetDeleted);
             }
 
-            data_[id.storage_.id].free = true;
+            slots_[id.storage_.id].free = true;
             freelist_.push_back(id.storage_.id);
             ::std::destroy_at(::std::addressof(data_[id.storage_.id].object));
 
@@ -231,7 +271,7 @@ namespace quartz::core {
          * @return Id of object added, along with a pointer to it
          */
         template<typename... Args>
-        ::std::pair<Id<T>, T*> add_wp(Args&&... args) {
+        ::std::pair<Id<T>, MutLease<T>> add_wl(Args&&... args) {
             if (freelist_.empty()) {
                 size_t capacity = data_.capacity();
 
@@ -242,10 +282,12 @@ namespace quartz::core {
 
                     if (capacity == 0 || (doubled_ok && doubled_capacity <= CHUNK_SIZE)) {
                         data_.reserve(doubled_capacity);
+                        slots_.reserve(doubled_capacity);
                     } else {
                         size_t target = capacity + CHUNK_SIZE;
                         if (target < capacity) target = std::numeric_limits<size_t>::max();
                         data_.reserve(target);
+                        slots_.reserve(target);
                     }
                 }
 
@@ -255,24 +297,31 @@ namespace quartz::core {
                     std::forward<Args>(args)...,
                     Id<T>{data_.size(), file_}
                 });
-                return ::std::pair{Id<T>{data_.size() - 1, file_}, ::std::addressof(data_.back().object)};
+
+                slots_.emplace_back();
+
+                slots_.back().held_mut = true;
+
+                return ::std::pair{Id<T>{data_.size() - 1, file_}, MutLease<T>{&slots_.back(), &data_.back(), LeaseKey()}};
             }
 
             size_t id = freelist_.back();
-            size_t gen = data_[id].generation + 1;
+            size_t gen = slots_[id].generation + 1;
             freelist_.pop_front();
 
             ::std::construct_at(
-                ::std::addressof(data_[id].object),
+                ::std::addressof(data_[id]),
                 IdKey{},
                 file_,
                 ::std::forward<Args>(args)...,
                 Id<T>{id, file_, gen});
 
-            data_[id].generation = gen;
-            data_[id].free = false;
+            slots_[id].generation = gen;
+            slots_[id].free = false;
+            slots_[id].locked = false;
+            slots_[id].held_mut = true;
 
-            return ::std::pair{Id<T>{id, file_, gen}, ::std::addressof(data_[id].object)};
+            return ::std::pair{Id<T>{id, file_, gen}, MutLease<T>{&slots_[id], &data_[id], LeaseKey()}};
         }
 
         /**
@@ -283,7 +332,7 @@ namespace quartz::core {
          */
         template<typename... Args>
         Id<T> add(Args... args) {
-            return add_wp(std::forward<Args>(args)...).first;
+            return add_wl(std::forward<Args>(args)...).first;
         }
 
         /**
@@ -291,7 +340,7 @@ namespace quartz::core {
          * @param id Id to resolve
          * @return Object pointer or error
          */
-        ::std::expected<T*, ResolveFailure> resolve(Id<T> id) {
+        ::std::expected<Lease<T>, ResolveFailure> resolve(Id<T> id) {
             if (!id) {
                 return ::std::unexpected(ResolveFailure::InvalidId);
             }
@@ -304,15 +353,58 @@ namespace quartz::core {
                 return ::std::unexpected(ResolveFailure::NoSuchObject);
             }
 
-            if (data_[id.storage_.id].free) {
+            if (slots_[id.storage_.id].free) {
                 return ::std::unexpected(ResolveFailure::TargetDeleted);
             }
 
-            if (data_[id.storage_.id].generation != id.storage_.gen) {
+            if (slots_[id.storage_.id].generation != id.storage_.gen) {
                 return ::std::unexpected(ResolveFailure::TargetDeleted);
             }
 
-            return ::std::addressof(data_[id.storage_.id].object);
+            if (slots_[id.storage_.id].locked) {
+                return ::std::unexpected(ResolveFailure::TargetLocked);
+            }
+
+            slots_[id.storage_.id].wait_until_no_mut();
+
+            slots_[id.storage_.id].held_const++;
+            return Lease<T>{&slots_[id.storage_.id], &data_[id.storage_.id], LeaseKey()};
+        }
+
+        /**
+         * @brief Resolves an Id, and gives the user a mutable lease to the object
+         * @param id Id to resolve
+         * @return Mutable lease to object or an error
+         */
+        ::std::expected<MutLease<T>, ResolveFailure> resolve_mut(Id<T> id) {
+            if (!id) {
+                return ::std::unexpected(ResolveFailure::InvalidId);
+            }
+
+            if (id.storage_.file != file_) {
+                return ::std::unexpected(ResolveFailure::WrongFile);
+            }
+
+            if (id.storage_.id >= data_.size()) {
+                return ::std::unexpected(ResolveFailure::NoSuchObject);
+            }
+
+            if (slots_[id.storage_.id].free) {
+                return ::std::unexpected(ResolveFailure::TargetDeleted);
+            }
+
+            if (slots_[id.storage_.id].generation != id.storage_.gen) {
+                return ::std::unexpected(ResolveFailure::TargetDeleted);
+            }
+
+            if (slots_[id.storage_.id].locked) {
+                return ::std::unexpected(ResolveFailure::TargetLocked);
+            }
+
+            slots_[id.storage_.id].wait_until_unleased();
+
+            slots_[id.storage_.id].held_mut = true;
+            return MutLease<T>{&data_[id.storage_.id], LeaseKey()};
         }
 
         size_t size() {
@@ -322,6 +414,151 @@ namespace quartz::core {
         size_t capacity() {
             return data_.capacity();
         }
+    };
+
+    template<typename T>
+    class MutLease {
+        Slot* slot_;
+        T* object_;
+        bool valid_;
+
+    public:
+        MutLease(Slot* slot, T* object, LeaseKey) :
+            slot_(slot),
+            object_(object),
+            valid_(true)
+        {}
+
+        MutLease() :
+            object_(nullptr),
+            slot_(nullptr),
+            valid_(false)
+        {}
+
+        MutLease(const MutLease&) = delete;
+        MutLease& operator=(const MutLease&) = delete;
+
+        MutLease(MutLease&& other) noexcept :
+            slot_(other.slot_),
+            object_(other.object_),
+            valid_(other.valid_)
+        {
+            other.slot_ = nullptr;
+            other.object_ = nullptr;
+            other.valid_ = false;
+        }
+
+        MutLease& operator=(MutLease&& other) noexcept {
+            if (this != &other) {
+                return_lease();
+                this->slot_ = other.slot_;
+                this->object_ = other.object_;
+                this->valid_ = other.valid_;
+
+                other.slot_ = nullptr;
+                other.object_ = nullptr;
+                other.valid_ = false;
+            }
+            return *this;
+        }
+
+        T* operator->() noexcept { return valid_ ? object_ : nullptr; }
+
+        template<typename Index>
+        decltype(auto) operator[](Index&& i)
+            requires requires(T& obj, Index&& i) { obj[::std::forward<Index>(i)]; }
+        {
+            return (*object_)[::std::forward<Index>(i)];
+        }
+
+        void return_lease() {
+            if (!valid_) {
+                return;
+            }
+            valid_ = false;
+            slot_->held_mut = false;
+        }
+
+        ~MutLease() {
+            return_lease();
+        }
+
+        [[nodiscard]] bool valid() const noexcept { return valid_; }
+    };
+
+    template<typename T>
+    class Lease {
+        Slot* slot_;
+        T* object_;
+        bool valid_;
+
+    public:
+        Lease(Slot* slot, T* object, LeaseKey) :
+            slot_(slot),
+            object_(object),
+            valid_(true)
+        {}
+
+        Lease() :
+            slot_(nullptr),
+            object_(nullptr),
+            valid_(false)
+        {}
+
+        Lease(const Lease&) = delete;
+        Lease& operator=(const Lease&) = delete;
+
+        Lease(Lease&& other) noexcept :
+            slot_(other.slot_),
+            object_(other.object_),
+            valid_(other.valid_)
+        {
+            other.slot_ = nullptr;
+            other.object_ = nullptr;
+            other.valid_ = false;
+        }
+
+        Lease& operator=(Lease&& other) noexcept {
+            if (this != &other) {
+                return_lease();
+                this->slot_ = other.slot_;
+                this->object_ = other.object_;
+                this->valid_ = other.valid_;
+
+                other.slot_ = nullptr;
+                other.object_ = nullptr;
+                other.valid_ = false;
+            }
+            return *this;
+        }
+
+        const T* operator->() const noexcept { return valid_? object_ : nullptr; }
+
+        template<typename Index>
+        decltype(auto) operator[](Index&& i) const
+            requires requires(const T& obj, Index&& i) { obj[::std::forward<Index>(i)]; }
+        {
+            return (*object_)[::std::forward<Index>(i)];
+        }
+
+        Lease duplicate_lease() const noexcept {
+            slot_->held_const++;
+            return Lease{slot_, object_, LeaseKey{}};
+        }
+
+        void return_lease() noexcept {
+            if (!valid_) {
+                return;
+            }
+            valid_ = false;
+            slot_->held_const--;
+        }
+
+        ~Lease() {
+            return_lease();
+        }
+
+        [[nodiscard]] bool valid() const noexcept { return valid_; }
     };
 
     using SymbolId = Id<Symbol>;
